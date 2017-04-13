@@ -17,6 +17,7 @@ static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
 
 /*Finally, include own libraries*/
 
+#include "../includes/elements.h"
 #include "../includes/GameObj.h"
 #include "../includes/helpers.h"
 
