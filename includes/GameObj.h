@@ -12,6 +12,8 @@ typedef struct _GameObj
     int WINDOW_WIDTH;
     int WINDOW_HEIGHT;
 
+    /** Theme **/
+    char theme[256];
 
     /** Elements default values **/
     int platformeHeight;

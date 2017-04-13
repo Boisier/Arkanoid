@@ -13,6 +13,8 @@ void initGame()
     gameObj.WINDOW_WIDTH = 1200;
     gameObj.WINDOW_HEIGHT = 800;
 
+    strcpy(gameObj.theme, "themes/default/");
+
     gameObj.platformeHeight = 5;
     gameObj.platMaxSpeed = 25;
     gameObj.platSpeedUpFactor = 2.5;
@@ -29,48 +31,25 @@ void initGame()
     gameObj.gameState = MAINMENU;
 
     gameObj.textures = NULL;
-  * gameObj.texturesPath = NULL;
     gameObj.nbrTextures = 0;
 
     gameObj.toPrint = NULL;
     gameObj.nbrToPrint = 0;
     gameObj.printContent = EMPTY;
+
 }
 
 void theLoop()
 {
-    printf("Here\n");
-    GLuint texture = getTexture("heart.jpg");
-    GLuint texture2 = getTexture("heart.jpg");
-
-
     int inGame = true;
     while(inGame) 
     {
         Uint32 startTime = SDL_GetTicks();
         glClear(GL_COLOR_BUFFER_BIT);
 
-        
+        doThings();
 
-        glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, texture2);
- 
-        // For Ortho mode, of course
-        int X = 0;
-        int Y = 0;
-        int Width = 256;
-        int Height = -256;
-        
-        glBegin(GL_QUADS);
-            glTexCoord2f(0, 0); glVertex3f(X, Y, 0);
-            glTexCoord2f(1, 0); glVertex3f(X + Width, Y, 0);
-            glTexCoord2f(1, 1); glVertex3f(X + Width, Y + Height, 0);
-            glTexCoord2f(0, 1); glVertex3f(X, Y + Height, 0);
-        glEnd();
-
-
-	      glBindTexture(GL_TEXTURE_2D, 0);
-	      glDisable(GL_TEXTURE_2D);
+        printScreen();
 
         SDL_GL_SwapBuffers();
 
@@ -106,3 +85,33 @@ void theLoop()
     }
 }
 
+void doThings()
+{
+    switch(gameObj.gameState)
+    {
+        case MAINMENU:
+            mainMenu();
+        break;
+        default:
+            return;
+    }
+}
+
+/* Handle main menu */
+void mainMenu()
+{
+    if(gameObj.printContent != MAINMENU)
+    {
+        createMainMenu();
+    }
+}
+
+void createMainMenu()
+{
+    //Create Mainmenu elements
+    Picture * bigLogo = createPicture(-50, 50, "face.jpg");
+
+    addToPrint(bigLogo, PICTURE);
+
+    gameObj.printContent = MAINMENU;
+}

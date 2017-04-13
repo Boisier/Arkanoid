@@ -11,8 +11,9 @@ int main(int argc, char** argv)
         return 0;
     }
 
-
     theLoop();
+    
+	glDisable(GL_TEXTURE_2D);
     
     SDL_Quit();
     

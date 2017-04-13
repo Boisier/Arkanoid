@@ -31,9 +31,13 @@ void * reAllocate(void * var, int newSize)  /*realloc encapsulation with failing
 
 
 
-GLuint getTexture(char * path)
+GLuint getTexture(char * imagePath)
 {
 	//Make sure the texture isn't already loaded
+	char path[356]; /* 256 for path, 100 for image should be enough */
+	strcpy(path, gameObj.theme);
+    strcat(path, imagePath);
+
 	int rslt = textureLoaded(path);
 
 	if(rslt != -1)
@@ -49,7 +53,7 @@ GLuint getTexture(char * path)
 
     if(image == NULL)
 	{
-        printf("No image\n");
+        printf("No image > %s\n", path);
 		return -1;
 	}
 
@@ -143,21 +147,12 @@ int textureLoaded(char * needle)
 
 
 
-
-
-
-int printOglError(char *file, int line)
+void getTextureDimensions(GLuint texture, int * width, int * height)
 {
+	glBindTexture(GL_TEXTURE_2D, texture);
 
-    GLenum glErr;
-    int    retCode = 0;
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, width);
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, height);	
 
-    glErr = glGetError();
-    if (glErr != GL_NO_ERROR)
-    {
-        printf("glError in file %s @ line %d: %s\n",
-			     file, line, gluErrorString(glErr));
-        retCode = 1;
-    }
-    return retCode;
+	glBindTexture(GL_TEXTURE_2D, 0);
 }

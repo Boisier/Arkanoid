@@ -20,6 +20,7 @@ enum elState
 
 enum bonusType
 {
+	NONE,
 	WIDE,
 	NARROW,
 	STICKY,
@@ -31,14 +32,16 @@ enum bonusType
 typedef struct _platforme
 {
 	float x;
-	int y;
+	float y;
 	int size;
+
+	float speed;
 
 	enum bonusType bonus;
 	int bonusEnd;
 } Plateforme;
 
-enum platType
+enum brickType
 {
 	BASIC,
 	INVICIBLE,
@@ -52,7 +55,7 @@ typedef struct _brick
 	int x;
 	int y;
 
-	enum platType type;
+	enum brickType type;
 	int strength;
 } Brick;
 
@@ -125,7 +128,7 @@ typedef struct _printElement
 {
 	union 
 	{
-		Plateforme * platforme;
+		Plateforme * plateforme;
 		Brick * brick;
 		Ball * ball;
 		Bonus * bonus;

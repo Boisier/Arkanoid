@@ -23,7 +23,7 @@ bool createWindow();
 
 
 /* Texture loadingHandler */
-GLuint getTexture(char * path);
+GLuint getTexture(char * image);
 
 GLenum getImageFormat(SDL_Surface * image);
 
