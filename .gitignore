@@ -1,3 +1,3 @@
 .DS_Store
-*.o
+obj/*
 bin/arkanopong
