@@ -3,8 +3,23 @@
 typedef enum _GameState
 {
     EMPTY,
-    MAINMENU
+    MAINMENU,
+    EXITING
 } GameState;
+
+
+typedef struct _keyPressed
+{
+    bool up;
+    bool down;
+    bool left;
+    bool right;
+    bool space;
+    bool enter;
+    bool a;
+    bool z;
+    bool esc;
+} KeyPressed;
 
 typedef struct _GameObj
 {
@@ -43,6 +58,12 @@ typedef struct _GameObj
     PrintElement * toPrint;
     int nbrToPrint;
     GameState printContent;
+
+    /** key watched **/
+    KeyPressed keys;
+
+    /** Interactions holders **/
+    Button * currentlySelectedBtn;
 
 } GameObj;
 

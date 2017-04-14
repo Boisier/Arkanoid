@@ -1,12 +1,12 @@
 CC = gcc
-LIB     = -lSDL -lSDL_image -lSDL_mixer -lGLU -lGL -lm
-LDFLAGS = -lSDL
+LIB     = -lSDL -lSDL_image -lSDL_mixer -lGLU -lGL -lm -lasan
+LDFLAGS = -lSDL -fsanitize=address
 
 #Do not include ASan
-CFLAGS = -g -O2 -Wall -std=c89 -pedantic -Werror
+#CFLAGS = -g -O2 -Wall -std=c89 -pedantic -Werror
 
 #Include ASan
-#CFLAGS = -g -O2 -Wall -std=c89 -pedantic -Werror -fsanitize=address -fno-omit-frame-pointer -ggdb
+CFLAGS = -g -O2 -Wall -std=c89 -pedantic -Werror -fsanitize=address -fno-omit-frame-pointer -ggdb
 
 APP_BIN = arkanopong
 
@@ -19,7 +19,7 @@ LIB_PATH = lib
 SRC_FILES = $(shell find $(SRC_PATH) -type f -name '*.c')
 OBJ_FILES = $(patsubst $(SRC_PATH)/%.c,$(OBJ_PATH)/%.o, $(SRC_FILES))
 
-all: $(APP_BIN)
+all: $(APP_BIN) clean
 
 $(APP_BIN): $(OBJ_FILES)
 	@mkdir -p $(BIN_PATH)
@@ -29,5 +29,7 @@ $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c
 	@mkdir -p "$(@D)"
 	$(CC) -c $< -o $@ $(CFLAGS) $(INC_PATH)
 
+.PHONY: clean
+
 clean:
-	rm -f $(OBJ_FILES) $(BIN_PATH)/$(APP_BIN)
+	rm -f $(OBJ_FILES)

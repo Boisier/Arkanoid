@@ -32,15 +32,24 @@ void initGame()
     gameObj.nbrToPrint = 0;
     gameObj.printContent = EMPTY;
 
+    gameObj.keys.up = false;
+    gameObj.keys.down = false;
+    gameObj.keys.left = false;
+    gameObj.keys.right = false;
+    gameObj.keys.space = false;
+    gameObj.keys.enter = false;
+    gameObj.keys.a = false;
+    gameObj.keys.z = false;
+    gameObj.keys.esc = false;
+
+    gameObj.currentlySelectedBtn = NULL;
 }
 
 void theLoop()
 {
-    int inGame = true;
     Uint32 startTime, elapsedTime;
-    SDL_Event e;
     
-    while(inGame) 
+    while(gameObj.gameState != EXITING) 
     {
         startTime = SDL_GetTicks();
         glClear(GL_COLOR_BUFFER_BIT);
@@ -51,29 +60,7 @@ void theLoop()
 
         SDL_GL_SwapBuffers();
 
-        while(SDL_PollEvent(&e)) 
-        {
-            if(e.type == SDL_QUIT) {
-                inGame = false;
-                break;
-            }
-
-            switch(e.type) 
-            {
-                case SDL_KEYDOWN:
-                    switch(e.key.keysym.sym){
-                        case 'q' :
-                        case SDLK_ESCAPE :
-                      inGame = false;
-                            break;
-                        default : break;
-                    }
-                    break;
-                    
-                default:
-                    break;
-            }
-        }
+        watcher();
         
         elapsedTime = SDL_GetTicks() - startTime;
         if(elapsedTime < FRAMERATE_MILLISECONDS) 
@@ -81,6 +68,8 @@ void theLoop()
             SDL_Delay(FRAMERATE_MILLISECONDS - elapsedTime);
         }
     }
+    
+    /** TODO : Clean up app **/
 }
 
 void doThings()
@@ -95,21 +84,115 @@ void doThings()
     }
 }
 
+void watcher()
+{
+    SDL_Event e;
+    bool newKeyValue = false;
+
+    while(SDL_PollEvent(&e)) 
+    {
+        if(e.type == SDL_QUIT) 
+        {
+            gameObj.gameState = EXITING;
+            break;
+        }
+
+        switch(e.type) 
+        {
+            case SDL_KEYDOWN:
+                newKeyValue = true;
+            break;
+            case SDL_KEYUP:
+                newKeyValue = false;
+            break;
+        }
+
+        if(e.type == SDL_KEYDOWN || e.type == SDL_KEYUP)
+        {
+            switch(e.key.keysym.sym)
+            {
+                case SDLK_UP      : gameObj.keys.up    = newKeyValue; break;
+                case SDLK_DOWN    : gameObj.keys.down  = newKeyValue; break;
+                case SDLK_LEFT    : gameObj.keys.left  = newKeyValue; break;
+                case SDLK_RIGHT   : gameObj.keys.right = newKeyValue; break;
+                case SDLK_SPACE   : gameObj.keys.space = newKeyValue; break;
+                case SDLK_RETURN  :
+                case SDLK_KP_ENTER:   /*Let's not forget the keypad*/
+                                    gameObj.keys.enter = newKeyValue; break;
+                case SDLK_a       : gameObj.keys.a     = newKeyValue; break;
+                case SDLK_z       : gameObj.keys.z     = newKeyValue; break;
+                case SDLK_ESCAPE  : gameObj.keys.esc   = newKeyValue; break;
+                default: /*Do nothing for other keys*/ break;
+            }
+        }
+    }
+}
+
 /*Handle main menu*/
 void mainMenu()
 {
+    Button * btn;
+    char callback = 0;
+
     if(gameObj.printContent != MAINMENU)
     {
         createMainMenu();
+        return;
     }
+
+    if(!gameObj.keys.up && !gameObj.keys.down && !gameObj.keys.enter)
+    {
+        return;                             /*None of the keys we need are pressed, no need to go further*/
+    }
+
+    btn = gameObj.currentlySelectedBtn;
+
+    if(gameObj.keys.enter)
+    {
+        callback = btn->callback;
+    }
+    else if(gameObj.keys.up && btn->topBtn != NULL)
+    {
+        btn->state = IDLE;
+        btn->topBtn->state = SELECTED;
+        gameObj.currentlySelectedBtn = btn->topBtn;
+    }
+    else if(gameObj.keys.down && btn->bottomBtn != NULL)
+    {
+        btn->state = IDLE;
+        btn->bottomBtn->state = SELECTED;
+        gameObj.currentlySelectedBtn = btn->bottomBtn;
+    }
+
+    /*Do something with the callback*/
+    printf("%d", callback);
 }
 
 /*Create Mainmenu elements*/
 void createMainMenu()
 {
-    Picture * bigLogo = createPicture(-200, 200, "face.jpg");
+    Picture * background;
+    Button * playBtn, * rulesBtn;
 
-    addToPrint(bigLogo, PICTURE);
+    background = createPicture(-600, 400, "background.png");
+
+    playBtn = createButton(-171, -78, 342, 52, 's');                /*'s' for start*/
+    playBtn->idleTexture = getTexture("playBtn_idle.png");
+    playBtn->selectedTexture = getTexture("playBtn_selected.png");
+    playBtn->state = SELECTED;
+
+    rulesBtn = createButton(-171, -195, 342, 52, 'r');              /*'r' for rules*/
+    rulesBtn->idleTexture = getTexture("rulesBtn_idle.png");
+    rulesBtn->selectedTexture = getTexture("rulesBtn_selected.png");
+    rulesBtn->state = IDLE;
+
+    playBtn->bottomBtn = rulesBtn;
+    rulesBtn->topBtn = playBtn;
+
+    addToPrint(background, PICTURE);
+    addToPrint(playBtn, BUTTON);
+    addToPrint(rulesBtn, BUTTON);
 
     gameObj.printContent = MAINMENU;
+    gameObj.currentlySelectedBtn = playBtn;
 }

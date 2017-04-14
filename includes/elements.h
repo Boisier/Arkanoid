@@ -95,19 +95,25 @@ typedef struct _bonus
 
 } Bonus;
 
-typedef struct _button
-{
+typedef struct _button Button;
+
+struct _button {
 	int x;
 	int y;
-
 	int width;
 	int height;
 
 	GLuint idleTexture;
 	GLuint selectedTexture;
 
-	int callBack;
-} Button;
+	enum elState state;
+	char callback;
+
+	Button * leftBtn;
+	Button * topBtn;
+	Button * rightBtn;
+	Button * bottomBtn;
+};
 
 typedef struct _picture
 {
@@ -138,6 +144,5 @@ typedef struct _printElement
 		Picture * pict;
 	} element;
 	enum elType type;
-	enum elState state;
 
 } PrintElement;

@@ -3,7 +3,7 @@
 /** Create a new picture element with the given texture **/
 Picture * createPicture(float posX, float posY, char * picturePath)
 {
-	Picture * picture = allocate(sizeof(Plateforme));
+	Picture * picture = allocate(sizeof(Button));
 	int height, width;
 
 	picture->x = posX;
@@ -24,8 +24,6 @@ void printPicture(Picture * pict)
 {
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, pict->texture);
-
-	printf("%d %d\n", pict->x, pict->y);
 
 	glBegin(GL_QUADS);
 		glTexCoord2f(0, 0); glVertex2f(pict->x, pict->y);

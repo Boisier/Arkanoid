@@ -7,6 +7,7 @@ void theLoop();
 void doThings();
 
 
+void watcher();
 
 void mainMenu();
 

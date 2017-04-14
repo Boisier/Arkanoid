@@ -24,7 +24,7 @@ void printScreen()
             case BRICK: printPicture(el.element.pict); break;
             case BALL: printPicture(el.element.pict); break;
             case BONUS: printPicture(el.element.pict); break;
-            case BUTTON: printPicture(el.element.pict); break;
+            case BUTTON: printButton(el.element.btn); break;
         }
     }
 }
@@ -48,8 +48,6 @@ PrintElement * addToPrint(void * element, enum elType type)
         case BUTTON: newEl.element.btn = element; break;
         case PICTURE: newEl.element.pict = element; break;
     }
-    
-    newEl.state = IDLE;
     
     /*Add room in the toPrint array to store this new element*/
     newSize = (gameObj.nbrToPrint + 1) * sizeof(PrintElement);
