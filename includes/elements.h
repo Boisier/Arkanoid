@@ -37,6 +37,8 @@ typedef struct _platforme
 
 	float speed;
 
+	GLuint texture;
+
 	enum bonusType bonus;
 	int bonusEnd;
 } Plateforme;

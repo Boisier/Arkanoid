@@ -1,8 +1,3 @@
-//
-//  game.c
-//  Arkanopong
-//
-
 #include "../includes/game.h"
 
 /**
@@ -42,9 +37,12 @@ void initGame()
 void theLoop()
 {
     int inGame = true;
+    Uint32 startTime, elapsedTime;
+    SDL_Event e;
+    
     while(inGame) 
     {
-        Uint32 startTime = SDL_GetTicks();
+        startTime = SDL_GetTicks();
         glClear(GL_COLOR_BUFFER_BIT);
 
         doThings();
@@ -53,7 +51,6 @@ void theLoop()
 
         SDL_GL_SwapBuffers();
 
-        SDL_Event e;
         while(SDL_PollEvent(&e)) 
         {
             if(e.type == SDL_QUIT) {
@@ -78,8 +75,9 @@ void theLoop()
             }
         }
         
-        Uint32 elapsedTime = SDL_GetTicks() - startTime;
-        if(elapsedTime < FRAMERATE_MILLISECONDS) {
+        elapsedTime = SDL_GetTicks() - startTime;
+        if(elapsedTime < FRAMERATE_MILLISECONDS) 
+        {
             SDL_Delay(FRAMERATE_MILLISECONDS - elapsedTime);
         }
     }
@@ -97,7 +95,7 @@ void doThings()
     }
 }
 
-/* Handle main menu */
+/*Handle main menu*/
 void mainMenu()
 {
     if(gameObj.printContent != MAINMENU)
@@ -106,10 +104,10 @@ void mainMenu()
     }
 }
 
+/*Create Mainmenu elements*/
 void createMainMenu()
 {
-    //Create Mainmenu elements
-    Picture * bigLogo = createPicture(-50, 50, "face.jpg");
+    Picture * bigLogo = createPicture(-200, 200, "face.jpg");
 
     addToPrint(bigLogo, PICTURE);
 

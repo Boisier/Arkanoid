@@ -2,13 +2,13 @@
 
 void printScreen()
 {
-    if(gameObj.printContent == EMPTY)
-        return;
-
-
     int nbrToPrint = gameObj.nbrToPrint;
     int i;
     PrintElement el;
+
+    /*No need to go further if there's nothing to print*/
+    if(gameObj.printContent == EMPTY || gameObj.nbrToPrint == 0)
+        return;
 
     /** Clean screen ?**/                            
     
@@ -21,6 +21,10 @@ void printScreen()
         {
             case PLATEFORME: printPlateforme(el.element.plateforme); break;
             case PICTURE: printPicture(el.element.pict); break;
+            case BRICK: printPicture(el.element.pict); break;
+            case BALL: printPicture(el.element.pict); break;
+            case BONUS: printPicture(el.element.pict); break;
+            case BUTTON: printPicture(el.element.pict); break;
         }
     }
 }

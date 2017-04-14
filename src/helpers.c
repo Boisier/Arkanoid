@@ -1,18 +1,23 @@
 #include "../includes/game.h"
 
-void throwCriticalError()                   /*Clean the program then terminate it*/
+/* Send an error and completely stop the program */
+void throwCriticalError()                   
 {
-    printf("A critical error occured and the program had to stop.\n");  /*Throw error message*/
-     exit(0);                               /*End the program*/
+    printf("A critical error occured and the program had to stop.\n");
+     exit(0);                               
 }
 
-void criticalIfNull(void * pointer)         /*Throw a critical error and stop the application if the given pointer is null*/
+
+/*Throw a critical error and stop the application if the given pointer is null*/
+void criticalIfNull(void * pointer)         
 {
     if(pointer == NULL)                     /*Is the given pointer NULL?*/
         throwCriticalError();               /*Yes, then stop all*/
 }
 
-void * allocate(int size)                   /*malloc encapsulation with failing behavior handling*/
+
+/*malloc encapsulation with failing behavior handling*/
+void * allocate(int size)                   
 {
     void * var = malloc(size);              /*Allocate asked memory*/
     criticalIfNull(var);                    /*Did the allocation worked ?*/
@@ -20,7 +25,9 @@ void * allocate(int size)                   /*malloc encapsulation with failing 
     return var;                             /*Yes, return newly allocated pointer*/
 }
 
-void * reAllocate(void * var, int newSize)  /*realloc encapsulation with failing behavior handling*/
+
+/*realloc encapsulation with failing behavior handling*/
+void * reAllocate(void * var, int newSize)  
 {
     var = realloc(var, newSize);            /*realloc asked memory to the given pointer*/
     criticalIfNull(var);                    /*Did the allocation worked ?*/
@@ -29,35 +36,82 @@ void * reAllocate(void * var, int newSize)  /*realloc encapsulation with failing
 }
 
 
-
-
+/*Load the asked texture from the theme folder. Handle already loaded textures*/
 GLuint getTexture(char * imagePath)
 {
-	//Make sure the texture isn't already loaded
 	char path[356]; /* 256 for path, 100 for image should be enough */
+	int rslt;
+	SDL_Surface * image;
+	GLuint * texture;
+	GLenum format;
+
+	/* Build path */
 	strcpy(path, gameObj.theme);
     strcat(path, imagePath);
+	
+	rslt = textureLoaded(path);				/*Make sure the texture isn't already loaded*/
 
-	int rslt = textureLoaded(path);
-
-	if(rslt != -1)
+	if(rslt != -1)							/*Is the texture already loaded ?*/
 	{
-		//Texture already loaded
-		return gameObj.textures[rslt];
+		return gameObj.textures[rslt];		/*Return the already loaded texture*/
 	}
 
-	//This is a new texture
+	/*This is a new texture*/
 
-	//Load it
-	SDL_Surface * image = IMG_Load(path);
+	image = IMG_Load(path);	/*Load the image*/
 
-    if(image == NULL)
+    if(image == NULL)						/*Loading ok ?*/
 	{
         printf("No image > %s\n", path);
 		return -1;
 	}
 
-	//Add space to store it
+	/*Increase space in texture holder to store the new one*/
+	texture = addTextureSlot(path); /*And get the newly created space*/
+
+	glGenTextures(1, texture);
+	glBindTexture(GL_TEXTURE_2D, *texture);
+
+	/*Set filters*/
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	
+	format = getImageFormat(image);	/*Get image format*/
+
+	/*Send to OpenGL with this LOVELY function*/
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->w, image->h, 0, format, GL_UNSIGNED_BYTE, image->pixels);
+
+    SDL_FreeSurface(image); /*Free the image*/
+
+	glBindTexture(GL_TEXTURE_2D, 0); /*Leave the texture*/
+
+	return * texture; /*Return the texture ID*/
+}
+
+/*Return the image format to use with openGL*/
+GLenum getImageFormat(SDL_Surface * image)
+{
+	switch(image->format->BytesPerPixel) 
+	{
+		case 1:
+			return GL_RED;
+		break;
+		case 3:
+			return GL_RGB;
+		break;
+		case 4:
+			return GL_RGBA;
+		break;
+		default:
+			fprintf(stderr, "Format des pixels de l'image non pris en charge\n");
+			return 0;
+	}
+}
+
+/*Add one more texture slot to store*/
+GLuint * addTextureSlot(char * path)
+{
 	gameObj.nbrTextures++;
 
 	if(gameObj.nbrTextures == 1)
@@ -72,63 +126,17 @@ GLuint getTexture(char * imagePath)
 	}
 
 	gameObj.texturesPath[gameObj.nbrTextures - 1] = allocate(sizeof(char) * 100);
-	
-	//Mark current texture as loaded
-	strcpy(gameObj.texturesPath[gameObj.nbrTextures - 1], path);
 
-	//Get the newly created space
-	GLuint * texture = &gameObj.textures[gameObj.nbrTextures - 1];
+	strcpy(gameObj.texturesPath[gameObj.nbrTextures - 1], path);	/*Mark new texture as loaded*/
 
-	glGenTextures(1, texture);
-	glBindTexture(GL_TEXTURE_2D, *texture);
-
-	//Set filters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	//Get image format
-	GLenum format = getImageFormat(image);
-
-	//Send to OpenGL
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->w, image->h, 0, format, GL_UNSIGNED_BYTE, image->pixels);
-
-	//Free the image
-    SDL_FreeSurface(image);
-
-	glBindTexture(GL_TEXTURE_2D, 0); // on debind la texture sur laquelle des operations ont été faites
-
-	//And return the texture
-	return * texture;
-}
-
-
-GLenum getImageFormat(SDL_Surface * image)
-{
-	switch(image->format->BytesPerPixel) 
-	{
-		case 1:
-			return GL_RED;
-		break;
-		case 3:
-			/* Ne gere pas les machines big-endian (a confirmer...) */
-			return GL_RGB;
-		break;
-		case 4:
-			/* Ne gere pas les machines big-endian (a confirmer...) */
-			return GL_RGBA;
-		break;
-		default:
-			/* On ne traite pas les autres cas */
-			fprintf(stderr, "Format des pixels de l'image non pris en charge\n");
-			return 0;
-	}
+	return &gameObj.textures[gameObj.nbrTextures - 1];
 }
 
 
 
 
 
-
+/*Tell if the texture as already been loaded or not*/
 int textureLoaded(char * needle)
 {
 	int i;
@@ -146,7 +154,7 @@ int textureLoaded(char * needle)
 
 
 
-
+/*Return the dimensions of the texture*/
 void getTextureDimensions(GLuint texture, int * width, int * height)
 {
 	glBindTexture(GL_TEXTURE_2D, texture);

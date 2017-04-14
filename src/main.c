@@ -2,10 +2,10 @@
 
 int main(int argc, char** argv) 
 {
-    //Init the GameObj
+    /*Init the GameObj*/
     initGame();
 
-    //Open the window
+    /*Open the window*/
     if(!createWindow())
     {
         return 0;

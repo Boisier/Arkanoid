@@ -1,5 +1,6 @@
 #include "../../includes/game.h"
 
+/** Create a new plateforme element width the defaultplateforme texture**/
 Plateforme * createPlateforme(float posX, float posY)
 {
 	Plateforme * plateforme = allocate(sizeof(Plateforme));
@@ -8,6 +9,7 @@ Plateforme * createPlateforme(float posX, float posY)
 	plateforme->y = posY;
 
 	plateforme->speed = 0;
+	plateforme->texture = getTexture("plateforme.png");
 
 	plateforme->bonus = NONE;
 	plateforme->bonusEnd = 0;
@@ -15,12 +17,11 @@ Plateforme * createPlateforme(float posX, float posY)
 	return plateforme;
 }
 
+/** Print the plateforme on the screen**/
 void printPlateforme(Plateforme * plateforme)
-{
-	GLuint texture = getTexture("plateforme.png");
-	
+{	
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, texture);
+	glBindTexture(GL_TEXTURE_2D, plateforme->texture);
 	
 	glBegin(GL_QUADS);
 		glTexCoord2f(0, 0); glVertex2f(plateforme->x, plateforme->y);
@@ -34,6 +35,7 @@ void printPlateforme(Plateforme * plateforme)
 	glDisable(GL_TEXTURE_2D);
 }
 
+/** Free the plateforme, the texture is not free-ed **/
 void freePlateforme(Plateforme * plateforme)
 {
 	free(plateforme);

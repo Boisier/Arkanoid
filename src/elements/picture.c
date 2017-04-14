@@ -1,5 +1,6 @@
 #include "../../includes/game.h"
 
+/** Create a new picture element with the given texture **/
 Picture * createPicture(float posX, float posY, char * picturePath)
 {
 	Picture * picture = allocate(sizeof(Plateforme));
@@ -18,10 +19,13 @@ Picture * createPicture(float posX, float posY, char * picturePath)
 	return picture;
 }
 
+/** Print the given picture to the screen */
 void printPicture(Picture * pict)
 {
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, pict->texture);
+
+	printf("%d %d\n", pict->x, pict->y);
 
 	glBegin(GL_QUADS);
 		glTexCoord2f(0, 0); glVertex2f(pict->x, pict->y);
@@ -34,6 +38,7 @@ void printPicture(Picture * pict)
 	glDisable(GL_TEXTURE_2D);
 }
 
+/** Free the picture element, the texture is NOT free-ed **/
 void freePicture(Picture * pict)
 {
 	free(pict);
