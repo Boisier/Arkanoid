@@ -6,9 +6,14 @@ void theLoop();
 
 void doThings();
 
-
+/** Core functions **/
 void watcher();
 
-void mainMenu();
+char btnHandler();
 
+/** Screen functions **/
+void mainMenu();
 void createMainMenu();
+
+void playerSelection();
+void createPlayerSelection();

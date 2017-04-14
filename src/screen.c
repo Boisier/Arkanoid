@@ -64,3 +64,51 @@ PrintElement * addToPrint(void * element, enum elType type)
     /*Return the newly created element so it can be edited*/
     return &gameObj.toPrint[gameObj.nbrToPrint-1];       
 }
+
+/**cleanPrint() empty the toPrint array**/
+void cleanToPrint()
+{
+    int i;
+
+    if(gameObj.nbrToPrint != 0)
+    {
+        for(i = 0; i < gameObj.nbrToPrint; i++)
+        {
+            /*Free the element with the appropriate function*/
+            switch(gameObj.toPrint[i].type)          
+            {
+                case PLATEFORME: freePlateforme(gameObj.toPrint[i].element.plateforme); break;
+                case BRICK: freePlateforme(gameObj.toPrint[i].element.plateforme); break;
+                case BALL: freePlateforme(gameObj.toPrint[i].element.plateforme); break;
+                case BONUS: freePlateforme(gameObj.toPrint[i].element.plateforme); break;
+                case BUTTON: freeButton(gameObj.toPrint[i].element.btn); break;
+                case PICTURE: freePicture(gameObj.toPrint[i].element.pict); break;
+            }
+        }
+
+        free(gameObj.toPrint); 
+        
+        gameObj.toPrint = NULL;
+        gameObj.nbrToPrint = 0;                                     
+    }
+}
+
+
+
+void freeTextures()
+{
+    int i;
+
+    /*Free all textures*/
+    glDeleteTextures(gameObj.nbrTextures, gameObj.textures);
+
+    for(i = 0; i < gameObj.nbrTextures; ++i)
+    {
+        free(gameObj.texturesPath[i]);
+    }
+
+    free(gameObj.texturesPath);
+    
+    gameObj.texturesPath = NULL;
+    gameObj.nbrTextures = 0;
+}

@@ -4,6 +4,7 @@ typedef enum _GameState
 {
     EMPTY,
     MAINMENU,
+    PLAYERSELECTION,
     EXITING
 } GameState;
 

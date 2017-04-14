@@ -4,4 +4,6 @@ void printScreen();
 
 PrintElement * addToPrint(void * element, enum elType type);
 
-void freeToPrint();
+void cleanToPrint();
+
+void freeTextures();
