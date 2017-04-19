@@ -10,18 +10,21 @@ void initGame()
 
     strcpy(gameObj.theme, "themes/default/");
 
-    gameObj.platformeHeight = 5;
-    gameObj.platMaxSpeed = 25;
-    gameObj.platSpeedUpFactor = 2.5;
+    gameObj.defVal.plateforme.size = 25;
+    gameObj.defVal.plateforme.height = 5;
+    gameObj.defVal.plateforme.maxSpeed = 25;
+    gameObj.defVal.plateforme.acceleration = 2.5;
 
-    gameObj.brickWidth = 50;
-    gameObj.brickHeight = 20;
+    gameObj.defVal.brick.width = 50;
+    gameObj.defVal.brick.height = 20;
     
-    gameObj.ballSize = 15;
-    gameObj.defaultSpeed = 5; 
+    gameObj.defVal.ball.size = 15;
+    gameObj.defVal.ball.speed = 5; 
 
-    gameObj.bonusSize = 10;
-    gameObj.bonusSpeed = 10;
+    gameObj.defVal.bonus.size = 10;
+    gameObj.defVal.bonus.speed = 10;
+
+    gameObj.defVal.lifeNbr = 3;
 
     gameObj.gameState = MAINMENU;
 
@@ -83,6 +86,9 @@ void doThings()
         break;
         case PLAYERSELECTION:
             playerSelection();
+        break;
+        case STARTGAME:
+            startGame();
         default:
             return;
     }
@@ -109,35 +115,6 @@ void mainMenu()
     }
 }
 
-/*Create Mainmenu elements*/
-void createMainMenu()
-{
-    Picture * background;
-    Button * playBtn, * rulesBtn;
-
-    background = createPicture(-600, 400, "background.png");
-
-    playBtn = createButton(-171, -78, 342, 52, 's');                /*'s' for start*/
-    playBtn->idleTexture = getTexture("playBtn_idle.png");
-    playBtn->selectedTexture = getTexture("playBtn_selected.png");
-    playBtn->state = SELECTED;
-
-    rulesBtn = createButton(-171, -195, 342, 52, 'r');              /*'r' for rules*/
-    rulesBtn->idleTexture = getTexture("rulesBtn_idle.png");
-    rulesBtn->selectedTexture = getTexture("rulesBtn_selected.png");
-    rulesBtn->state = IDLE;
-
-    playBtn->bottomBtn = rulesBtn;
-    rulesBtn->topBtn = playBtn;
-
-    addToPrint(background, PICTURE);
-    addToPrint(playBtn, BUTTON);
-    addToPrint(rulesBtn, BUTTON);
-
-    gameObj.printContent = MAINMENU;
-    gameObj.currentlySelectedBtn = playBtn;
-}
-
 void playerSelection()
 {
     char callback;
@@ -151,45 +128,47 @@ void playerSelection()
 
     callback = btnHandler();
 
-    if(callback == 's')
+    if(callback == 'b')
     {
-        return;
+        gameObj.gameState = MAINMENU;
+    }
+    else if(callback == '1' || callback == '2')
+    {
+        gameObj.nbrPlayers = (int)callback;
+        gameObj.gameState = STARTGAME;
     }
 }
 
-/*Create Mainmenu elements*/
-void createPlayerSelection()
+void startGame()
 {
-    Picture * background;
-    Button * onePlayerBtn, * twoPlayerBtn, * backBtn;
+    createPlayer(HUMAN);
+}
 
-    background = createPicture(-600, 400, "background.png");
+void createPlayer(enum PlayerType type)
+{
+    int playerNbr = gameObj.nbrPlayers + 1;
+    
+    int platX = gameObj.WINDOW_WIDTH / 2 - gameObj.defVal.plateforme.size / 2;
+    int platY = gameObj.WINDOW_HEIGHT / 2;
 
-    onePlayerBtn = createButton(-171, -78, 342, 52, 's');                /*'s' for start*/
-    onePlayerBtn->idleTexture = getTexture("onePlayerBtn_idle.png");
-    onePlayerBtn->selectedTexture = getTexture("onePlayerBtn_selected.png");
-    onePlayerBtn->state = SELECTED;
+    Player player;
 
-    twoPlayerBtn = createButton(-171, -195, 342, 52, 'r');              /*'r' for rules*/
-    twoPlayerBtn->idleTexture = getTexture("twoPlayerBtn_idle.png");
-    twoPlayerBtn->selectedTexture = getTexture("twoPlayerBtn_selected.png");
-    twoPlayerBtn->state = IDLE;
+    if(playerNbr == 1)
+        platY += 40;
+    else
+        platY -= 50;
 
-    backBtn = createButton(-171, -312, 342, 52, 'r');              /*'r' for rules*/
-    backBtn->idleTexture = getTexture("backBtn_idle.png");
-    backBtn->selectedTexture = getTexture("backBtn_selected.png");
-    backBtn->state = IDLE;
+    player.type = type;
+    player.life = gameObj.defVal.lifeNbr;
 
-    onePlayerBtn->bottomBtn = twoPlayerBtn;
-    twoPlayerBtn->topBtn = onePlayerBtn;
-    twoPlayerBtn->bottomBtn = backBtn;
-    backBtn->topBtn = twoPlayerBtn;
+    player.plateforme = createPlateforme(platX, platY);
 
-    addToPrint(background, PICTURE);
-    addToPrint(onePlayerBtn, BUTTON);
-    addToPrint(twoPlayerBtn, BUTTON);
-    addToPrint(backBtn, BUTTON);
+    if(gameObj.nbrPlayers == 0)
+        gameObj.players = allocate(sizeof(Player));
+    else
+        gameObj.players = reAllocate(gameObj.players, sizeof(playerNbr));
+    
+    gameObj.players[gameObj.nbrPlayers] = player;
 
-    gameObj.printContent = PLAYERSELECTION;
-    gameObj.currentlySelectedBtn = onePlayerBtn;
+    gameObj.nbrPlayers++;
 }

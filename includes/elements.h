@@ -146,3 +146,26 @@ typedef struct _printElement
 	enum elType type;
 
 } PrintElement;
+
+
+
+
+
+enum PlayerType
+{
+	HUMAN,
+	AI
+};
+
+typedef struct _player
+{
+	enum PlayerType type;
+
+	int life;
+	int score; /* ~ */
+
+	Plateforme * plateforme;
+	
+
+
+} Player;

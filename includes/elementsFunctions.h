@@ -1,6 +1,6 @@
 #pragma once
 
-Plateforme * createPlatforme(float posX, float posY);
+Plateforme * createPlateforme(float posX, float posY);
 void printPlateforme(Plateforme * plateforme);
 void freePlateforme(Plateforme * plateforme);
 

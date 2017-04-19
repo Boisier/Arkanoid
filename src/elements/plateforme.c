@@ -7,6 +7,7 @@ Plateforme * createPlateforme(float posX, float posY)
 
 	plateforme->x = posX;
 	plateforme->y = posY;
+	plateforme->size = gameObj.defVal.plateforme.size;
 
 	plateforme->speed = 0;
 	plateforme->texture = getTexture("plateforme.png");
@@ -26,8 +27,8 @@ void printPlateforme(Plateforme * plateforme)
 	glBegin(GL_QUADS);
 		glTexCoord2f(0, 0); glVertex2f(plateforme->x, plateforme->y);
 		glTexCoord2f(1, 0); glVertex2f(plateforme->x + plateforme->size, plateforme->y);
-		glTexCoord2f(1, 1); glVertex2f(plateforme->x + plateforme->size, plateforme->y - gameObj.platformeHeight);
-		glTexCoord2f(0, 1); glVertex2f(plateforme->x, plateforme->y - gameObj.platformeHeight);
+		glTexCoord2f(1, 1); glVertex2f(plateforme->x + plateforme->size, plateforme->y - gameObj.defVal.plateforme.height);
+		glTexCoord2f(0, 1); glVertex2f(plateforme->x, plateforme->y - gameObj.defVal.plateforme.height);
 	glEnd();
 
 

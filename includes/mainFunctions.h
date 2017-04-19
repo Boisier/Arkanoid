@@ -17,3 +17,6 @@ void createMainMenu();
 
 void playerSelection();
 void createPlayerSelection();
+
+void startGame();
+void createPlayer(enum PlayerType type);

@@ -59,6 +59,10 @@ char btnHandler()
     if(gameObj.keys.enter)
     {
         callback = btn->callback;
+        
+        /*Deactivate the key*/
+        gameObj.keys.enter = false;
+
 		return callback;
     }
 
@@ -67,6 +71,10 @@ char btnHandler()
         btn->state = IDLE;
         btn->topBtn->state = SELECTED;
         gameObj.currentlySelectedBtn = btn->topBtn;
+
+        /*Deactivate the key*/
+        gameObj.keys.up = false;
+
 		return 0;
     }
     
@@ -75,6 +83,10 @@ char btnHandler()
         btn->state = IDLE;
         btn->bottomBtn->state = SELECTED;
         gameObj.currentlySelectedBtn = btn->bottomBtn;
+        
+        /*Deactivate the key*/
+        gameObj.keys.down = false;
+
 		return 0;
     }
 

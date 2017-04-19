@@ -5,6 +5,7 @@ typedef enum _GameState
     EMPTY,
     MAINMENU,
     PLAYERSELECTION,
+    STARTGAME,
     EXITING
 } GameState;
 
@@ -31,21 +32,38 @@ typedef struct _GameObj
     /** Theme **/
     char theme[256];
 
-    /** Elements default values **/
-    int platformeHeight;
-    float platMaxSpeed;
-    float platSpeedUpFactor;
+    /** Default values **/
+    struct
+    {
+        struct
+        {
+            int size;
+            int height;
+            float maxSpeed;
+            float acceleration;
+        } plateforme;
 
-    int brickWidth;
-    int brickHeight;
-    float ballSize;
-    float defaultSpeed; 
+        struct
+        {
+            int width;
+            int height;
+        } brick;
 
-    float bonusSize;
-    float bonusSpeed;
+        struct
+        {
+            int size;
+            float speed;
+        } ball;
 
-    /** Game Properties **/
-    int nbrPlayers;
+        struct
+        {
+            int size;
+            float speed;
+        } bonus;
+
+        int lifeNbr;
+
+    } defVal;
 
     /** Loop storage **/
     GameState gameState;
@@ -65,6 +83,10 @@ typedef struct _GameObj
 
     /** Interactions holders **/
     Button * currentlySelectedBtn;
+
+    /** The Game **/
+    int nbrPlayers;
+    Player * players;
 
 } GameObj;
 
