@@ -86,7 +86,7 @@ typedef struct _GameObj
     Button * currentlySelectedBtn;
 
     /** The Game **/
-    int nbrPlayers;
+    int nbrHumanPlayers;
     Player ** players;
 
 } GameObj;

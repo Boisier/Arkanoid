@@ -20,3 +20,5 @@ void createPlayerSelection();
 
 void startGame();
 void createPlayer(enum PlayerType type, int playerNbr);
+
+void ingame();

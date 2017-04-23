@@ -47,7 +47,7 @@ void initGame()
 
     gameObj.currentlySelectedBtn = NULL;
 
-    gameObj.nbrPlayers = 0;
+    gameObj.nbrHumanPlayers = 0;
     gameObj.players = NULL;
 }
 
@@ -92,6 +92,10 @@ void doThings()
         break;
         case STARTGAME:
             startGame();
+        break;
+        case INGAME:
+            ingame();
+        break;
         default:
             return;
     }
@@ -137,7 +141,7 @@ void playerSelection()
     }
     else if(callback == 1 || callback == 2)
     {
-        gameObj.nbrPlayers = callback;
+        gameObj.nbrHumanPlayers = callback;
         gameObj.gameState = STARTGAME;
     }
 }
@@ -149,10 +153,14 @@ void startGame()
         /*Free players*/
     }
     
-    gameObj.players = allocate(sizeof(Player *) * gameObj.nbrPlayers);
+    gameObj.players = allocate(sizeof(Player *) * 2);
 
     createPlayer(HUMAN, 1);
-    createPlayer(AI, 1);
+
+    if(gameObj.nbrHumanPlayers == 1)
+        createPlayer(AI, 2);
+    else
+        createPlayer(HUMAN, 2);
 
     gameObj.gameState = INGAME;
 }
@@ -175,4 +183,9 @@ void createPlayer(enum PlayerType type, int playerNbr)
     player->plateforme = createPlateforme(platX, platY);
 
     gameObj.players[playerNbr - 1] = player;
+}
+
+void ingame()
+{
+
 }
