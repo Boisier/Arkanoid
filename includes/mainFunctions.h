@@ -19,4 +19,4 @@ void playerSelection();
 void createPlayerSelection();
 
 void startGame();
-void createPlayer(enum PlayerType type);
+void createPlayer(enum PlayerType type, int playerNbr);

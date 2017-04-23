@@ -46,6 +46,9 @@ void initGame()
     gameObj.keys.esc = false;
 
     gameObj.currentlySelectedBtn = NULL;
+
+    gameObj.nbrPlayers = 0;
+    gameObj.players = NULL;
 }
 
 void theLoop()
@@ -132,43 +135,44 @@ void playerSelection()
     {
         gameObj.gameState = MAINMENU;
     }
-    else if(callback == '1' || callback == '2')
+    else if(callback == 1 || callback == 2)
     {
-        gameObj.nbrPlayers = (int)callback;
+        gameObj.nbrPlayers = callback;
         gameObj.gameState = STARTGAME;
     }
 }
 
 void startGame()
 {
-    createPlayer(HUMAN);
+    if(gameObj.players != NULL)
+    {
+        /*Free players*/
+    }
+    
+    gameObj.players = allocate(sizeof(Player *) * gameObj.nbrPlayers);
+
+    createPlayer(HUMAN, 1);
+    createPlayer(AI, 1);
+
+    gameObj.gameState = INGAME;
 }
 
-void createPlayer(enum PlayerType type)
-{
-    int playerNbr = gameObj.nbrPlayers + 1;
-    
+void createPlayer(enum PlayerType type, int playerNbr)
+{   
     int platX = gameObj.WINDOW_WIDTH / 2 - gameObj.defVal.plateforme.size / 2;
     int platY = gameObj.WINDOW_HEIGHT / 2;
 
-    Player player;
+    Player * player = allocate(sizeof(Player));
 
     if(playerNbr == 1)
-        platY += 40;
+        platY += 40;    /*Bottom player*/
     else
-        platY -= 50;
+        platY -= 50;    /*Top player*/
 
-    player.type = type;
-    player.life = gameObj.defVal.lifeNbr;
+    player->type = type;
+    player->life = gameObj.defVal.lifeNbr;
 
-    player.plateforme = createPlateforme(platX, platY);
+    player->plateforme = createPlateforme(platX, platY);
 
-    if(gameObj.nbrPlayers == 0)
-        gameObj.players = allocate(sizeof(Player));
-    else
-        gameObj.players = reAllocate(gameObj.players, sizeof(playerNbr));
-    
-    gameObj.players[gameObj.nbrPlayers] = player;
-
-    gameObj.nbrPlayers++;
+    gameObj.players[playerNbr - 1] = player;
 }

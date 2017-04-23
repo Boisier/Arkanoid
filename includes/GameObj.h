@@ -6,6 +6,7 @@ typedef enum _GameState
     MAINMENU,
     PLAYERSELECTION,
     STARTGAME,
+    INGAME,
     EXITING
 } GameState;
 
@@ -86,7 +87,7 @@ typedef struct _GameObj
 
     /** The Game **/
     int nbrPlayers;
-    Player * players;
+    Player ** players;
 
 } GameObj;
 

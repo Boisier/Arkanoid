@@ -37,12 +37,12 @@ void createPlayerSelection()
 
     background = createPicture(-600, 400, "background.png");
 
-    onePlayerBtn = createButton(-171, -78, 342, 52, '1');                /*'s' for start*/
+    onePlayerBtn = createButton(-171, -78, 342, 52, 1);                /*'s' for start*/
     onePlayerBtn->idleTexture = getTexture("onePlayerBtn_idle.png");
     onePlayerBtn->selectedTexture = getTexture("onePlayerBtn_selected.png");
     onePlayerBtn->state = SELECTED;
 
-    twoPlayerBtn = createButton(-171, -195, 342, 52, '2');              /*'r' for rules*/
+    twoPlayerBtn = createButton(-171, -195, 342, 52, 2);              /*'r' for rules*/
     twoPlayerBtn->idleTexture = getTexture("twoPlayerBtn_idle.png");
     twoPlayerBtn->selectedTexture = getTexture("twoPlayerBtn_selected.png");
     twoPlayerBtn->state = IDLE;
