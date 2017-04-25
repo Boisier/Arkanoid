@@ -27,8 +27,8 @@ typedef struct _keyPressed
 typedef struct _GameObj
 {
     /** Window Properties **/
-    int WINDOW_WIDTH;
-    int WINDOW_HEIGHT;
+    int wWidth;
+    int wHeight;
 
     /** Theme **/
     char theme[256];

@@ -31,7 +31,7 @@ void printPlateforme(Plateforme * plateforme)
 	w = plateforme->size;
 	h = gameObj.defVal.plateforme.height;
 
-	if(plateforme->pos == BOTTOM)
+	if(plateforme->pos == TOP)
 		h *= -1;
 
 	glEnable(GL_TEXTURE_2D);
@@ -66,15 +66,15 @@ BaseRect getPlateformeBaseRect(Plateforme * plat)
 	
 	if(plat->pos == TOP)
 	{
-		platBase.topLeftY = plat->y + gameObj.defVal.plateforme.height;
-		platBase.topRightY = plat->y + gameObj.defVal.plateforme.height;
-		platBase.bottomRightY = plat->y;
-		platBase.bottomLeftY = plat->y;
+		platBase.topLeftY = plat->y;
+		platBase.topRightY = plat->y;
+		platBase.bottomRightY = plat->y - gameObj.defVal.plateforme.height;
+		platBase.bottomLeftY = plat->y - gameObj.defVal.plateforme.height;
 	}
 	else
 	{
-		platBase.topLeftY = plat->y - gameObj.defVal.plateforme.height;
-		platBase.topRightY = plat->y - gameObj.defVal.plateforme.height;
+		platBase.topLeftY = plat->y + gameObj.defVal.plateforme.height;
+		platBase.topRightY = plat->y + gameObj.defVal.plateforme.height;
 		platBase.bottomRightY = plat->y;
 		platBase.bottomLeftY = plat->y;
 	}

@@ -37,9 +37,9 @@ void printBall(Ball * ball)
 	if(ball->glued)
 	{
 		if(ball->gluedPlat->pos == TOP)
-			ball->y = ball->gluedPlat->y + gameObj.defVal.plateforme.height + ball->size / 2;
+			ball->y = ball->gluedPlat->y + ball->size / 2;
 		else
-			ball->y = ball->gluedPlat->y - gameObj.defVal.plateforme.height - ball->size / 2;
+			ball->y = ball->gluedPlat->y - ball->size / 2;
 
 		ball->x = ball->gluedPlat->x + ball->glueOffsetX;
 	}
@@ -119,16 +119,16 @@ void moveBall(Ball * ball)
 		ball->direction.x *= -1;
 	}
 	/*Too much on the right ?*/
-	if(ball->x + ball->size > gameObj.WINDOW_WIDTH)
+	if(ball->x + ball->size > gameObj.wWidth)
 	{
-		ball->x = gameObj.WINDOW_WIDTH - (ball->x + ball->size - gameObj.WINDOW_WIDTH);
+		ball->x = gameObj.wWidth - (ball->x + ball->size - gameObj.wWidth);
 		ball->direction.x *= -1;
 	}	
 }
 
 bool ballLost(Ball * ball, int * player)
 {
-	if(ball->y - ball->size > gameObj.WINDOW_HEIGHT)
+	if(ball->y - ball->size > gameObj.wHeight)
 	{
 		/*Lost by bottom player*/
 		* player = 0;

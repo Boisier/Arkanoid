@@ -35,6 +35,15 @@ void * reAllocate(void * var, int newSize)
     return var;                             /*Yes, return the pointer*/
 }
 
+float percent(float percent, char direction)  /*return a percentage based on the window size*/
+{
+    if(direction == 'w')
+        return (gameObj.wWidth / 100.0) * percent;
+    else if(direction == 'h')
+        return (gameObj.wHeight / 100.0) * percent;
+    else
+        return 0;
+}
 
 /*Load the asked texture from the theme folder. Handle already loaded textures*/
 GLuint getTexture(char * imagePath)

@@ -8,12 +8,12 @@ void createMainMenu()
 
     background = createPicture(0, 0, "background.png");
 
-    playBtn = createButton(429, 478, 342, 52, 's');                /*'s' for start*/
+    playBtn = createButton(percent(50, 'w') - 171, 478, 342, 52, 's');                /*'s' for start*/
     playBtn->idleTexture = getTexture("playBtn_idle.png");
     playBtn->selectedTexture = getTexture("playBtn_selected.png");
     playBtn->state = SELECTED;
 
-    rulesBtn = createButton(429, 595, 342, 52, 'r');              /*'r' for rules*/
+    rulesBtn = createButton(percent(50, 'w') - 171, 595, 342, 52, 'r');              /*'r' for rules*/
     rulesBtn->idleTexture = getTexture("rulesBtn_idle.png");
     rulesBtn->selectedTexture = getTexture("rulesBtn_selected.png");
     rulesBtn->state = IDLE;
@@ -37,17 +37,17 @@ void createPlayerSelection()
 
     background = createPicture(0, 0, "background.png");
 
-    onePlayerBtn = createButton(429, 478, 342, 52, 1);                /*'s' for start*/
+    onePlayerBtn = createButton(percent(50, 'w') - 171, 478, 342, 52, 1);                /*'s' for start*/
     onePlayerBtn->idleTexture = getTexture("onePlayerBtn_idle.png");
     onePlayerBtn->selectedTexture = getTexture("onePlayerBtn_selected.png");
     onePlayerBtn->state = SELECTED;
 
-    twoPlayerBtn = createButton(429, 595, 342, 52, 2);              /*'r' for rules*/
+    twoPlayerBtn = createButton(percent(50, 'w') - 171, 595, 342, 52, 2);              /*'r' for rules*/
     twoPlayerBtn->idleTexture = getTexture("twoPlayerBtn_idle.png");
     twoPlayerBtn->selectedTexture = getTexture("twoPlayerBtn_selected.png");
     twoPlayerBtn->state = IDLE;
 
-    backBtn = createButton(429, 712, 342, 52, 'b');              /*'b' for back*/
+    backBtn = createButton(percent(50, 'w') - 171, 712, 342, 52, 'b');              /*'b' for back*/
     backBtn->idleTexture = getTexture("backBtn_idle.png");
     backBtn->selectedTexture = getTexture("backBtn_selected.png");
     backBtn->state = IDLE;

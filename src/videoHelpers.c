@@ -5,7 +5,7 @@ void reshape(unsigned int width, unsigned int height)
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(0, gameObj.WINDOW_WIDTH, gameObj.WINDOW_HEIGHT, 0);
+    gluOrtho2D(0, gameObj.wWidth, gameObj.wHeight, 0);
 }
 
 void setVideoMode(unsigned int width, unsigned int height) 
@@ -27,7 +27,7 @@ bool createWindow()
         return false;
     }
 
-    setVideoMode(gameObj.WINDOW_WIDTH, gameObj.WINDOW_HEIGHT);
+    setVideoMode(gameObj.wWidth, gameObj.wHeight);
 
     SDL_WM_SetCaption("Clickodrome", NULL);
 

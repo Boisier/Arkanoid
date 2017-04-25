@@ -160,9 +160,9 @@ void playerMovements()
             plateforme->dirFactor = 1;
 
             /*Are we still in the game area ?*/
-            if(plateforme->x + plateforme->size > gameObj.WINDOW_WIDTH)
+            if(plateforme->x + plateforme->size > gameObj.wWidth)
             {
-                plateforme->x = gameObj.WINDOW_WIDTH - plateforme->size;
+                plateforme->x = gameObj.wWidth - plateforme->size;
                 plateforme->speed = 0;
             }
         }

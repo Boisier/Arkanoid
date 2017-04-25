@@ -5,8 +5,8 @@
  */
 void initGame()
 {
-    gameObj.WINDOW_WIDTH = 1200;
-    gameObj.WINDOW_HEIGHT = 800;
+    gameObj.wWidth = 1200;
+    gameObj.wHeight = 800;
 
     strcpy(gameObj.theme, "themes/default/");
 
@@ -170,7 +170,7 @@ void startGame()
 
 void createPlayer(enum PlayerType type, int playerNbr)
 {   
-    int platX = (gameObj.WINDOW_WIDTH / 2 - gameObj.defVal.plateforme.size / 2);
+    int platX = (gameObj.wWidth / 2 - gameObj.defVal.plateforme.size / 2);
     int platY;
 
     Player * player = allocate(sizeof(Player));
@@ -178,7 +178,7 @@ void createPlayer(enum PlayerType type, int playerNbr)
     if(playerNbr == 1)
     {
         player->playerPos = BOTTOM;
-        platY = gameObj.WINDOW_HEIGHT - 50;
+        platY = gameObj.wHeight - 50;
     }
     else
     {

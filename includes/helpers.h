@@ -9,6 +9,8 @@ void * allocate(int size);
 
 void * reAllocate(void * var, int newSize);
 
+float percent(float percent, char direction);
+
 
 
 
