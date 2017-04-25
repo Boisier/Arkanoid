@@ -96,6 +96,7 @@ char btnHandler()
 void playerMovements()
 {
     int i;
+    float speedFactor, speedBonus;
     Player * player;
     Plateforme * plateforme;
     bool leftKey, rightKey;
@@ -132,7 +133,12 @@ void playerMovements()
         }
         
         /*This player plateforme is moving*/
-        plateforme->speed += gameObj.defVal.plateforme.acceleration;
+        
+        /*Update plateforme speed*/
+        speedFactor = 1 - (plateforme->speed / gameObj.defVal.plateforme.maxSpeed);
+        speedBonus = speedFactor * gameObj.defVal.plateforme.acceleration;
+
+        plateforme->speed += gameObj.defVal.plateforme.acceleration + speedBonus;
 
         if(plateforme->speed > gameObj.defVal.plateforme.maxSpeed)
             plateforme->speed = gameObj.defVal.plateforme.maxSpeed;

@@ -21,7 +21,7 @@ void initGame()
     gameObj.defVal.ball.size = 20;
     gameObj.defVal.ball.minSpeed = 5; 
     gameObj.defVal.ball.maxSpeed = 20; /*= gameObj.defVal.plateforme.height*/
-    gameObj.defVal.ball.maxStartAngle = 90;
+    gameObj.defVal.ball.maxAngle = 90;
 
     gameObj.defVal.bonus.size = 10;
     gameObj.defVal.bonus.speed = 10;
@@ -170,7 +170,7 @@ void startGame()
 
 void createPlayer(enum PlayerType type, int playerNbr)
 {   
-    int platX = (gameObj.wWidth / 2 - gameObj.defVal.plateforme.size / 2);
+    int platX = percent(50, 'w') - gameObj.defVal.plateforme.size / 2;
     int platY;
 
     Player * player = allocate(sizeof(Player));

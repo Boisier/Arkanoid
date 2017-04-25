@@ -15,6 +15,7 @@ typedef enum { false, true } bool;
 
 static const unsigned int BIT_PER_PIXEL = 32;
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
+static const float DEGTORAD = 57.2957795131;
 
 /*Finally, include our own libraries*/
 #include "../includes/elements.h"

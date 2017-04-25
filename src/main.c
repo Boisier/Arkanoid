@@ -2,6 +2,7 @@
 
 int main(int argc, char** argv) 
 {
+    printf("%f -- %f", sin(0), cos(0));
     /*Init the GameObj*/
     initGame();
 

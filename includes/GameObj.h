@@ -55,7 +55,7 @@ typedef struct _GameObj
             float size;
             float minSpeed;
             float maxSpeed;
-            float maxStartAngle;
+            float maxAngle;
         } ball;
 
         struct

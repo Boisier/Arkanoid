@@ -21,3 +21,4 @@ void moveBall(Ball * ball);
 bool ballLost(Ball * ball, int * player);
 void ballCollisions(Ball * ball);
 void ballPlateformeCollision(Ball * ball, Plateforme * plat, Collision col);
+void setBallDirection(Ball * ball, float angle);

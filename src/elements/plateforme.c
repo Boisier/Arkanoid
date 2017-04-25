@@ -73,10 +73,10 @@ BaseRect getPlateformeBaseRect(Plateforme * plat)
 	}
 	else
 	{
-		platBase.topLeftY = plat->y + gameObj.defVal.plateforme.height;
-		platBase.topRightY = plat->y + gameObj.defVal.plateforme.height;
-		platBase.bottomRightY = plat->y;
-		platBase.bottomLeftY = plat->y;
+		platBase.topLeftY = plat->y;
+		platBase.topRightY = plat->y;
+		platBase.bottomRightY = plat->y - gameObj.defVal.plateforme.height;
+		platBase.bottomLeftY = plat->y - gameObj.defVal.plateforme.height;
 	}
 
 	return platBase;

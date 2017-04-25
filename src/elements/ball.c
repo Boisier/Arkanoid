@@ -71,11 +71,16 @@ void freeBall(Ball * ball)
 	free(ball);
 }
 
+/*Unglue the ball from it's plateforme if the condition are met*/
 void unglueBall(Ball * ball)
 {
 	bool actionKey;
     float speedFactor, relAngle, startAngle, speedRange;
     Plateforme * plat;
+
+	/*Is this ball glued ?*/
+	if(!ball->glued)
+		return;
 
 	/*Select actionKey based on plateforme Position*/
 	if(ball->gluedPlat->pos == TOP)
@@ -83,26 +88,27 @@ void unglueBall(Ball * ball)
 	else
 		actionKey = gameObj.keys.up;
 	
-	/*Is this ball glued ?*/
-	if(ball->glued && actionKey)
+	/*Can we unglue this ball ?*/
+	if(actionKey)
 	{
+		/*Unglue this ball*/
 		plat = ball->gluedPlat;
 		
-		/*Unglue this ball*/
+		/*Let's calculate ball start angle and velocity*/
 		speedFactor = plat->speed / gameObj.defVal.plateforme.maxSpeed;
-		relAngle = gameObj.defVal.ball.maxStartAngle / 100.0;
-		startAngle = speedFactor * relAngle * plat->dirFactor;
+		relAngle = gameObj.defVal.ball.maxAngle / 2 * speedFactor;
+		startAngle = relAngle * plat->dirFactor;
 
-		ball->direction.x = sin(startAngle);
-		ball->direction.y = cos(startAngle);
+		setBallDirection(ball, startAngle);
 
 		if(plat->pos == BOTTOM)
 			ball->direction.y *= -1;
 
 		speedRange = gameObj.defVal.ball.maxSpeed - gameObj.defVal.ball.minSpeed;
-
 		ball->speed = gameObj.defVal.ball.minSpeed + speedRange * speedFactor;
 
+		/*Finally, set the ball as unglued*/
+		ball->gluedPlat = NULL;
 		ball->glued = false;
 	}
 }
@@ -185,7 +191,7 @@ void ballCollisions(Ball * ball)
 
 void ballPlateformeCollision(Ball * ball, Plateforme * plat, Collision col)
 {
-	float speedFactor, speedDelta;
+	float speedFactor, speedDelta, colPosPerc, angle;
 
 	switch (col.side) 
 	{
@@ -225,9 +231,26 @@ void ballPlateformeCollision(Ball * ball, Plateforme * plat, Collision col)
 
 		/*printf("%f\n", ball->speed);*/
 		/*printf("> %f -- %f\n", ball->direction.y, ball->y);*/
+
+		colPosPerc = (col.x - plat->x) / plat->size;
+
+		angle = (gameObj.defVal.ball.maxAngle * colPosPerc) - (gameObj.defVal.ball.maxAngle / 2);
+
+		setBallDirection(ball, angle);
+
+		if(plat->pos == BOTTOM)
+			ball->direction.y *= -1;
+
+		/*printf("> %f > %f -- %f\n", angle, ball->direction.x, ball->direction.y);*/
 	}
 	else if(col.side == LEFT_SIDE || col.side == RIGHT_SIDE)
 	{
 		ball->direction.x *= -1;
 	}
+}
+
+void setBallDirection(Ball * ball, float angle)
+{
+	ball->direction.x = sin(angle / DEGTORAD);
+	ball->direction.y = cos(angle / DEGTORAD);
 }
