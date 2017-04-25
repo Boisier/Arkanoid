@@ -222,12 +222,14 @@ Collision SphereRectCollisionDetails(BaseSphere sphere, BaseRect rect)
 	col.deltaRight = sphere.x - rect.topRightX;
 	col.deltaLeft = sphere.x - rect.topLeftX;
 
-	if((col.deltaTop < sphere.radius || col.deltaBottom < sphere.radius) && col.deltaLeft >= 0 && col.deltaRight <= 0)
+	/*printf("> TOP: %f > LEFT: %f > RIGHT: %f > BOTTOM : %f > RADIUS : %f\n", col.deltaTop, col.deltaLeft, col.deltaRight, col.deltaBottom, sphere.radius);*/
+
+	if((col.deltaTop <= sphere.radius || col.deltaBottom <= sphere.radius) && col.deltaLeft >= -sphere.radius && col.deltaRight <= sphere.radius)
 	{
 		/*Collision on top or bottom*/
 		col.x = sphere.x;
 
-		if(col.deltaTop < col.deltaBottom)
+		if(col.deltaTop <= col.deltaBottom)
 		{
 			/*Sphere closer to top, assume coming from top*/
 			col.y = sphere.y - col.deltaTop;
@@ -241,12 +243,12 @@ Collision SphereRectCollisionDetails(BaseSphere sphere, BaseRect rect)
 			col.side = BOTTOM_SIDE;
 		}
 	}
-	else if((col.deltaLeft < sphere.radius || col.deltaRight < sphere.radius) && col.deltaLeft >= 0 && col.deltaRight <= 0)
+	else if((col.deltaLeft <= sphere.radius || col.deltaRight <= sphere.radius) && col.deltaLeft >= -sphere.radius && col.deltaRight <= sphere.radius)
 	{
 		/*Collision on left or right*/
 		col.y = sphere.y;
 
-		if(col.deltaLeft < col.deltaRight)
+		if(col.deltaLeft <= col.deltaRight)
 		{
 			/*Sphere closer to the left, assume coming from the left*/
 			col.x = sphere.x - col.deltaLeft;
@@ -259,6 +261,10 @@ Collision SphereRectCollisionDetails(BaseSphere sphere, BaseRect rect)
 			col.x = sphere.x + col.deltaRight;
 			col.side = RIGHT_SIDE;
 		}
+	}
+	else
+	{
+		col.side = UNKNOWN;
 	}
 
 	return col;

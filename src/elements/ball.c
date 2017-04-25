@@ -187,7 +187,7 @@ void ballPlateformeCollision(Ball * ball, Plateforme * plat, Collision col)
 {
 	float speedFactor, speedDelta;
 
-	/*switch (col.side) 
+	switch (col.side) 
 	{
 		case NO_COLLISION: printf("NO_COLLISION\n"); break;
 		case UNKNOWN: printf("UNKNOWN\n"); break;
@@ -199,7 +199,7 @@ void ballPlateformeCollision(Ball * ball, Plateforme * plat, Collision col)
 		case BOTTOM_LEFT_CORNER: printf("BOTTOM_LEFT_CORNER\n"); break;
 		case LEFT_SIDE: printf("LEFT_SIDE\n"); break;
 		case LEFT_TOP_CORNER: printf("LEFT_TOP_CORNER\n"); break;
-	}*/
+	}
 
 	if(col.side == TOP_SIDE || col.side == BOTTOM_SIDE)
 	{
@@ -223,7 +223,7 @@ void ballPlateformeCollision(Ball * ball, Plateforme * plat, Collision col)
 			ball->y += col.deltaBottom;
 		}
 
-		printf("%f\n", ball->speed);
+		/*printf("%f\n", ball->speed);*/
 		/*printf("> %f -- %f\n", ball->direction.y, ball->y);*/
 	}
 	else if(col.side == LEFT_SIDE || col.side == RIGHT_SIDE)
