@@ -19,7 +19,6 @@ Picture * createPicture(float posX, float posY, char * picturePath)
 	return picture;
 }
 
-/** Print the given picture to the screen */
 void printPicture(Picture * pict)
 {
 	glEnable(GL_TEXTURE_2D);

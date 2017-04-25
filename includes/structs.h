@@ -1,60 +1,6 @@
 #pragma once
 
-enum elType
-{
-	PLATEFORME,
-	BRICK,
-	BALL,
-	BONUS,
-	BUTTON,
-	PICTURE
-};
-
-enum elState
-{
-	IDLE,
-	SELECTED,
-	FOCUS,
-	BLUR
-};
-
-enum bonusType
-{
-	NONE,
-	WIDE,
-	NARROW,
-	STICKY,
-	BIG,
-	SMALL,
-	REVERSED
-};
-
-enum PlayerType
-{
-	HUMAN,
-	AI
-};
-
-enum PlayerPos
-{
-	TOP,
-	BOTTOM
-};
-
-enum CollisionSide
-{
-	NO_COLLISION,
-	UNKNOWN,
-	TOP_SIDE,
-	TOP_RIGHT_CORNER,
-	RIGHT_SIDE,
-	BOTTOM_RIGHT_CORNER,
-	BOTTOM_SIDE,
-	BOTTOM_LEFT_CORNER,
-	LEFT_SIDE,
-	LEFT_TOP_CORNER
-};
-
+/** Collision is used to store data about a collision event **/
 typedef struct _collisionData
 {
 	enum CollisionSide side;
@@ -68,15 +14,14 @@ typedef struct _collisionData
 
 } Collision;
 
-
-
-
+/** Holds a vector used for direction **/
 typedef struct _vector2D
 {
 	float x;
 	float y;
 } Vector2D;
 
+/** Rectangles coordinates for easy manipulation **/
 typedef struct _basicRectangle
 {
 	float topLeftX;
@@ -92,6 +37,7 @@ typedef struct _basicRectangle
 	float bottomLeftY;
 } BaseRect;
 
+/** Spheres coordinates for easy manipulation **/
 typedef struct _basicSphere
 {
 	float x;
@@ -100,8 +46,9 @@ typedef struct _basicSphere
 } BaseSphere;
 
 
-
-
+/********************/
+/** PRINT ELEMENTS **/
+/********************/
 
 typedef struct _platforme
 {
@@ -120,15 +67,6 @@ typedef struct _platforme
 	enum bonusType bonus;
 	int bonusEnd;
 } Plateforme;
-
-enum brickType
-{
-	BASIC,
-	INVICIBLE,
-	TRANSPARENT,
-	STRONG,
-	VERYSTRONG
-};
 
 typedef struct _brick
 {
@@ -201,13 +139,6 @@ typedef struct _picture
 	GLuint texture;
 } Picture;
 
-
-
-
-
-
-
-
 typedef struct _printElement
 {
 	union 
@@ -223,11 +154,6 @@ typedef struct _printElement
 	bool display;
 
 } PrintElement;
-
-
-
-
-
 
 typedef struct _player
 {

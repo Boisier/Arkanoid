@@ -1,5 +1,6 @@
 #include "../includes/game.h"
 
+/** Print the toPrint array on the screen **/
 void printScreen()
 {
     int nbrToPrint = gameObj.nbrToPrint;
@@ -32,6 +33,7 @@ void printScreen()
     }
 }
 
+/** Add an element to the toPrint array **/
 PrintElement * addToPrint(void * element, enum elType type)
 {
     int newSize;
@@ -70,7 +72,7 @@ PrintElement * addToPrint(void * element, enum elType type)
     return &gameObj.toPrint[gameObj.nbrToPrint-1];       
 }
 
-/**cleanPrint() empty the toPrint array**/
+/** Empty the toPrint array **/
 void cleanToPrint()
 {
     int i;
@@ -96,24 +98,4 @@ void cleanToPrint()
         gameObj.toPrint = NULL;
         gameObj.nbrToPrint = 0;                                     
     }
-}
-
-
-
-void freeTextures()
-{
-    int i;
-
-    /*Free all textures*/
-    glDeleteTextures(gameObj.nbrTextures, gameObj.textures);
-
-    for(i = 0; i < gameObj.nbrTextures; ++i)
-    {
-        free(gameObj.texturesPath[i]);
-    }
-
-    free(gameObj.texturesPath);
-    
-    gameObj.texturesPath = NULL;
-    gameObj.nbrTextures = 0;
 }

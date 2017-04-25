@@ -1,4 +1,4 @@
-#include "../includes/game.h"
+#include "../../includes/game.h"
 
 void reshape(unsigned int width, unsigned int height) 
 {

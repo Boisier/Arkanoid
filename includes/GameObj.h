@@ -1,16 +1,5 @@
 #pragma once
 
-typedef enum _GameState
-{
-    EMPTY,
-    MAINMENU,
-    PLAYERSELECTION,
-    STARTGAME,
-    INGAME,
-    EXITING
-} GameState;
-
-
 typedef struct _keyPressed
 {
     bool up;

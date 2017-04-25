@@ -36,6 +36,7 @@ void printBall(Ball * ball)
 
 	if(ball->glued)
 	{
+		/*Get ball position based on the plateforme position*/
 		if(ball->gluedPlat->pos == TOP)
 			ball->y = ball->gluedPlat->y + ball->size / 2;
 		else
@@ -71,7 +72,6 @@ void freeBall(Ball * ball)
 	free(ball);
 }
 
-/*Unglue the ball from it's plateforme if the condition are met*/
 void unglueBall(Ball * ball)
 {
 	bool actionKey;
@@ -113,6 +113,7 @@ void unglueBall(Ball * ball)
 	}
 }
 
+/** Move the ball along its direction. Bounce on screen sides*/
 void moveBall(Ball * ball)
 {
 	ball->x += ball->direction.x * ball->speed;
@@ -132,6 +133,7 @@ void moveBall(Ball * ball)
 	}	
 }
 
+/** Check if the ball is lost, return playerID who lost it*/
 bool ballLost(Ball * ball, int * player)
 {
 	if(ball->y - ball->size > gameObj.wHeight)
@@ -151,7 +153,7 @@ bool ballLost(Ball * ball, int * player)
 	return false;
 }
 
-
+/** CHeck for ball collisions **/
 void ballCollisions(Ball * ball)
 {
 	int i;
@@ -164,36 +166,41 @@ void ballCollisions(Ball * ball)
 	ballBase.y = ball->y;
 	ballBase.radius = ball->size / 2;
 
+	/*For every element*/
 	for(i = 0; i < gameObj.nbrToPrint; ++i)
 	{
+		/*Ignore elements withour interactions with the balls, and unused elements*/
 		if(gameObj.toPrint[i].type == BALL   || 
 		   gameObj.toPrint[i].type == BONUS  || 
 		   gameObj.toPrint[i].type == BUTTON || 
-		   gameObj.toPrint[i].type == PICTURE)
+		   gameObj.toPrint[i].type == PICTURE||
+		   !gameObj.toPrint[i].display)
 			continue;
-
+		
+		/*If it's a plateforme*/
 		if(gameObj.toPrint[i].type == PLATEFORME)
 		{
 			plat = gameObj.toPrint[i].element.plateforme;
 			
+			/*CHeck collisions with the plateforme*/
 			platBase = getPlateformeBaseRect(plat);
-
 			col = SphereRectCollision(ballBase, platBase, true);
 
-			if(col.side != NO_COLLISION)
-			{
-				ballPlateformeCollision(ball, plat, col);
-				continue;
-			}
+			if(col.side == NO_COLLISION)
+				continue; /*No collision, let's go to the next element*/
+
+			/*Collisions -> handle it*/
+			ballPlateformeCollision(ball, plat, col);
 		}
 	}
 }
 
+/**Handle ball collision with plateforme **/
 void ballPlateformeCollision(Ball * ball, Plateforme * plat, Collision col)
 {
 	float speedFactor, speedDelta, colPosPerc, angle;
 
-	switch (col.side) 
+	/*switch (col.side) 
 	{
 		case NO_COLLISION: printf("NO_COLLISION\n"); break;
 		case UNKNOWN: printf("UNKNOWN\n"); break;
@@ -205,21 +212,18 @@ void ballPlateformeCollision(Ball * ball, Plateforme * plat, Collision col)
 		case BOTTOM_LEFT_CORNER: printf("BOTTOM_LEFT_CORNER\n"); break;
 		case LEFT_SIDE: printf("LEFT_SIDE\n"); break;
 		case LEFT_TOP_CORNER: printf("LEFT_TOP_CORNER\n"); break;
-	}
+	}*/
 
 	if(col.side == TOP_SIDE || col.side == BOTTOM_SIDE)
 	{
+		/*Update ball speed based on plateforme speed*/
 		speedFactor = plat->speed / gameObj.defVal.plateforme.maxSpeed;
-
-		/*printf("%f\n", speedFactor);*/
-
 		speedDelta = (10 * speedFactor) - 2;
 		ball->speed += speedDelta;
 
 		ball->speed = clamp(ball->speed, gameObj.defVal.ball.minSpeed, gameObj.defVal.ball.maxSpeed);
 
-		ball->direction.y *= -1;
-
+		/*Move the ball away from the plateforme by the distance it was inside it*/
 		if(col.side == TOP_SIDE)
 		{
 			ball->y += col.deltaTop;
@@ -229,19 +233,14 @@ void ballPlateformeCollision(Ball * ball, Plateforme * plat, Collision col)
 			ball->y += col.deltaBottom;
 		}
 
-		/*printf("%f\n", ball->speed);*/
-		/*printf("> %f -- %f\n", ball->direction.y, ball->y);*/
-
+		/*Update ball direction based on collision point*/
 		colPosPerc = (col.x - plat->x) / plat->size;
-
 		angle = (gameObj.defVal.ball.maxAngle * colPosPerc) - (gameObj.defVal.ball.maxAngle / 2);
 
 		setBallDirection(ball, angle);
 
 		if(plat->pos == BOTTOM)
 			ball->direction.y *= -1;
-
-		/*printf("> %f > %f -- %f\n", angle, ball->direction.x, ball->direction.y);*/
 	}
 	else if(col.side == LEFT_SIDE || col.side == RIGHT_SIDE)
 	{
@@ -249,6 +248,7 @@ void ballPlateformeCollision(Ball * ball, Plateforme * plat, Collision col)
 	}
 }
 
+/** Set ball direction from a given angle **/
 void setBallDirection(Ball * ball, float angle)
 {
 	ball->direction.x = sin(angle / DEGTORAD);

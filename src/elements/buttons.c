@@ -21,7 +21,7 @@ Button * createButton(float posX, float posY, float width, float height, char ca
 	return btn;
 }
 
-/** Print the given button to the screen */
+/** Print the given button to the screen **/
 void printButton(Button * btn)
 {
 	GLuint texture;

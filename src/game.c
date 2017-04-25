@@ -1,8 +1,6 @@
 #include "../includes/game.h"
 
-/**
- * Init gameObj with default values
- */
+/** Init gameObj with default values **/
 void initGame()
 {
     gameObj.wWidth = 1200;
@@ -53,6 +51,7 @@ void initGame()
     gameObj.players = NULL;
 }
 
+/** Main loop of the app**/
 void theLoop()
 {
     Uint32 startTime, elapsedTime;
@@ -82,6 +81,7 @@ void theLoop()
     freeTextures();
 }
 
+/** Call current game state function **/
 void doThings()
 {
     switch(gameObj.gameState)
@@ -103,7 +103,7 @@ void doThings()
     }
 }
 
-/*Handle main menu*/
+/** Handle the main menu **/
 void mainMenu()
 {
     char callback;
@@ -124,6 +124,7 @@ void mainMenu()
     }
 }
 
+/** Handle nbr of player selection **/
 void playerSelection()
 {
     char callback;
@@ -148,6 +149,7 @@ void playerSelection()
     }
 }
 
+/** Start the game **/
 void startGame()
 {
     if(gameObj.players != NULL)
@@ -168,6 +170,7 @@ void startGame()
     gameObj.gameState = INGAME;
 }
 
+/** Create a new player **/
 void createPlayer(enum PlayerType type, int playerNbr)
 {   
     int platX = percent(50, 'w') - gameObj.defVal.plateforme.size / 2;
@@ -194,6 +197,7 @@ void createPlayer(enum PlayerType type, int playerNbr)
     gameObj.players[playerNbr - 1] = player;
 }
 
+/** Handle ingame events **/
 void ingame()
 {
     if(gameObj.printContent != INGAME)

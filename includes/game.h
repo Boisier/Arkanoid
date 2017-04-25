@@ -18,10 +18,10 @@ static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
 static const float DEGTORAD = 57.2957795131;
 
 /*Finally, include our own libraries*/
-#include "../includes/elements.h"
-#include "../includes/GameObj.h"
-#include "../includes/helpers.h"
-#include "../includes/elementsFunctions.h"
-#include "../includes/print.h"
-
-#include "../includes/mainFunctions.h"
+#include "enumerations.h"
+#include "structs.h"
+#include "GameObj.h"
+#include "helpers.h"
+#include "elementsFunctions.h"
+#include "screen.h"
+#include "mainFunctions.h"

@@ -31,6 +31,7 @@ void printPlateforme(Plateforme * plateforme)
 	w = plateforme->size;
 	h = gameObj.defVal.plateforme.height;
 
+	/*Reverse texture for top plateforme*/
 	if(plateforme->pos == TOP)
 		h *= -1;
 
@@ -55,6 +56,7 @@ void freePlateforme(Plateforme * plateforme)
 	free(plateforme);
 }
 
+/** Generate a baseRect for the given plateforme* */
 BaseRect getPlateformeBaseRect(Plateforme * plat)
 {
 	BaseRect platBase;

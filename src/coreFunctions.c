@@ -1,5 +1,6 @@
 #include "../includes/game.h"
 
+/** Watch for user events **/
 void watcher()
 {
     SDL_Event e;
@@ -44,6 +45,7 @@ void watcher()
     }
 }
 
+/** Handle menu interactions **/
 char btnHandler()
 {
 	char callback = 0;
@@ -93,6 +95,7 @@ char btnHandler()
 	return callback;
 }
 
+/** Handle movement of the players **/
 void playerMovements()
 {
     int i;
@@ -175,7 +178,7 @@ void playerMovements()
     }
 }
 
-
+/** Handle movement of the balls **/
 void ballMovements()
 {
     int i, player;
