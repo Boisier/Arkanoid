@@ -16,7 +16,6 @@ typedef enum { false, true } bool;
 static const unsigned int BIT_PER_PIXEL = 32;
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
 
-
 /*Finally, include our own libraries*/
 #include "../includes/elements.h"
 #include "../includes/GameObj.h"

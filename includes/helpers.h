@@ -35,3 +35,15 @@ int textureLoaded(char * needle);
 
 /** Other actions around textures **/
 void getTextureDimensions(GLuint texture, int * width, int * height);
+
+
+float fmax(float a, float b);
+float fmin(float a, float b);
+float clamp(float value, float min, float max);
+
+
+/** Collisions **/
+Collision SphereRectCollision(BaseSphere sphere, BaseRect rect, bool details);
+Collision SphereRectCollisionDetails(BaseSphere sphere, BaseRect rect);
+
+

@@ -6,14 +6,14 @@ void createMainMenu()
     Picture * background;
     Button * playBtn, * rulesBtn;
 
-    background = createPicture(-600, 400, "background.png");
+    background = createPicture(0, 0, "background.png");
 
-    playBtn = createButton(-171, -78, 342, 52, 's');                /*'s' for start*/
+    playBtn = createButton(429, 478, 342, 52, 's');                /*'s' for start*/
     playBtn->idleTexture = getTexture("playBtn_idle.png");
     playBtn->selectedTexture = getTexture("playBtn_selected.png");
     playBtn->state = SELECTED;
 
-    rulesBtn = createButton(-171, -195, 342, 52, 'r');              /*'r' for rules*/
+    rulesBtn = createButton(429, 595, 342, 52, 'r');              /*'r' for rules*/
     rulesBtn->idleTexture = getTexture("rulesBtn_idle.png");
     rulesBtn->selectedTexture = getTexture("rulesBtn_selected.png");
     rulesBtn->state = IDLE;
@@ -35,19 +35,19 @@ void createPlayerSelection()
     Picture * background;
     Button * onePlayerBtn, * twoPlayerBtn, * backBtn;
 
-    background = createPicture(-600, 400, "background.png");
+    background = createPicture(0, 0, "background.png");
 
-    onePlayerBtn = createButton(-171, -78, 342, 52, 1);                /*'s' for start*/
+    onePlayerBtn = createButton(429, 478, 342, 52, 1);                /*'s' for start*/
     onePlayerBtn->idleTexture = getTexture("onePlayerBtn_idle.png");
     onePlayerBtn->selectedTexture = getTexture("onePlayerBtn_selected.png");
     onePlayerBtn->state = SELECTED;
 
-    twoPlayerBtn = createButton(-171, -195, 342, 52, 2);              /*'r' for rules*/
+    twoPlayerBtn = createButton(429, 595, 342, 52, 2);              /*'r' for rules*/
     twoPlayerBtn->idleTexture = getTexture("twoPlayerBtn_idle.png");
     twoPlayerBtn->selectedTexture = getTexture("twoPlayerBtn_selected.png");
     twoPlayerBtn->state = IDLE;
 
-    backBtn = createButton(-171, -312, 342, 52, 'b');              /*'b' for back*/
+    backBtn = createButton(429, 712, 342, 52, 'b');              /*'b' for back*/
     backBtn->idleTexture = getTexture("backBtn_idle.png");
     backBtn->selectedTexture = getTexture("backBtn_selected.png");
     backBtn->state = IDLE;
@@ -64,4 +64,29 @@ void createPlayerSelection()
 
     gameObj.printContent = PLAYERSELECTION;
     gameObj.currentlySelectedBtn = onePlayerBtn;
+}
+
+
+/*Create the game board*/
+void createGameBoard()
+{
+      Picture * background;
+      Ball * ball;
+      int i;
+
+      background = createPicture(0, 0, "background.png");
+
+      addToPrint(background, PICTURE);
+
+      for(i = 0; i < gameObj.nbrPlayers; ++i)
+      {
+          addToPrint(gameObj.players[i]->plateforme, PLATEFORME);
+
+          ball = createBall(0, 0, i);
+          ball->gluedPlat = gameObj.players[i]->plateforme;
+          ball->glueOffsetX = gameObj.players[i]->plateforme->size / 2;
+          addToPrint(ball, BALL);
+      }
+
+      gameObj.printContent = INGAME;
 }

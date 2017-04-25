@@ -92,3 +92,126 @@ char btnHandler()
 
 	return callback;
 }
+
+void playerMovements()
+{
+    int i;
+    Player * player;
+    Plateforme * plateforme;
+    bool leftKey, rightKey;
+
+    for(i = 0; i < gameObj.nbrPlayers; ++i)
+    {
+        player = gameObj.players[i];
+
+        if(player->type == AI)
+        {
+            /*Handle AI*/
+            continue;
+        }
+
+        /*Human Player*/
+        if(player->playerPos == TOP)
+        {
+            leftKey = gameObj.keys.a;
+            rightKey = gameObj.keys.z;
+        }
+        else
+        {
+            leftKey = gameObj.keys.left;
+            rightKey = gameObj.keys.right;
+        }
+
+        plateforme = player->plateforme;
+
+        if(!leftKey && !rightKey)
+        {
+            /*No movement here*/
+            plateforme->speed = 0;
+            continue;
+        }
+        
+        /*This player plateforme is moving*/
+        plateforme->speed += gameObj.defVal.plateforme.acceleration;
+
+        if(plateforme->speed > gameObj.defVal.plateforme.maxSpeed)
+            plateforme->speed = gameObj.defVal.plateforme.maxSpeed;
+        
+        if(leftKey)
+        {
+            /*Move top plateforme to the left*/
+            plateforme->x -= plateforme->speed; 
+
+            plateforme->dirFactor = -1;
+
+            /*Are we still in the game area ?*/
+            if(plateforme->x < 0)
+            {
+                plateforme->x = 0;
+                plateforme->speed = 0;
+            }
+
+        }
+        else if(rightKey)
+        {
+            /*Move top plateforme to the right*/
+            plateforme->x += plateforme->speed; 
+
+            plateforme->dirFactor = 1;
+
+            /*Are we still in the game area ?*/
+            if(plateforme->x + plateforme->size > gameObj.WINDOW_WIDTH)
+            {
+                plateforme->x = gameObj.WINDOW_WIDTH - plateforme->size;
+                plateforme->speed = 0;
+            }
+        }
+    }
+}
+
+
+void ballMovements()
+{
+    int i, player;
+    Ball * ball;
+
+    for(i = 0; i < gameObj.nbrToPrint; ++i)
+    {
+        /*Only care about active balls here*/
+        if(gameObj.toPrint[i].type != BALL || !gameObj.toPrint[i].display)
+            continue;
+
+        ball = gameObj.toPrint[i].element.ball;
+
+        /*See if ball is glued and try to unglue it*/
+        unglueBall(ball);
+
+        if(ball->glued)
+        {
+            /*Ball glued, no movements here*/
+            continue;
+        }
+
+        /*Ball not glued, let's move*/
+        moveBall(ball);
+
+        /*Lost ball ?*/
+        if(ballLost(ball, &player))
+        {
+            /*Deactivate the ball*/
+            gameObj.toPrint[i].display = false;
+            gameObj.players[player]->life--;
+            
+            /*Create a new ball for the ball owner*/
+            ball = createBall(0, 0, ball->playerID);
+            ball->gluedPlat = gameObj.players[ball->playerID]->plateforme;
+            ball->glueOffsetX = gameObj.players[ball->playerID]->plateforme->size / 2;
+            addToPrint(ball, BALL);
+
+            continue;
+        }
+
+        /*Check collisions*/
+        ballCollisions(ball);
+    }
+}

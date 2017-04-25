@@ -17,12 +17,15 @@ void printScreen()
     {
         el = gameObj.toPrint[i];
 
+        if(!el.display) /*Deactivated element ?*/
+            continue;
+
         switch(el.type)          
         {
             case PLATEFORME: printPlateforme(el.element.plateforme); break;
             case PICTURE: printPicture(el.element.pict); break;
             case BRICK: printPicture(el.element.pict); break;
-            case BALL: printPicture(el.element.pict); break;
+            case BALL: printBall(el.element.ball); break;
             case BONUS: printPicture(el.element.pict); break;
             case BUTTON: printButton(el.element.btn); break;
         }
@@ -48,6 +51,8 @@ PrintElement * addToPrint(void * element, enum elType type)
         case BUTTON: newEl.element.btn = element; break;
         case PICTURE: newEl.element.pict = element; break;
     }
+
+    newEl.display = true;
     
     /*Add room in the toPrint array to store this new element*/
     newSize = (gameObj.nbrToPrint + 1) * sizeof(PrintElement);

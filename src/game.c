@@ -10,16 +10,18 @@ void initGame()
 
     strcpy(gameObj.theme, "themes/default/");
 
-    gameObj.defVal.plateforme.size = 25;
-    gameObj.defVal.plateforme.height = 5;
+    gameObj.defVal.plateforme.size = 100;
+    gameObj.defVal.plateforme.height = 20;
     gameObj.defVal.plateforme.maxSpeed = 25;
-    gameObj.defVal.plateforme.acceleration = 2.5;
+    gameObj.defVal.plateforme.acceleration = .5;
 
     gameObj.defVal.brick.width = 50;
     gameObj.defVal.brick.height = 20;
     
-    gameObj.defVal.ball.size = 15;
-    gameObj.defVal.ball.speed = 5; 
+    gameObj.defVal.ball.size = 20;
+    gameObj.defVal.ball.minSpeed = 5; 
+    gameObj.defVal.ball.maxSpeed = 20; /*= gameObj.defVal.plateforme.height*/
+    gameObj.defVal.ball.maxStartAngle = 90;
 
     gameObj.defVal.bonus.size = 10;
     gameObj.defVal.bonus.speed = 10;
@@ -153,7 +155,8 @@ void startGame()
         /*Free players*/
     }
     
-    gameObj.players = allocate(sizeof(Player *) * 2);
+    gameObj.nbrPlayers = 2;
+    gameObj.players = allocate(sizeof(Player *) * gameObj.nbrPlayers);
 
     createPlayer(HUMAN, 1);
 
@@ -167,25 +170,40 @@ void startGame()
 
 void createPlayer(enum PlayerType type, int playerNbr)
 {   
-    int platX = gameObj.WINDOW_WIDTH / 2 - gameObj.defVal.plateforme.size / 2;
-    int platY = gameObj.WINDOW_HEIGHT / 2;
+    int platX = (gameObj.WINDOW_WIDTH / 2 - gameObj.defVal.plateforme.size / 2);
+    int platY;
 
     Player * player = allocate(sizeof(Player));
 
     if(playerNbr == 1)
-        platY += 40;    /*Bottom player*/
+    {
+        player->playerPos = BOTTOM;
+        platY = gameObj.WINDOW_HEIGHT - 50;
+    }
     else
-        platY -= 50;    /*Top player*/
+    {
+        player->playerPos = TOP;
+        platY = 50;
 
+    }
     player->type = type;
     player->life = gameObj.defVal.lifeNbr;
 
-    player->plateforme = createPlateforme(platX, platY);
+    player->plateforme = createPlateforme(platX, platY, player->playerPos);
 
     gameObj.players[playerNbr - 1] = player;
 }
 
 void ingame()
 {
+    if(gameObj.printContent != INGAME)
+    {
+        cleanToPrint();
+        createGameBoard();
+        return;
+    }
 
+    playerMovements();
+
+    ballMovements();
 }

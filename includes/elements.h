@@ -29,13 +29,91 @@ enum bonusType
 	REVERSED
 };
 
+enum PlayerType
+{
+	HUMAN,
+	AI
+};
+
+enum PlayerPos
+{
+	TOP,
+	BOTTOM
+};
+
+enum CollisionSide
+{
+	NO_COLLISION,
+	UNKNOWN,
+	TOP_SIDE,
+	TOP_RIGHT_CORNER,
+	RIGHT_SIDE,
+	BOTTOM_RIGHT_CORNER,
+	BOTTOM_SIDE,
+	BOTTOM_LEFT_CORNER,
+	LEFT_SIDE,
+	LEFT_TOP_CORNER
+};
+
+typedef struct _collisionData
+{
+	enum CollisionSide side;
+	float x;
+	float y;
+
+	float deltaTop;
+	float deltaLeft;
+	float deltaRight;
+	float deltaBottom;
+
+} Collision;
+
+
+
+
+typedef struct _vector2D
+{
+	float x;
+	float y;
+} Vector2D;
+
+typedef struct _basicRectangle
+{
+	float topLeftX;
+	float topLeftY;
+
+	float topRightX;
+	float topRightY;
+
+	float bottomRightX;
+	float bottomRightY;
+
+	float bottomLeftX;
+	float bottomLeftY;
+} BaseRect;
+
+typedef struct _basicSphere
+{
+	float x;
+	float y;
+	float radius;
+} BaseSphere;
+
+
+
+
+
 typedef struct _platforme
 {
 	float x;
 	float y;
 	int size;
+	int dirFactor;
 
+	enum PlayerPos pos;
 	float speed;
+
+	bool sticky;
 
 	GLuint texture;
 
@@ -61,26 +139,24 @@ typedef struct _brick
 	int strength;
 } Brick;
 
-typedef struct _vector2D
-{
-	float x;
-	float y;
-} Vector2D;
-
 typedef struct _ball
 {
 	float x;
 	float y;
 	float size;
 
+	int playerID;
+
 	bool glued;
 	Plateforme * gluedPlat;
 	float glueOffsetX;
 
+	GLuint texture;
+
 	Vector2D direction;
 	float speed;
 	
-	enum bonusType bonus;
+	enum bonusType bonusType;
 	int bonusEnd;
 } Ball;
 
@@ -144,6 +220,7 @@ typedef struct _printElement
 		Picture * pict;
 	} element;
 	enum elType type;
+	bool display;
 
 } PrintElement;
 
@@ -151,11 +228,6 @@ typedef struct _printElement
 
 
 
-enum PlayerType
-{
-	HUMAN,
-	AI
-};
 
 typedef struct _player
 {
@@ -164,8 +236,7 @@ typedef struct _player
 	int life;
 	int score; /* ~ */
 
+	enum PlayerPos playerPos;
+
 	Plateforme * plateforme;
-	
-
-
 } Player;

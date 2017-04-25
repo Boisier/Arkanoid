@@ -22,3 +22,8 @@ void startGame();
 void createPlayer(enum PlayerType type, int playerNbr);
 
 void ingame();
+void createGameBoard();
+
+/** ingame functions **/
+void playerMovements();
+void ballMovements();

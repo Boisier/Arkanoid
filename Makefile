@@ -1,12 +1,12 @@
 CC = gcc
-LIB     = -lSDL -lSDL_image -lSDL_mixer -lGLU -lGL -lm -lasan
-LDFLAGS = -lSDL -fsanitize=address
+LIB     = -lSDL -lSDL_image -lSDL_mixer -lGLU -lGL -lm
+LDFLAGS = -lSDL 
 
 #Do not include ASan
-#CFLAGS = -g -O2 -Wall -std=c89 -pedantic -Werror
+CFLAGS = -g -O2 -Wall -std=c89 -pedantic -Werror
 
 #Include ASan
-CFLAGS = -g -O2 -Wall -std=c89 -pedantic -Werror -fsanitize=address -fno-omit-frame-pointer -ggdb
+#CFLAGS = -g -O2 -Wall -std=c89 -pedantic -Werror -fsanitize=address -fno-omit-frame-pointer -ggdb
 
 APP_BIN = arkanopong
 

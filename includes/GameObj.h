@@ -38,8 +38,8 @@ typedef struct _GameObj
     {
         struct
         {
-            int size;
-            int height;
+            float size;
+            float height;
             float maxSpeed;
             float acceleration;
         } plateforme;
@@ -52,8 +52,10 @@ typedef struct _GameObj
 
         struct
         {
-            int size;
-            float speed;
+            float size;
+            float minSpeed;
+            float maxSpeed;
+            float maxStartAngle;
         } ball;
 
         struct
@@ -87,6 +89,7 @@ typedef struct _GameObj
 
     /** The Game **/
     int nbrHumanPlayers;
+    int nbrPlayers;
     Player ** players;
 
 } GameObj;

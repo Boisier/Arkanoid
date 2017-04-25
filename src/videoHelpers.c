@@ -5,7 +5,7 @@ void reshape(unsigned int width, unsigned int height)
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(-600., 600., -400., 400.);
+    gluOrtho2D(0, gameObj.WINDOW_WIDTH, gameObj.WINDOW_HEIGHT, 0);
 }
 
 void setVideoMode(unsigned int width, unsigned int height) 
