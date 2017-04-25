@@ -83,3 +83,9 @@ BaseRect getPlateformeBaseRect(Plateforme * plat)
 
 	return platBase;
 }
+
+/** Return the plateforme speed ratio to the max speed */
+float platSpeedFactor(Plateforme * plat)
+{
+	return plat->speed / gameObj.defVal.plateforme.maxSpeed;
+}

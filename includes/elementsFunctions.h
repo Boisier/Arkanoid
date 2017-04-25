@@ -16,6 +16,8 @@ void freePlateforme(Plateforme * plateforme);
 /** Generate a baseRect for the given plateforme* */
 BaseRect getPlateformeBaseRect(Plateforme * plat);
 
+/** Return the plateforme speed ratio to the max speed */
+float platSpeedFactor(Plateforme * plat);
 
 
 

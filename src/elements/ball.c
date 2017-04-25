@@ -95,7 +95,7 @@ void unglueBall(Ball * ball)
 		plat = ball->gluedPlat;
 		
 		/*Let's calculate ball start angle and velocity*/
-		speedFactor = plat->speed / gameObj.defVal.plateforme.maxSpeed;
+		speedFactor = platSpeedFactor(plat);
 		relAngle = gameObj.defVal.ball.maxAngle / 2 * speedFactor;
 		startAngle = relAngle * plat->dirFactor;
 
@@ -205,33 +205,23 @@ void ballPlateformeCollision(Ball * ball, Plateforme * plat, Collision col)
 		case NO_COLLISION: printf("NO_COLLISION\n"); break;
 		case UNKNOWN: printf("UNKNOWN\n"); break;
 		case TOP_SIDE: printf("TOP_SIDE\n"); break;
-		case TOP_RIGHT_CORNER: printf("TOP_RIGHT_CORNER\n"); break;
 		case RIGHT_SIDE: printf("RIGHT_SIDE\n"); break;
-		case BOTTOM_RIGHT_CORNER: printf("BOTTOM_RIGHT_CORNER\n"); break;
 		case BOTTOM_SIDE: printf("BOTTOM_SIDE\n"); break;
-		case BOTTOM_LEFT_CORNER: printf("BOTTOM_LEFT_CORNER\n"); break;
 		case LEFT_SIDE: printf("LEFT_SIDE\n"); break;
-		case LEFT_TOP_CORNER: printf("LEFT_TOP_CORNER\n"); break;
 	}*/
+
+	/**Do nothing if there's no collision**/
+	if(col.side == UNKNOWN || col.side == NO_COLLISION)
+		return;
 
 	if(col.side == TOP_SIDE || col.side == BOTTOM_SIDE)
 	{
 		/*Update ball speed based on plateforme speed*/
-		speedFactor = plat->speed / gameObj.defVal.plateforme.maxSpeed;
+		speedFactor = platSpeedFactor(plat);
 		speedDelta = (10 * speedFactor) - 2;
 		ball->speed += speedDelta;
 
 		ball->speed = clamp(ball->speed, gameObj.defVal.ball.minSpeed, gameObj.defVal.ball.maxSpeed);
-
-		/*Move the ball away from the plateforme by the distance it was inside it*/
-		if(col.side == TOP_SIDE)
-		{
-			ball->y += col.deltaTop;
-		}
-		else if(col.side == BOTTOM_SIDE)
-		{
-			ball->y += col.deltaBottom;
-		}
 
 		/*Update ball direction based on collision point*/
 		colPosPerc = (col.x - plat->x) / plat->size;
@@ -245,6 +235,16 @@ void ballPlateformeCollision(Ball * ball, Plateforme * plat, Collision col)
 	else if(col.side == LEFT_SIDE || col.side == RIGHT_SIDE)
 	{
 		ball->direction.x *= -1;
+	}
+
+	/*Move the ball away from the plateforme by the distance it was inside it*/
+	switch (col.side) 
+	{
+		case TOP_SIDE: ball->y += col.deltaTop; break;
+		case RIGHT_SIDE: ball->y += col.deltaRight; break;
+		case BOTTOM_SIDE: ball->y += col.deltaBottom; break;
+		case LEFT_SIDE: ball->y += col.deltaLeft; break;
+		default: break;
 	}
 }
 
