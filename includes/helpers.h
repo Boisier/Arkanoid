@@ -89,16 +89,26 @@ Collision SphereRectCollisionDetails(BaseSphere sphere, BaseRect rect);
 /** MATHS **/
 /***********/
 
-void getCoordinatesAngle(float angle, float distance, Vector2D * coord);
+Vector2D addVector(Vector2D A, Vector2D B);
+
+Vector2D subVector(Vector2D A, Vector2D B);
+
+Vector2D multVector(Vector2D A, float factor);
 
 float norm(Vector2D A, Vector2D B);
+
+float normSquared(Vector2D A, Vector2D B);
+
+float dotP(Vector2D A, Vector2D B);
+
+
+Vector2D rotateVector(Vector2D vec, float angle);
+
+void getCoordinatesAngle(float angle, float distance, Vector2D * coord);
 
 float bbWidthAt(float dist);
 
 float bbAngle(int BBox);
 
-Vector2D rotateVector(Vector2D vec, float angle);
-
 bool inBBox(Ball * ball);
 
-float dotP(Vector2D A, Vector2D B);

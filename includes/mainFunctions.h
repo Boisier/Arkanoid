@@ -36,6 +36,9 @@ void playerMovements();
 /** Handle movement of the balls **/
 void ballMovements();
 
+/** Create the bricks for every player with the given level*/
+void createBricks(char * levelName);
+
 
 
 

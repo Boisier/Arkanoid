@@ -14,7 +14,7 @@ void initGame()
     gameObj.defVal.plateforme.acceleration = .5;
     gameObj.defVal.plateforme.level = 35;
 
-    gameObj.defVal.brick.width = 50;
+    gameObj.defVal.brick.startLevel = 30;
     gameObj.defVal.brick.height = 20;
     
     gameObj.defVal.ball.size = 15;
@@ -211,7 +211,7 @@ void startGame()
     
     
     /********************************/
-    gameObj.game.nbrPlayers = 8;
+    gameObj.game.nbrPlayers = 2;
     /********************************/
 
 

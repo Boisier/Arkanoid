@@ -36,7 +36,7 @@ typedef struct _GameObj
 
         struct
         {
-            int width;
+            int startLevel;
             int height;
         } brick;
 
@@ -98,6 +98,9 @@ typedef struct _GameObj
 
             float platMinPos;
             float platMaxPos;
+
+            int gridH;
+            int gridW;
         } bb; /* bb : short for Bounding Box*/
 
     } game;

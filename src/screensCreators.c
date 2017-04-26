@@ -64,8 +64,8 @@ void createThemeSelection()
 
         if(tFold != NULL)
         {
-            /*Ignore dot and dotdot folders*/
-            if(strcmp(tFold->d_name, ".") == 0 || strcmp(tFold->d_name, "..") == 0)
+            /*Ignore dot folders*/
+            if(tFold->d_name[0] == '.')
                 continue;
 
             nbrThemes++;
@@ -186,6 +186,9 @@ void createGameBoard()
         ball = createGluedBall(0, 0, i);
         addToPrint(ball, BALL);
     }
+
+    /**Create the bricks for the level*/
+    createBricks("starter.level");
 
     gameObj.printContent = INGAME;
 }

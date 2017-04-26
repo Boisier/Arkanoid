@@ -25,7 +25,7 @@ void printScreen()
         {
             case PLATEFORME: printPlateforme(el.element.plateforme); break;
             case PICTURE: printPicture(el.element.pict); break;
-            case BRICK: printPicture(el.element.pict); break;
+            case BRICK: printBrick(el.element.brick); break;
             case BALL: printBall(el.element.ball); break;
             case BONUS: printPicture(el.element.pict); break;
             case BUTTON: printButton(el.element.btn); break;
@@ -85,8 +85,8 @@ void cleanToPrint()
             switch(gameObj.toPrint[i].type)          
             {
                 case PLATEFORME: freePlateforme(gameObj.toPrint[i].element.plateforme); break;
-                case BRICK: freePlateforme(gameObj.toPrint[i].element.plateforme); break;
-                case BALL: freePlateforme(gameObj.toPrint[i].element.plateforme); break;
+                case BRICK: freeBrick(gameObj.toPrint[i].element.brick); break;
+                case BALL: freeBall(gameObj.toPrint[i].element.ball); break;
                 case BONUS: freePlateforme(gameObj.toPrint[i].element.plateforme); break;
                 case BUTTON: freeButton(gameObj.toPrint[i].element.btn); break;
                 case PICTURE: freePicture(gameObj.toPrint[i].element.pict); break;

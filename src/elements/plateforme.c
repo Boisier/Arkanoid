@@ -44,14 +44,16 @@ void printPlateforme(Plateforme * plateforme)
 		glTexCoord2f(0, 1); glVertex2f(  x  , y + h);
 	glEnd();
 
+	if(gameObj.game.bb.squared)
+	{
+		glBegin(GL_LINE_LOOP);
 
-	glBegin(GL_LINE_LOOP);
+			glVertex2f(0                , 0);
+			glVertex2f(gameObj.game.bb.width / 2, gameObj.game.bb.height);
+			glVertex2f(-gameObj.game.bb.width / 2, gameObj.game.bb.height);
 
-		glVertex2f(0                , 0);
-		glVertex2f(gameObj.game.bb.width / 2, gameObj.game.bb.height);
-		glVertex2f(-gameObj.game.bb.width / 2, gameObj.game.bb.height);
-
-	glEnd();
+		glEnd();
+	}
 
 	glPopMatrix();
 
@@ -71,16 +73,17 @@ BaseRect getPlateformeBaseRect(Plateforme * plat)
 	BaseRect platBase;
 
 	platBase.topLeftX = plat->x;
-	platBase.topRightX = plat->x + plat->size;
-	platBase.bottomRightX = plat->x + plat->size;
-	platBase.bottomLeftX = plat->x;
-
 	platBase.topLeftY = plat->y;
+
+	platBase.topRightX = plat->x + plat->size;
 	platBase.topRightY = plat->y;
+
+	platBase.bottomRightX = plat->x + plat->size;
 	platBase.bottomRightY = plat->y - gameObj.defVal.plateforme.height;
+	
+	platBase.bottomLeftX = plat->x;
 	platBase.bottomLeftY = plat->y - gameObj.defVal.plateforme.height;
 	
-
 	return platBase;
 }
 

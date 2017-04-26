@@ -62,9 +62,9 @@ enum brickType
 {
 	BASIC,			/*1*/
 	STRONG,			/*2*/
-	VERYSTRONG		/*3*/
-	INVICIBLE,		/*4*/
-	TRANSPARENT,	/*5*/
+	VERYSTRONG,		/*3*/
+	INVINCIBLE,		/*4*/
+	TRANSPARENT   	/*5*/
 };
 
 enum gameType

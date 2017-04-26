@@ -19,7 +19,7 @@ static const float DEGTORAD = 57.2957795131;
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
 
 /*Finally, include our own libraries*/
-#include "enumerations.h"
+#include "enums.h"
 #include "structs.h"
 #include "GameObj.h"
 #include "helpers.h"

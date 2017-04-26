@@ -161,7 +161,7 @@ void setTheme(int themeID)
         if(tFold != NULL)
         {
             /*Ignore dot and dotdot folders*/
-            if(strcmp(tFold->d_name, ".") == 0 || strcmp(tFold->d_name, "..") == 0)
+            if(tFold->d_name[0] == '.')
                 continue;
 			
 			++i;

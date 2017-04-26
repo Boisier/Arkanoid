@@ -277,3 +277,54 @@ void ballMovements()
         ballCollisions(ball);
     }
 }
+
+/**Create the bricks for the level*/
+void createBricks(char * levelName)
+{
+    FILE * level;
+    char path[256] = "./levels/", line[256];
+    int i, j, k, type;
+
+    strcat(path, levelName);
+
+    level = fopen(path, "r");
+
+    /*Retrieve grid dimensions*/
+    if(fgets(line, 255, level) == NULL)
+        throwCriticalError();
+
+    gameObj.game.bb.gridW = atoi(strtok(line, " "));
+    gameObj.game.bb.gridH = atoi(strtok(NULL, " "));
+
+    /*For every line of brick*/
+    for(i = 0; i < gameObj.game.bb.gridH; ++i)
+    {
+        /*Get the line infos*/
+        if(fgets(line, 255, level) == NULL)
+            throwCriticalError();
+        
+        printf("%s\n", line);
+        
+        /*For every brick on the line*/
+        for(j = 0; j < gameObj.game.bb.gridW; ++j)
+        {
+            /*Get the brick type*/
+            if(j == 0)
+                type = atoi(strtok(line, " "));
+            else
+                type = atoi(strtok(NULL, " "));
+            
+            if(type == 0) /*No brick on this one*/
+                continue;
+
+            /*For every player*/
+            for(k = 0; k < gameObj.game.nbrPlayers; ++k)
+            {   
+                /*Add the brick*/
+                addToPrint(createBrick(gameObj.game.bb.gridW - j-1, gameObj.defVal.brick.startLevel + i * gameObj.defVal.brick.height, type, k), BRICK);
+            }
+        }
+    }
+
+    fclose(level);
+}

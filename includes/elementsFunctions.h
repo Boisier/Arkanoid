@@ -86,3 +86,22 @@ void ballPlateformeCollision(Ball * ball, Plateforme * plat, Collision col);
 
 /** Set ball direction from a given angle **/
 void setBallDirection(Ball * ball, float angle);
+
+
+
+
+/**********/
+/** BRICK**/
+/**********/
+
+/** Create a new brick element **/
+Brick * createBrick(float Xpos, float level, int type, int BBox);
+
+/** Print the brick on the screen on the correct BBox*/
+void printBrick(Brick * brick);
+
+/** Free the brick element, the texture(s) is(are) NOT free-ed **/
+void freeBrick(Brick * brick);
+
+/** Generate a baseRect for the given brick **/
+BaseRect getBrickBaseRect(Brick * brick);

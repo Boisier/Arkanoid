@@ -1,27 +1,58 @@
 #include "../../includes/game.h"
 
-
-void getCoordinatesAngle(float angle, float distance, Vector2D * coord)
+/** Substract two vectors **/
+Vector2D addVector(Vector2D A, Vector2D B)
 {
-    coord->x = sin(angle / DEGTORAD) * distance;
-    coord->y = cos(angle / DEGTORAD) * distance;
+    Vector2D vec;
+
+    vec.x = A.x + B.x;
+    vec.y = A.y + B.y;
+
+    return vec;
 }
 
+Vector2D subVector(Vector2D A, Vector2D B)
+{
+    Vector2D vec;
+
+    vec.x = A.x - B.x;
+    vec.y = A.y - B.y;
+
+    return vec;
+}
+
+
+/** Substract two vectors **/
+Vector2D multVector(Vector2D A, float factor)
+{
+    Vector2D vec;
+
+    vec.x = A.x * factor;
+    vec.y = A.y * factor;
+
+    return vec;
+}
+
+/** Vector Norm **/
 float norm(Vector2D A, Vector2D B)
 {
     return sqrt((A.x - B.x)*(A.x - B.x) + (A.y - B.y)*(A.y - B.y));
 }
 
-float bbWidthAt(float dist)
+/** Vector Norm **/
+float normSquared(Vector2D A, Vector2D B)
 {
-	return ((gameObj.game.bb.height - dist) / gameObj.game.bb.height) * gameObj.game.bb.width;
+    float n = norm(A, B);
+    return n * n;
 }
 
-float bbAngle(int BBox)
+/** Dot Product **/
+float dotP(Vector2D A, Vector2D B)
 {
-	return gameObj.game.bb.startAngle + gameObj.game.bb.angle * BBox;
+    return A.x * B.x + A.y * B.y;
 }
 
+/** Rotate vector **/
 Vector2D rotateVector(Vector2D vec, float angle)
 {
     Vector2D rotated;
@@ -29,6 +60,34 @@ Vector2D rotateVector(Vector2D vec, float angle)
     rotated.y = vec.x * sin(angle / DEGTORAD) + vec.y * cos(angle / DEGTORAD);
 
     return rotated;
+}
+
+/** Get point coordinate at the given angle and distance from the origin **/
+void getCoordinatesAngle(float angle, float distance, Vector2D * vec)
+{
+    vec->x = sin(angle / DEGTORAD) * distance;
+    vec->y = cos(angle / DEGTORAD) * distance;
+}
+
+
+
+
+
+/****************************/
+/** BBOX RELATED FUNCTIONS **/
+/****************************/
+
+float bbWidthAt(float dist)
+{
+    if(gameObj.game.bb.squared)
+        return gameObj.game.bb.width;
+	    
+    return ((gameObj.game.bb.height - dist) / gameObj.game.bb.height) * gameObj.game.bb.width;
+}
+
+float bbAngle(int BBox)
+{
+	return gameObj.game.bb.startAngle + gameObj.game.bb.angle * BBox;
 }
 
 bool inBBox(Ball * ball)
@@ -64,9 +123,4 @@ bool inBBox(Ball * ball)
     v = (dotAA * dotCB - dotAC * dotAB) * denom;
 
     return u >= 0 && v >= 0 && u + v < 1;
-}
-
-float dotP(Vector2D A, Vector2D B)
-{
-    return A.x * B.x + A.y * B.y;
 }

@@ -76,11 +76,18 @@ typedef struct _brick
 {
 	int BBox;
 
-	int x;
-	int y;
+	Vector2D topLeft;
+	Vector2D topRight;
+	Vector2D bottomRight;
+	Vector2D bottomLeft;
 
 	enum brickType type;
+
 	int strength;
+
+	GLuint texture;
+	GLuint texture1;
+	GLuint texture2;
 } Brick;
 
 typedef struct _ball
