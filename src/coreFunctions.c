@@ -95,6 +95,59 @@ char btnHandler()
 	return callback;
 }
 
+/**Define the playable area for each player**/
+void defineBoundingBox()
+{
+    Vector2D A, B, middle;
+
+    /*Size of a bounding box*/
+    gameObj.game.bb.radius = gameObj.wHeight / 2;
+
+    /*The display style is different if there is only 2 players*/
+    if(gameObj.game.nbrPlayers == 2)
+    {
+        /*For 2 player, the bb is handled manually*/
+        gameObj.game.bb.squared = true;
+        gameObj.game.bb.angle = 180;
+        gameObj.game.bb.startAngle = 180;
+        gameObj.game.bb.width = gameObj.wWidth;
+        gameObj.game.bb.height = gameObj.game.bb.radius;
+        gameObj.game.bb.platMinPos = - gameObj.wWidth / 2;
+        gameObj.game.bb.platMaxPos = gameObj.wWidth / 2;
+        return;
+    }
+
+    gameObj.game.bb.squared = false;
+
+    /*Get angles*/
+    gameObj.game.bb.angle = 360.0 / gameObj.game.nbrPlayers;
+    gameObj.game.bb.startAngle = 180;
+
+    /*Get two extremities*/
+    getCoordinatesAngle(0, gameObj.game.bb.radius, &A);
+    getCoordinatesAngle(gameObj.game.bb.angle, gameObj.game.bb.radius, &B);
+
+    /*Width of the base of the bounding box*/
+    gameObj.game.bb.width = norm(A, B);
+
+    /*Get the height of the bounding box*/
+    middle.x = (A.x + B.x) / 2;
+    middle.y = (A.y + B.y) / 2;
+
+    gameObj.game.bb.height = sqrt((middle.x * middle.x) + (middle.y * middle.y));
+
+    /**Store more data that will be used frequently**/
+    gameObj.game.bb.platMinPos = - bbWidthAt(gameObj.defVal.plateforme.level) / 2;
+    gameObj.game.bb.platMaxPos = bbWidthAt(gameObj.defVal.plateforme.level) / 2;
+    printf(">> %f <> %f \n", bbWidthAt(gameObj.defVal.plateforme.level), gameObj.game.bb.width);
+}
+
+
+
+
+
+
+
 /** Handle movement of the players **/
 void playerMovements()
 {
@@ -104,9 +157,9 @@ void playerMovements()
     Plateforme * plateforme;
     bool leftKey, rightKey;
 
-    for(i = 0; i < gameObj.nbrPlayers; ++i)
+    for(i = 0; i < gameObj.game.nbrPlayers; ++i)
     {
-        player = gameObj.players[i];
+        player = gameObj.game.players[i];
 
         if(player->type == AI)
         {
@@ -115,15 +168,17 @@ void playerMovements()
         }
 
         /*Human Player*/
-        if(player->playerPos == TOP)
+        if(i == 0)
         {
-            leftKey = gameObj.keys.a;
-            rightKey = gameObj.keys.z;
+            /**Keys are inversed beacause the BBoxs are roated 180 degrees*/
+            leftKey = gameObj.keys.right;
+            rightKey = gameObj.keys.left;
         }
-        else
+        else if(i == 1)
         {
-            leftKey = gameObj.keys.left;
-            rightKey = gameObj.keys.right;
+            /**Keys are inversed beacause the BBoxs are roated 180 degrees*/
+            rightKey = gameObj.keys.z;
+            leftKey = gameObj.keys.a;
         }
 
         plateforme = player->plateforme;
@@ -154,9 +209,9 @@ void playerMovements()
             plateforme->dirFactor = -1;
 
             /*Are we still in the game area ?*/
-            if(plateforme->x < 0)
+            if(plateforme->x < gameObj.game.bb.platMinPos)
             {
-                plateforme->x = 0;
+                plateforme->x = gameObj.game.bb.platMinPos;
                 plateforme->speed = 0;
             }
 
@@ -169,9 +224,9 @@ void playerMovements()
             plateforme->dirFactor = 1;
 
             /*Are we still in the game area ?*/
-            if(plateforme->x + plateforme->size > gameObj.wWidth)
+            if(plateforme->x + plateforme->size > gameObj.game.bb.platMaxPos)
             {
-                plateforme->x = gameObj.wWidth - plateforme->size;
+                plateforme->x = gameObj.game.bb.platMaxPos - plateforme->size;
                 plateforme->speed = 0;
             }
         }
@@ -193,7 +248,7 @@ void ballMovements()
         ball = gameObj.toPrint[i].element.ball;
 
         /*See if ball is glued and try to unglue it*/
-        unglueBall(ball);
+        unglueBall(ball, ball->playerID);
 
         if(ball->glued)
         {
@@ -209,12 +264,10 @@ void ballMovements()
         {
             /*Deactivate the ball*/
             gameObj.toPrint[i].display = false;
-            gameObj.players[player]->life--;
+            gameObj.game.players[player]->life--;
             
             /*Create a new ball for the ball owner*/
-            ball = createBall(0, 0, ball->playerID);
-            ball->gluedPlat = gameObj.players[ball->playerID]->plateforme;
-            ball->glueOffsetX = gameObj.players[ball->playerID]->plateforme->size / 2;
+            ball = createGluedBall(0, 0, ball->playerID);
             addToPrint(ball, BALL);
 
             continue;

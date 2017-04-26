@@ -25,10 +25,10 @@ void printPicture(Picture * pict)
 	glBindTexture(GL_TEXTURE_2D, pict->texture);
 
 	glBegin(GL_QUADS);
-		glTexCoord2f(0, 0); glVertex2f(pict->x, pict->y);
+		glTexCoord2f(0, 0); glVertex2f(pict->x              , pict->y);
 		glTexCoord2f(1, 0); glVertex2f(pict->x + pict->width, pict->y);
-		glTexCoord2f(1, 1); glVertex2f(pict->x + pict->width, pict->y + pict->height);
-		glTexCoord2f(0, 1); glVertex2f(pict->x, pict->y + pict->height);
+		glTexCoord2f(1, 1); glVertex2f(pict->x + pict->width, pict->y - pict->height);
+		glTexCoord2f(0, 1); glVertex2f(pict->x              , pict->y - pict->height);
 	glEnd();
 
 	glBindTexture(GL_TEXTURE_2D, 0);

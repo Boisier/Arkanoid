@@ -80,8 +80,8 @@ GLuint * addTextureSlot(char * path)
 
 	if(gameObj.nbrTextures == 1)
 	{
-		gameObj.textures = allocate(sizeof(GLuint) * gameObj.nbrTextures);
-		gameObj.texturesPath = allocate(gameObj.nbrTextures * sizeof(char *));
+		gameObj.textures = allocate(sizeof(GLuint));
+		gameObj.texturesPath = allocate(sizeof(char *));
 	}
 	else
 	{
@@ -89,7 +89,7 @@ GLuint * addTextureSlot(char * path)
 		gameObj.texturesPath = reAllocate(gameObj.texturesPath, gameObj.nbrTextures * sizeof(char *));
 	}
 
-	gameObj.texturesPath[gameObj.nbrTextures - 1] = allocate(sizeof(char) * 100);
+	gameObj.texturesPath[gameObj.nbrTextures - 1] = allocate(sizeof(char) * 256);
 
 	strcpy(gameObj.texturesPath[gameObj.nbrTextures - 1], path);	/*Mark new texture as loaded*/
 
@@ -142,4 +142,46 @@ void freeTextures()
     
     gameObj.texturesPath = NULL;
     gameObj.nbrTextures = 0;
+}
+
+void setTheme(int themeID)
+{
+	DIR * themesFolder;
+    struct dirent * tFold;
+	char themePath[256];
+	int i  = 0;
+
+    themesFolder = opendir("./themes");
+
+	/*Parse folder*/
+	do
+    {
+        tFold = readdir(themesFolder);
+
+        if(tFold != NULL)
+        {
+            /*Ignore dot and dotdot folders*/
+            if(strcmp(tFold->d_name, ".") == 0 || strcmp(tFold->d_name, "..") == 0)
+                continue;
+			
+			++i;
+
+			/*Is this the theme ?*/
+			if(i != themeID)
+				continue;
+
+			/*This is the theme*/
+			strcpy(themePath, "./themes/");
+            strcat(themePath, tFold->d_name);
+            strcat(themePath, "/");
+			break;
+        }
+    } while(tFold != NULL);
+
+    (void) closedir(themesFolder);
+
+	strcpy(gameObj.theme, themePath);
+
+	/*Clean up textures*/
+	freeTextures();
 }

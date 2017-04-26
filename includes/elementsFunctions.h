@@ -5,7 +5,7 @@
 /****************/
 
 /** Create a new plateforme element width the defaultplateforme texture**/
-Plateforme * createPlateforme(float posX, float posY, enum PlayerPos pos);
+Plateforme * createPlateforme(float posX, float posY);
 
 /** Print the plateforme on the screen**/
 void printPlateforme(Plateforme * plateforme);
@@ -58,7 +58,10 @@ void freeButton(Button * btn);
 /**********/
 
 /** Create a new ball element width the defaultplateforme texture**/
-Ball * createBall(float posX, float posY, int playerID);
+Ball * createBall(float posX, float posY, int playerID, int BBox);
+
+/** Create a new ball already glued to a plat*/
+Ball * createGluedBall(float posX, float posY, int playerID);
 
 /** Print the ball on the screen**/
 void printBall(Ball * ball);
@@ -67,7 +70,7 @@ void printBall(Ball * ball);
 void freeBall(Ball * ball);
 
 /** Free the ball, the texture is not free-ed **/
-void unglueBall(Ball * ball);
+void unglueBall(Ball * ball, int playerID);
 
 /** Move the ball along its direction. Bounce on screen sides*/
 void moveBall(Ball * ball);

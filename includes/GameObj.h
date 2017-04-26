@@ -31,6 +31,7 @@ typedef struct _GameObj
             float height;
             float maxSpeed;
             float acceleration;
+            float level;
         } plateforme;
 
         struct
@@ -77,9 +78,29 @@ typedef struct _GameObj
     Button * currentlySelectedBtn;
 
     /** The Game **/
-    int nbrHumanPlayers;
-    int nbrPlayers;
-    Player ** players;
+    struct
+    {
+        enum gameType type;
+
+        Player ** players;
+        int nbrPlayers;
+
+        struct
+        {
+            float angle;
+            float startAngle;
+            float radius;
+            
+            bool squared;
+
+            float height;
+            float width;
+
+            float platMinPos;
+            float platMaxPos;
+        } bb; /* bb : short for Bounding Box*/
+
+    } game;
 
 } GameObj;
 

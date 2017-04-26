@@ -46,18 +46,22 @@ typedef struct _basicSphere
 } BaseSphere;
 
 
+
+
+
 /********************/
 /** PRINT ELEMENTS **/
 /********************/
 
 typedef struct _platforme
 {
+	int BBox;
+
 	float x;
 	float y;
 	int size;
 	int dirFactor;
 
-	enum PlayerPos pos;
 	float speed;
 
 	bool sticky;
@@ -70,6 +74,8 @@ typedef struct _platforme
 
 typedef struct _brick
 {
+	int BBox;
+
 	int x;
 	int y;
 
@@ -79,6 +85,8 @@ typedef struct _brick
 
 typedef struct _ball
 {
+	int BBox;
+
 	float x;
 	float y;
 	float size;
@@ -100,6 +108,8 @@ typedef struct _ball
 
 typedef struct _bonus
 {
+	int BBox;
+	
 	float x;
 	float y;
 	
@@ -161,8 +171,6 @@ typedef struct _player
 
 	int life;
 	int score; /* ~ */
-
-	enum PlayerPos playerPos;
 
 	Plateforme * plateforme;
 } Player;

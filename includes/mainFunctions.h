@@ -27,6 +27,9 @@ void watcher();
 /** Handle menu interactions **/
 char btnHandler();
 
+/**Define the playable area for each player**/
+void defineBoundingBox();
+
 /** Handle movement of the players **/
 void playerMovements();
 
@@ -46,6 +49,12 @@ void mainMenu();
 
 /** Create the main menu **/
 void createMainMenu();
+
+/** Theme switch screen **/
+void themeSelection();
+
+/** Create theme selection screen **/
+void createThemeSelection();
 
 /** Handle nbr of player selection **/
 void playerSelection();

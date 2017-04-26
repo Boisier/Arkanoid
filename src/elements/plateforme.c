@@ -1,14 +1,13 @@
 #include "../../includes/game.h"
 
 /** Create a new plateforme element width the defaultplateforme texture**/
-Plateforme * createPlateforme(float posX, float posY, enum PlayerPos pos)
+Plateforme * createPlateforme(float posX, float posY)
 {
 	Plateforme * plateforme = allocate(sizeof(Plateforme));
 
 	plateforme->x = posX;
 	plateforme->y = posY;
 	plateforme->size = gameObj.defVal.plateforme.size;
-	plateforme->pos = pos;
 
 	plateforme->speed = 0;
 	plateforme->texture = getTexture("plateforme.png");
@@ -24,19 +23,19 @@ Plateforme * createPlateforme(float posX, float posY, enum PlayerPos pos)
 /** Print the plateforme on the screen**/
 void printPlateforme(Plateforme * plateforme)
 {	
-	float x, y, w, h;
+	float x, y, w, h, angle;
 
 	x = plateforme->x;
 	y = plateforme->y;
 	w = plateforme->size;
 	h = gameObj.defVal.plateforme.height;
-
-	/*Reverse texture for top plateforme*/
-	if(plateforme->pos == TOP)
-		h *= -1;
+	angle = bbAngle(plateforme->BBox);
 
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, plateforme->texture);
+
+	glPushMatrix();
+	glRotatef(angle, 0, 0, 1);
 	
 	glBegin(GL_QUADS);
 		glTexCoord2f(0, 0); glVertex2f(  x  ,   y  );
@@ -45,6 +44,16 @@ void printPlateforme(Plateforme * plateforme)
 		glTexCoord2f(0, 1); glVertex2f(  x  , y + h);
 	glEnd();
 
+
+	glBegin(GL_LINE_LOOP);
+
+		glVertex2f(0                , 0);
+		glVertex2f(gameObj.game.bb.width / 2, gameObj.game.bb.height);
+		glVertex2f(-gameObj.game.bb.width / 2, gameObj.game.bb.height);
+
+	glEnd();
+
+	glPopMatrix();
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_TEXTURE_2D);
@@ -65,21 +74,12 @@ BaseRect getPlateformeBaseRect(Plateforme * plat)
 	platBase.topRightX = plat->x + plat->size;
 	platBase.bottomRightX = plat->x + plat->size;
 	platBase.bottomLeftX = plat->x;
+
+	platBase.topLeftY = plat->y;
+	platBase.topRightY = plat->y;
+	platBase.bottomRightY = plat->y - gameObj.defVal.plateforme.height;
+	platBase.bottomLeftY = plat->y - gameObj.defVal.plateforme.height;
 	
-	if(plat->pos == TOP)
-	{
-		platBase.topLeftY = plat->y;
-		platBase.topRightY = plat->y;
-		platBase.bottomRightY = plat->y - gameObj.defVal.plateforme.height;
-		platBase.bottomLeftY = plat->y - gameObj.defVal.plateforme.height;
-	}
-	else
-	{
-		platBase.topLeftY = plat->y;
-		platBase.topRightY = plat->y;
-		platBase.bottomRightY = plat->y - gameObj.defVal.plateforme.height;
-		platBase.bottomLeftY = plat->y - gameObj.defVal.plateforme.height;
-	}
 
 	return platBase;
 }

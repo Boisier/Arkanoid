@@ -68,6 +68,9 @@ void getTextureDimensions(GLuint texture, int * width, int * height);
 /** Free all textures **/
 void freeTextures();
 
+/** Set theme to use **/
+void setTheme(int themeID);
+
 
 
 /****************/
@@ -79,3 +82,23 @@ Collision SphereRectCollision(BaseSphere sphere, BaseRect rect, bool details);
 
 /** Detect a collision between a sphere and a rect and get details for it **/
 Collision SphereRectCollisionDetails(BaseSphere sphere, BaseRect rect);
+
+
+
+/***********/
+/** MATHS **/
+/***********/
+
+void getCoordinatesAngle(float angle, float distance, Vector2D * coord);
+
+float norm(Vector2D A, Vector2D B);
+
+float bbWidthAt(float dist);
+
+float bbAngle(int BBox);
+
+Vector2D rotateVector(Vector2D vec, float angle);
+
+bool inBBox(Ball * ball);
+
+float dotP(Vector2D A, Vector2D B);

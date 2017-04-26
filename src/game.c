@@ -9,14 +9,15 @@ void initGame()
     strcpy(gameObj.theme, "themes/default/");
 
     gameObj.defVal.plateforme.size = 100;
-    gameObj.defVal.plateforme.height = 20;
+    gameObj.defVal.plateforme.height = 15;
     gameObj.defVal.plateforme.maxSpeed = 25;
     gameObj.defVal.plateforme.acceleration = .5;
+    gameObj.defVal.plateforme.level = 35;
 
     gameObj.defVal.brick.width = 50;
     gameObj.defVal.brick.height = 20;
     
-    gameObj.defVal.ball.size = 20;
+    gameObj.defVal.ball.size = 15;
     gameObj.defVal.ball.minSpeed = 5; 
     gameObj.defVal.ball.maxSpeed = 20; /*= gameObj.defVal.plateforme.height*/
     gameObj.defVal.ball.maxAngle = 90;
@@ -47,8 +48,8 @@ void initGame()
 
     gameObj.currentlySelectedBtn = NULL;
 
-    gameObj.nbrHumanPlayers = 0;
-    gameObj.players = NULL;
+    gameObj.game.nbrPlayers = 0;
+    gameObj.game.players = NULL;
 }
 
 /** Main loop of the app**/
@@ -89,6 +90,9 @@ void doThings()
         case MAINMENU:
             mainMenu();
         break;
+        case THEMESELECTION:
+            themeSelection();
+        break;
         case PLAYERSELECTION:
             playerSelection();
         break;
@@ -122,7 +126,42 @@ void mainMenu()
     {
         gameObj.gameState = PLAYERSELECTION;
     }
+
+    if(callback == 't')
+    {
+        gameObj.gameState = THEMESELECTION;
+    }
 }
+
+
+
+/** Theme switch screen **/
+void themeSelection()
+{
+    char callback;
+
+    if(gameObj.printContent != THEMESELECTION)
+    {
+        cleanToPrint();
+        createThemeSelection();
+    }
+
+    callback = btnHandler();
+
+    if(callback == 'b')
+    {
+        gameObj.gameState = MAINMENU;
+        return;
+    }
+    
+    if(callback != 0)
+    {
+        /*Apply new theme*/
+        setTheme(callback);
+        gameObj.gameState = MAINMENU;
+    }
+}
+
 
 /** Handle nbr of player selection **/
 void playerSelection()
@@ -141,10 +180,12 @@ void playerSelection()
     if(callback == 'b')
     {
         gameObj.gameState = MAINMENU;
+        return;
     }
-    else if(callback == 1 || callback == 2)
+    
+    if(callback != 0)
     {
-        gameObj.nbrHumanPlayers = callback;
+        gameObj.game.nbrPlayers = callback;
         gameObj.gameState = STARTGAME;
     }
 }
@@ -152,20 +193,45 @@ void playerSelection()
 /** Start the game **/
 void startGame()
 {
-    if(gameObj.players != NULL)
+    int i;
+    bool addAI = false;
+
+    if(gameObj.game.players != NULL)
     {
         /*Free players*/
     }
     
-    gameObj.nbrPlayers = 2;
-    gameObj.players = allocate(sizeof(Player *) * gameObj.nbrPlayers);
+    /*Handle only one human player*/
+    if(gameObj.game.nbrPlayers == 1)
+    {
+        gameObj.game.nbrPlayers = 2;
+        addAI = true;
+    }
 
-    createPlayer(HUMAN, 1);
+    
+    
+    /********************************/
+    gameObj.game.nbrPlayers = 8;
+    /********************************/
 
-    if(gameObj.nbrHumanPlayers == 1)
-        createPlayer(AI, 2);
-    else
-        createPlayer(HUMAN, 2);
+
+    /*Create bounding box*/
+    defineBoundingBox();
+
+    printf("> %d\n", gameObj.game.nbrPlayers);
+    gameObj.game.players = allocate(sizeof(Player *) * gameObj.game.nbrPlayers);
+
+    for(i = 0; i < gameObj.game.nbrPlayers; ++i)
+    {
+        if(addAI == true && i+1 == gameObj.game.nbrPlayers)
+        {
+            /*If it's the last insert and we need an AI -> add an AI*/
+            createPlayer(AI, i);
+            break;
+        }
+
+        createPlayer(HUMAN, i);
+    }
 
     gameObj.gameState = INGAME;
 }
@@ -173,28 +239,19 @@ void startGame()
 /** Create a new player **/
 void createPlayer(enum PlayerType type, int playerNbr)
 {   
-    int platX = percent(50, 'w') - gameObj.defVal.plateforme.size / 2;
-    int platY;
+    /**Define plateforme position **/
+    int platX = 0 - gameObj.defVal.plateforme.size / 2;
+    int platY = gameObj.game.bb.height - gameObj.defVal.plateforme.level;
 
     Player * player = allocate(sizeof(Player));
 
-    if(playerNbr == 1)
-    {
-        player->playerPos = BOTTOM;
-        platY = gameObj.wHeight - 50;
-    }
-    else
-    {
-        player->playerPos = TOP;
-        platY = 50;
-
-    }
     player->type = type;
     player->life = gameObj.defVal.lifeNbr;
 
-    player->plateforme = createPlateforme(platX, platY, player->playerPos);
+    player->plateforme = createPlateforme(platX, platY);
+    player->plateforme->BBox = playerNbr;
 
-    gameObj.players[playerNbr - 1] = player;
+    gameObj.game.players[playerNbr] = player;
 }
 
 /** Handle ingame events **/

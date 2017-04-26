@@ -1,5 +1,18 @@
 #pragma once
 
+typedef enum _GameState
+{
+    EMPTY,
+    MAINMENU,
+	THEMESELECTION,
+    PLAYERSELECTION,
+    STARTGAME,
+    INGAME,
+    EXITING
+} GameState;
+
+
+
 enum elType
 {
 	PLATEFORME,
@@ -35,12 +48,6 @@ enum PlayerType
 	AI
 };
 
-enum PlayerPos
-{
-	TOP,
-	BOTTOM
-};
-
 enum CollisionSide
 {
 	NO_COLLISION,
@@ -53,19 +60,15 @@ enum CollisionSide
 
 enum brickType
 {
-	BASIC,
-	INVICIBLE,
-	TRANSPARENT,
-	STRONG,
-	VERYSTRONG
+	BASIC,			/*1*/
+	STRONG,			/*2*/
+	VERYSTRONG		/*3*/
+	INVICIBLE,		/*4*/
+	TRANSPARENT,	/*5*/
 };
 
-typedef enum _GameState
+enum gameType
 {
-    EMPTY,
-    MAINMENU,
-    PLAYERSELECTION,
-    STARTGAME,
-    INGAME,
-    EXITING
-} GameState;
+	LOCALE,
+	ONLINE
+};

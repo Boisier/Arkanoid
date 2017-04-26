@@ -1,9 +1,11 @@
 #include "../../includes/game.h"
 
 /** Create a new ball element width the defaultplateforme texture**/
-Ball * createBall(float posX, float posY, int playerID)
+Ball * createBall(float posX, float posY, int playerID, int BBox)
 {
 	Ball * ball = allocate(sizeof(Ball));
+
+	ball->BBox = BBox;
 
 	ball->x = posX;
 	ball->y = posY;
@@ -11,8 +13,8 @@ Ball * createBall(float posX, float posY, int playerID)
 
 	ball->playerID = playerID;
 
-	ball->glued = true;
-	ball->gluedPlat = gameObj.players[playerID]->plateforme;
+	ball->glued = false;
+	ball->gluedPlat = NULL;
 
 	ball->texture = getTexture("ball.png");
 
@@ -26,10 +28,22 @@ Ball * createBall(float posX, float posY, int playerID)
 	return ball;
 }
 
+/** Create a new ball already glued to a plat*/
+Ball * createGluedBall(float posX, float posY, int playerID)
+{
+	Ball * ball = createBall(0, 0, playerID, playerID);
+
+	ball->glued = true;
+	ball->gluedPlat = gameObj.game.players[playerID]->plateforme;
+	ball->glueOffsetX = ball->gluedPlat->size / 2;
+
+	return ball;
+}
+
 /** Print the ball on the screen**/
 void printBall(Ball * ball)
 {	
-	float x, y, w, h;
+	float x, y, w, h, angle;
 
 	w = ball->size;
 	h = ball->size;
@@ -37,30 +51,29 @@ void printBall(Ball * ball)
 	if(ball->glued)
 	{
 		/*Get ball position based on the plateforme position*/
-		if(ball->gluedPlat->pos == TOP)
-			ball->y = ball->gluedPlat->y + ball->size / 2;
-		else
-			ball->y = ball->gluedPlat->y - ball->size / 2;
-
+		ball->y = ball->gluedPlat->y - ball->size / 2;
 		ball->x = ball->gluedPlat->x + ball->glueOffsetX;
 	}
 
 	x = ball->x - ball->size / 2;
-	y = ball->y - ball->size / 2;
+	y = ball->y + ball->size / 2;
 
-	/*if(ball->gluedPlat->pos == BOTTOM)
-		printf(">> %f : %f %f <<\n", ball->speed, x, y);*/
+	angle = bbAngle(ball->BBox);
 
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, ball->texture);
 	
+	glPushMatrix();
+	glRotatef(angle, 0, 0, 1);
+
 	glBegin(GL_QUADS);
 		glTexCoord2f(0, 0); glVertex2f(  x  ,   y  );
 		glTexCoord2f(1, 0); glVertex2f(x + w,   y  );
-		glTexCoord2f(1, 1); glVertex2f(x + w, y + h);
-		glTexCoord2f(0, 1); glVertex2f(  x  , y + h);
+		glTexCoord2f(1, 1); glVertex2f(x + w, y - h);
+		glTexCoord2f(0, 1); glVertex2f(  x  , y - h);
 	glEnd();
 
+	glPopMatrix();
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_TEXTURE_2D);
@@ -72,9 +85,9 @@ void freeBall(Ball * ball)
 	free(ball);
 }
 
-void unglueBall(Ball * ball)
+void unglueBall(Ball * ball, int playerID)
 {
-	bool actionKey;
+	bool actionKey = false;
     float speedFactor, relAngle, startAngle, speedRange;
     Plateforme * plat;
 
@@ -83,10 +96,10 @@ void unglueBall(Ball * ball)
 		return;
 
 	/*Select actionKey based on plateforme Position*/
-	if(ball->gluedPlat->pos == TOP)
-		actionKey = gameObj.keys.space;
-	else
+	if(playerID == 0)
 		actionKey = gameObj.keys.up;
+	else if(playerID == 1)
+		actionKey = gameObj.keys.space;
 	
 	/*Can we unglue this ball ?*/
 	if(actionKey)
@@ -101,8 +114,7 @@ void unglueBall(Ball * ball)
 
 		setBallDirection(ball, startAngle);
 
-		if(plat->pos == BOTTOM)
-			ball->direction.y *= -1;
+		ball->direction.y *= -1;
 
 		speedRange = gameObj.defVal.ball.maxSpeed - gameObj.defVal.ball.minSpeed;
 		ball->speed = gameObj.defVal.ball.minSpeed + speedRange * speedFactor;
@@ -116,37 +128,47 @@ void unglueBall(Ball * ball)
 /** Move the ball along its direction. Bounce on screen sides*/
 void moveBall(Ball * ball)
 {
+	Vector2D ballPos;
+
 	ball->x += ball->direction.x * ball->speed;
 	ball->y += ball->direction.y * ball->speed;
 
-	/*Too much on the left ?*/
-	if(ball->x < 0)
+	/*The ball is no longer in it's bbox, we need to find it's new one*/
+	if(ball->y > gameObj.game.bb.height)
+		return;
+
+	while(!inBBox(ball))
 	{
-		ball->x = abs(ball->x);
-		ball->direction.x *= -1;
+		ballPos.x = ball->x;
+		ballPos.y = ball->y;
+
+		ballPos = rotateVector(ballPos, - gameObj.game.bb.angle);
+		ball->direction = rotateVector(ball->direction, -gameObj.game.bb.angle);
+
+		ball->x = ballPos.x;
+		ball->y = ballPos.y;
+		
+		ball->BBox++;
+
+		if(ball->BBox == gameObj.game.nbrPlayers)
+			ball->BBox = 0; /*Loop*/
 	}
-	/*Too much on the right ?*/
-	if(ball->x + ball->size > gameObj.wWidth)
-	{
-		ball->x = gameObj.wWidth - (ball->x + ball->size - gameObj.wWidth);
+
+	if(!gameObj.game.bb.squared)
+		return;
+
+	/*Handle side bounce for 1v1 BBox*/
+	if(ball->x < -gameObj.game.bb.width * .5 || ball->x > gameObj.game.bb.width * .5)
 		ball->direction.x *= -1;
-	}	
 }
 
 /** Check if the ball is lost, return playerID who lost it*/
 bool ballLost(Ball * ball, int * player)
 {
-	if(ball->y - ball->size > gameObj.wHeight)
+	if(ball->y > gameObj.game.bb.height)
 	{
-		/*Lost by bottom player*/
-		* player = 0;
-		return true;
-	}
-
-	if(ball->y < 0)
-	{
-		/*Lost by top player*/
-		* player = 1;
+		/*This ball is lost*/
+		* player = ball->BBox;
 		return true;
 	}
 
@@ -229,8 +251,7 @@ void ballPlateformeCollision(Ball * ball, Plateforme * plat, Collision col)
 
 		setBallDirection(ball, angle);
 
-		if(plat->pos == BOTTOM)
-			ball->direction.y *= -1;
+		ball->direction.y *= -1;
 	}
 	else if(col.side == LEFT_SIDE || col.side == RIGHT_SIDE)
 	{

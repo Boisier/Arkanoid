@@ -5,7 +5,7 @@ void reshape(unsigned int width, unsigned int height)
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(0, gameObj.wWidth, gameObj.wHeight, 0);
+    gluOrtho2D(-gameObj.wWidth / 2, gameObj.wWidth / 2, -gameObj.wHeight / 2, gameObj.wHeight / 2);
 }
 
 void setVideoMode(unsigned int width, unsigned int height) 
@@ -29,7 +29,7 @@ bool createWindow()
 
     setVideoMode(gameObj.wWidth, gameObj.wHeight);
 
-    SDL_WM_SetCaption("Clickodrome", NULL);
+    SDL_WM_SetCaption("Arkanopong", NULL);
 
 	return true;
 }

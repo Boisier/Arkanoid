@@ -37,8 +37,8 @@ void printButton(Button * btn)
 	glBegin(GL_QUADS);
 		glTexCoord2f(0, 0); glVertex2f(btn->x             , btn->y);
 		glTexCoord2f(1, 0); glVertex2f(btn->x + btn->width, btn->y);
-		glTexCoord2f(1, 1); glVertex2f(btn->x + btn->width, btn->y + btn->height);
-		glTexCoord2f(0, 1); glVertex2f(btn->x             , btn->y + btn->height);
+		glTexCoord2f(1, 1); glVertex2f(btn->x + btn->width, btn->y - btn->height);
+		glTexCoord2f(0, 1); glVertex2f(btn->x             , btn->y - btn->height);
 	glEnd();
 
 	glBindTexture(GL_TEXTURE_2D, 0);
