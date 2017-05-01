@@ -34,16 +34,15 @@ Vector2D multVector(Vector2D A, float factor)
 }
 
 /** Vector Norm **/
-float norm(Vector2D A, Vector2D B)
+float norm(Vector2D A)
 {
-    return sqrt((A.x - B.x)*(A.x - B.x) + (A.y - B.y)*(A.y - B.y));
+    return sqrt(normSquared(A));
 }
 
 /** Vector Norm **/
-float normSquared(Vector2D A, Vector2D B)
+float normSquared(Vector2D A)
 {
-    float n = norm(A, B);
-    return n * n;
+    return A.x * A.x + A.y * A.y;
 }
 
 /** Dot Product **/
@@ -60,6 +59,11 @@ Vector2D rotateVector(Vector2D vec, float angle)
     rotated.y = vec.x * sin(angle / DEGTORAD) + vec.y * cos(angle / DEGTORAD);
 
     return rotated;
+}
+
+float vectorAngleOrigin(Vector2D vec)
+{
+    return atan2(vec.y, vec.x) * DEGTORAD;
 }
 
 /** Get point coordinate at the given angle and distance from the origin **/
@@ -100,8 +104,8 @@ bool inBBox(Ball * ball)
         /*Simple square technique*/
         return ball->y >= 0 && ball->y <= gameObj.game.bb.height;
     }
-    /*Barycentric Technique*/
 
+    /*Barycentric Technique*/
     A.x = gameObj.game.bb.width / 2;
     A.y = gameObj.game.bb.height;
 
@@ -123,4 +127,20 @@ bool inBBox(Ball * ball)
     v = (dotAA * dotCB - dotAC * dotAB) * denom;
 
     return u >= 0 && v >= 0 && u + v < 1;
+}
+
+void changePolyBBox(Polygon * poly, int BBox)
+{
+    float angle;
+    int i;
+
+    if(poly->BBox == BBox)
+        return;
+
+    angle = (poly->BBox - BBox) * -gameObj.game.bb.angle;
+			
+    for(i = 0; i < poly->nbrPoints; ++i)
+	    poly->points[i] = rotateVector(poly->points[i], angle);
+
+    poly->BBox = BBox;
 }

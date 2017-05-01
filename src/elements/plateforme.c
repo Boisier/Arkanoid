@@ -44,11 +44,11 @@ void printPlateforme(Plateforme * plateforme)
 		glTexCoord2f(0, 1); glVertex2f(  x  , y + h);
 	glEnd();
 
-	if(gameObj.game.bb.squared)
+	if(gameObj.game.guidelines)
 	{
 		glBegin(GL_LINE_LOOP);
 
-			glVertex2f(0                , 0);
+			/*glVertex2f(0                , 0);*/
 			glVertex2f(gameObj.game.bb.width / 2, gameObj.game.bb.height);
 			glVertex2f(-gameObj.game.bb.width / 2, gameObj.game.bb.height);
 
@@ -67,28 +67,52 @@ void freePlateforme(Plateforme * plateforme)
 	free(plateforme);
 }
 
-/** Generate a baseRect for the given plateforme* */
-BaseRect getPlateformeBaseRect(Plateforme * plat)
+/** Generate a polygon for the given plateforme* */
+Polygon getPlateformePolygon(Plateforme * plat)
 {
-	BaseRect platBase;
+	Polygon poly;
 
-	platBase.topLeftX = plat->x;
-	platBase.topLeftY = plat->y;
+	poly.BBox = plat->BBox;
 
-	platBase.topRightX = plat->x + plat->size;
-	platBase.topRightY = plat->y;
+	poly.points = allocate(sizeof(Vector2D) * 4);
+	poly.nbrPoints = 4;
 
-	platBase.bottomRightX = plat->x + plat->size;
-	platBase.bottomRightY = plat->y - gameObj.defVal.plateforme.height;
+	/* EDGES ORDER : TOP RIGHT BOTTOM LEFT */
+
+	poly.points[0].x = plat->x;
+	poly.points[0].y = plat->y;
+
+	poly.points[1].x = plat->x + plat->size;
+	poly.points[1].y = plat->y;
+
+	poly.points[2].x = plat->x + plat->size;
+	poly.points[2].y = plat->y + gameObj.defVal.plateforme.height;
 	
-	platBase.bottomLeftX = plat->x;
-	platBase.bottomLeftY = plat->y - gameObj.defVal.plateforme.height;
+	poly.points[3].x = plat->x;
+	poly.points[3].y = plat->y + gameObj.defVal.plateforme.height;
 	
-	return platBase;
+	return poly;
 }
 
 /** Return the plateforme speed ratio to the max speed */
 float platSpeedFactor(Plateforme * plat)
 {
 	return plat->speed / gameObj.defVal.plateforme.maxSpeed;
+}
+
+/** Update bonus for the given plateforme **/
+void updatePlateformeBonus(Plateforme * plate)
+{
+	if(plate->sticky && plate->stickyEnd - (int)SDL_GetTicks() <= 0)
+	{
+		plate->sticky = false;
+		plate->stickyEnd = 0;
+	}
+
+	if(plate->bonus != NONE && plate->bonusEnd - (int)SDL_GetTicks() <= 0)
+	{
+		plate->bonus = NONE;
+		plate->bonusEnd = 0;
+		plate->size = gameObj.defVal.plateforme.size;
+	}
 }

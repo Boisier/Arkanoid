@@ -10,6 +10,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <float.h> 
+#include <time.h> 
 
 /*Now let's declare some global things... */
 typedef enum { false, true } bool;

@@ -13,17 +13,23 @@ void initGame()
     gameObj.defVal.plateforme.maxSpeed = 25;
     gameObj.defVal.plateforme.acceleration = .5;
     gameObj.defVal.plateforme.level = 35;
+    gameObj.defVal.plateforme.narrowSize = 50;
+    gameObj.defVal.plateforme.wideSize = 150;
 
-    gameObj.defVal.brick.startLevel = 30;
+    gameObj.defVal.brick.startLevel = 40;
     gameObj.defVal.brick.height = 20;
     
     gameObj.defVal.ball.size = 15;
+    gameObj.defVal.ball.bigSize = 25;
+    gameObj.defVal.ball.smallSize = 5;
     gameObj.defVal.ball.minSpeed = 5; 
-    gameObj.defVal.ball.maxSpeed = 20; /*= gameObj.defVal.plateforme.height*/
+    gameObj.defVal.ball.maxSpeed = 20;
     gameObj.defVal.ball.maxAngle = 90;
+    gameObj.defVal.ball.gluedMaxDuration = 10 * 1000; /*ms*/
 
-    gameObj.defVal.bonus.size = 10;
-    gameObj.defVal.bonus.speed = 10;
+    gameObj.defVal.bonus.size = 15;
+    gameObj.defVal.bonus.speed = 2;
+    gameObj.defVal.bonus.duration = 10 * 1000; /*ms*/
 
     gameObj.defVal.lifeNbr = 3;
 
@@ -50,6 +56,10 @@ void initGame()
 
     gameObj.game.nbrPlayers = 0;
     gameObj.game.players = NULL;
+
+    gameObj.game.guidelines = true;
+
+    srand(time(NULL));   /*Init rand*/
 }
 
 /** Main loop of the app**/
@@ -211,7 +221,7 @@ void startGame()
     
     
     /********************************/
-    gameObj.game.nbrPlayers = 2;
+    gameObj.game.nbrPlayers = 6;
     /********************************/
 
 
@@ -267,4 +277,6 @@ void ingame()
     playerMovements();
 
     ballMovements();
+
+    bonusMovements();
 }

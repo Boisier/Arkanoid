@@ -78,10 +78,8 @@ void setTheme(int themeID);
 /****************/
 
 /** Detect a collision between a sphere and a rect **/
-Collision SphereRectCollision(BaseSphere sphere, BaseRect rect, bool details);
+Collision circleRectCollision(Circle circle, Polygon poly);
 
-/** Detect a collision between a sphere and a rect and get details for it **/
-Collision SphereRectCollisionDetails(BaseSphere sphere, BaseRect rect);
 
 
 
@@ -95,12 +93,13 @@ Vector2D subVector(Vector2D A, Vector2D B);
 
 Vector2D multVector(Vector2D A, float factor);
 
-float norm(Vector2D A, Vector2D B);
+float norm(Vector2D A);
 
-float normSquared(Vector2D A, Vector2D B);
+float normSquared(Vector2D A);
 
 float dotP(Vector2D A, Vector2D B);
 
+float vectorAngleOrigin(Vector2D vec);
 
 Vector2D rotateVector(Vector2D vec, float angle);
 
@@ -110,5 +109,8 @@ float bbWidthAt(float dist);
 
 float bbAngle(int BBox);
 
-bool inBBox(Ball * ball);
+bool inBBox(Ball * ball);	
+
+void changePolyBBox(Polygon * poly, int BBox);
+
 

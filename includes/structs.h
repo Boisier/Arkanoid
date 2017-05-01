@@ -1,19 +1,5 @@
 #pragma once
 
-/** Collision is used to store data about a collision event **/
-typedef struct _collisionData
-{
-	enum CollisionSide side;
-	float x;
-	float y;
-
-	float deltaTop;
-	float deltaLeft;
-	float deltaRight;
-	float deltaBottom;
-
-} Collision;
-
 /** Holds a vector used for direction **/
 typedef struct _vector2D
 {
@@ -21,29 +7,31 @@ typedef struct _vector2D
 	float y;
 } Vector2D;
 
-/** Rectangles coordinates for easy manipulation **/
-typedef struct _basicRectangle
+/** Polygon coordinates for easy manipulation **/
+typedef struct _polygon
 {
-	float topLeftX;
-	float topLeftY;
+	int BBox;
+	Vector2D * points;
+	int nbrPoints;
+} Polygon;
 
-	float topRightX;
-	float topRightY;
-
-	float bottomRightX;
-	float bottomRightY;
-
-	float bottomLeftX;
-	float bottomLeftY;
-} BaseRect;
-
-/** Spheres coordinates for easy manipulation **/
-typedef struct _basicSphere
+/** Circle coordinates for easy manipulation **/
+typedef struct _circle
 {
-	float x;
-	float y;
+	int BBox;
 	float radius;
-} BaseSphere;
+	Vector2D position;
+} Circle;
+
+/** Collision is used to store data about a collision event **/
+typedef struct _collisionData
+{
+	enum CollisionSide side;
+	Vector2D point;
+
+	float delta;
+
+} Collision;
 
 
 
@@ -64,12 +52,14 @@ typedef struct _platforme
 
 	float speed;
 
-	bool sticky;
-
 	GLuint texture;
+
+	bool sticky;
+	int stickyEnd;
 
 	enum bonusType bonus;
 	int bonusEnd;
+
 } Plateforme;
 
 typedef struct _brick
@@ -103,13 +93,14 @@ typedef struct _ball
 	bool glued;
 	Plateforme * gluedPlat;
 	float glueOffsetX;
+	int gluedAt;
 
 	GLuint texture;
 
 	Vector2D direction;
 	float speed;
 	
-	enum bonusType bonusType;
+	enum bonusType bonus;
 	int bonusEnd;
 } Ball;
 
@@ -122,7 +113,7 @@ typedef struct _bonus
 	
 	enum bonusType type;
 
-	Vector2D direction;
+	GLuint texture;
 
 } Bonus;
 
@@ -169,6 +160,7 @@ typedef struct _printElement
 	} element;
 	enum elType type;
 	bool display;
+	bool toDelete;
 
 } PrintElement;
 

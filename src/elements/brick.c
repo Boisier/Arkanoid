@@ -29,6 +29,8 @@ Brick * createBrick(float Xpos, float level, int type, int BBox)
 	brick->bottomRight.x = -bottomWidth + bottomBrickWidth * (Xpos + 1);
 	brick->bottomRight.y = level + gameObj.defVal.brick.height;
 
+	brick->strength = 1;
+
 	/*Get brick texture(s)*/
 	switch(type)
 	{
@@ -68,7 +70,13 @@ void printBrick(Brick * brick)
 	float angle = bbAngle(brick->BBox);
 
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, brick->texture);
+
+	if(brick->strength == 3)
+		glBindTexture(GL_TEXTURE_2D, brick->texture2);
+	else if(brick->strength == 2)
+		glBindTexture(GL_TEXTURE_2D, brick->texture1);
+	else
+		glBindTexture(GL_TEXTURE_2D, brick->texture);
 	
 	glPushMatrix();
 	glRotatef(angle, 0, 0, 1);
@@ -92,22 +100,44 @@ void freeBrick(Brick * brick)
 	free(brick);
 }
 
-/** Generate a baseRect for the given brick **/
-BaseRect getBrickBaseRect(Brick * brick)
+/** Generate a polygon for the given brick **/
+Polygon getBrickPolygon(Brick * brick)
 {
-	BaseRect brickBase;
+	Polygon poly;
 
-	brickBase.topLeftX = brick->topLeft.x;
-	brickBase.topLeftY = brick->topLeft.y;
+	poly.BBox = brick->BBox;
 
-	brickBase.topRightX = brick->topRight.x;
-	brickBase.topRightY = brick->topRight.y;
+	poly.points = allocate(sizeof(Vector2D) * 4);
+	poly.nbrPoints = 4;
 
-	brickBase.bottomRightX = brick->bottomRight.x;
-	brickBase.bottomRightY = brick->bottomRight.y;
+	/* EDGES ORDER : TOP RIGHT BOTTOM LEFT */
+
+	poly.points[0] = brick->topLeft;
+	poly.points[1] = brick->topRight;
+	poly.points[2] = brick->bottomRight;
+	poly.points[3] = brick->bottomLeft;
 	
-	brickBase.bottomLeftX = brick->bottomLeft.x;
-	brickBase.bottomLeftY = brick->bottomLeft.y;
-	
-	return brickBase;
+	return poly;
+}
+
+/** Handle a hit made to a brick*/
+void brickHit(Brick * brick, int brickID)
+{
+	/*Ignore invincible bricks because they are... invincible*/
+	if(brick->type == INVINCIBLE)
+		return;
+
+	brick->strength--;
+
+	if(brick->strength == 0)
+	{
+		/**Remove the brick**/
+		gameObj.toPrint[brickID].display = false;
+		gameObj.toPrint[brickID].toDelete = true;
+	}
+
+	if(rand() % 4 > 0)
+		return;		/*No bonus this time*/
+
+	generateBonus(brick);
 }

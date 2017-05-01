@@ -27,7 +27,7 @@ void printScreen()
             case PICTURE: printPicture(el.element.pict); break;
             case BRICK: printBrick(el.element.brick); break;
             case BALL: printBall(el.element.ball); break;
-            case BONUS: printPicture(el.element.pict); break;
+            case BONUS: printBonus(el.element.bonus); break;
             case BUTTON: printButton(el.element.btn); break;
         }
     }
@@ -55,6 +55,7 @@ PrintElement * addToPrint(void * element, enum elType type)
     }
 
     newEl.display = true;
+    newEl.toDelete = false;
     
     /*Add room in the toPrint array to store this new element*/
     newSize = (gameObj.nbrToPrint + 1) * sizeof(PrintElement);
@@ -87,7 +88,7 @@ void cleanToPrint()
                 case PLATEFORME: freePlateforme(gameObj.toPrint[i].element.plateforme); break;
                 case BRICK: freeBrick(gameObj.toPrint[i].element.brick); break;
                 case BALL: freeBall(gameObj.toPrint[i].element.ball); break;
-                case BONUS: freePlateforme(gameObj.toPrint[i].element.plateforme); break;
+                case BONUS: freeBonus(gameObj.toPrint[i].element.bonus); break;
                 case BUTTON: freeButton(gameObj.toPrint[i].element.btn); break;
                 case PICTURE: freePicture(gameObj.toPrint[i].element.pict); break;
             }

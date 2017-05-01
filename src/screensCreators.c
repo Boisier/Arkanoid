@@ -188,7 +188,7 @@ void createGameBoard()
     }
 
     /**Create the bricks for the level*/
-    createBricks("starter.level");
+    createBricks("full.level");
 
     gameObj.printContent = INGAME;
 }

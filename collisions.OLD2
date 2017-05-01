@@ -1,0 +1,97 @@
+#include "../../includes/game.h"
+
+bool circleRectCollision(Circle circle, Polygon poly)
+{
+	Vector2D vertex, circleCenter, axis, origin, nextVertex, edge, projection;
+	float radiusSquared, nearestDistance, distance, edgeLengthSquared, dot;
+	int i, nearestVertex;
+
+	origin.x = 0; origin.y = 0;
+	
+	radiusSquared = circle.radius * circle.radius;
+
+	vertex = poly.points[poly.nbrPoints - 1];
+
+	circleCenter = circle.position;
+
+	nearestDistance = FLT_MAX;
+    nearestVertex = -1;
+
+	/* For each points of the polygon*/
+	for(i = 0; i < poly.nbrPoints; i++)
+    {
+		printf("> %f %f <\n", poly.points[i].x, poly.points[i].y);
+		axis = subVector(circleCenter, poly.points[i]);
+
+		distance = normSquared(axis, origin) - radiusSquared;
+
+		/*Collision ?*/
+		if (distance <= 0)
+		{
+			/*Yes*/
+			return true;
+		}
+		else if (distance < nearestDistance)
+		{	
+			/*No for this point*/
+			nearestVertex = i;
+			nearestDistance = distance;
+		}
+    }
+
+	if(nearestVertex == 0)
+		vertex = poly.points[poly.nbrPoints - 1];
+	else
+		vertex = poly.points[nearestVertex - 1];
+	
+	/*For vertex area before and after the closest point*/
+    for(i = 0; i < 2; ++i)
+    {
+      	nextVertex = poly.points[nearestVertex + i];
+		
+		edge = subVector(nextVertex, vertex);
+		edgeLengthSquared = normSquared(edge, origin);
+
+		/*norm = 0 ? same point, jump to the next*/
+      	if(edgeLengthSquared == 0)
+      	{
+      		vertex = nextVertex;
+			continue;
+		}
+
+		axis = subVector(circleCenter, vertex);
+		dot = dotP(edge, axis);
+
+		/*Is the dot projection on the axis ?*/
+		if(dot < 0 || dot > edgeLengthSquared)
+      	{
+			/*No*/
+      		vertex = nextVertex;
+			continue;
+		}
+
+		/*Get shortest distance between vertex and circle center*/
+		/*projection = addVector(vertex, multVector(edge, (dot / edgeLengthSquared)));*/
+		projection = addVector(vertex, multVector(edge, (dot / edgeLengthSquared)));
+		axis = subVector(projection, circleCenter);
+		
+		if(normSquared(axis, origin) <= radiusSquared)
+			return true;
+		
+		if(edge.x > 0 && axis.y > 0)
+			return false;
+
+		if(edge.x < 0 && axis.y < 0)
+			return false;
+		
+		if(edge.y > 0 && axis.x < 0)
+			return false;
+		
+		if (axis.x > 0)
+			return false;
+
+      	vertex = nextVertex;
+    }
+
+    return false;
+}

@@ -32,6 +32,8 @@ typedef struct _GameObj
             float maxSpeed;
             float acceleration;
             float level;
+            float narrowSize;
+            float wideSize;
         } plateforme;
 
         struct
@@ -43,15 +45,19 @@ typedef struct _GameObj
         struct
         {
             float size;
+            float bigSize;
+            float smallSize;
             float minSpeed;
             float maxSpeed;
             float maxAngle;
+            float gluedMaxDuration;
         } ball;
 
         struct
         {
             int size;
             float speed;
+            int duration;
         } bonus;
 
         int lifeNbr;
@@ -102,6 +108,8 @@ typedef struct _GameObj
             int gridH;
             int gridW;
         } bb; /* bb : short for Bounding Box*/
+
+        bool guidelines;
 
     } game;
 

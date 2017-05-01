@@ -128,7 +128,7 @@ void defineBoundingBox()
     getCoordinatesAngle(gameObj.game.bb.angle, gameObj.game.bb.radius, &B);
 
     /*Width of the base of the bounding box*/
-    gameObj.game.bb.width = norm(A, B);
+    gameObj.game.bb.width = norm(subVector(B, A));
 
     /*Get the height of the bounding box*/
     middle.x = (A.x + B.x) / 2;
@@ -160,6 +160,9 @@ void playerMovements()
     for(i = 0; i < gameObj.game.nbrPlayers; ++i)
     {
         player = gameObj.game.players[i];
+
+        /*Check and update bonus on this player's plateforme*/
+        updatePlateformeBonus(player->plateforme);
 
         if(player->type == AI)
         {
@@ -247,8 +250,11 @@ void ballMovements()
 
         ball = gameObj.toPrint[i].element.ball;
 
+        /*Update bonus*/
+        updateBallBonus(ball);
+
         /*See if ball is glued and try to unglue it*/
-        unglueBall(ball, ball->playerID);
+        unglueBall(ball);
 
         if(ball->glued)
         {
@@ -264,6 +270,7 @@ void ballMovements()
         {
             /*Deactivate the ball*/
             gameObj.toPrint[i].display = false;
+		    gameObj.toPrint[i].toDelete = true;
             gameObj.game.players[player]->life--;
             
             /*Create a new ball for the ball owner*/
@@ -303,7 +310,7 @@ void createBricks(char * levelName)
         if(fgets(line, 255, level) == NULL)
             throwCriticalError();
         
-        printf("%s\n", line);
+        /*printf("%s\n", line);*/
         
         /*For every brick on the line*/
         for(j = 0; j < gameObj.game.bb.gridW; ++j)
@@ -327,4 +334,43 @@ void createBricks(char * levelName)
     }
 
     fclose(level);
+}
+
+
+/** Handle movement of the bonus **/
+void bonusMovements()
+{
+    int i;
+    Bonus * bonus;
+
+    for(i = 0; i < gameObj.nbrToPrint; ++i)
+    {
+        /*Only care about active bonus here*/
+        if(gameObj.toPrint[i].type != BONUS || !gameObj.toPrint[i].display)
+            continue;
+
+        bonus = gameObj.toPrint[i].element.bonus;
+
+        /*Move bonus*/
+        bonus->y += gameObj.defVal.bonus.speed;
+
+        /*Lost ball ?*/
+        if(bonus->y > gameObj.game.bb.height)
+        {
+            /*Deactivate the bonus*/
+            gameObj.toPrint[i].display = false;
+		    gameObj.toPrint[i].toDelete = true;
+
+            continue;
+        }
+
+        /*Check collisions*/
+        if(bonusCollisions(bonus))
+        {
+            /*Deactivate the bonus*/
+            gameObj.toPrint[i].display = false;
+		    gameObj.toPrint[i].toDelete = true;
+        }
+    }
+
 }

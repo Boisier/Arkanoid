@@ -13,11 +13,14 @@ void printPlateforme(Plateforme * plateforme);
 /** Free the plateforme, the texture is not free-ed **/
 void freePlateforme(Plateforme * plateforme);
 
-/** Generate a baseRect for the given plateforme* */
-BaseRect getPlateformeBaseRect(Plateforme * plat);
+/** Generate a polygon for the given plateforme **/
+Polygon getPlateformePolygon(Plateforme * plat);
 
 /** Return the plateforme speed ratio to the max speed */
 float platSpeedFactor(Plateforme * plat);
+
+/** Update bonus for the given plateforme **/
+void updatePlateformeBonus(Plateforme * plate);
 
 
 
@@ -69,11 +72,17 @@ void printBall(Ball * ball);
 /** Free the ball, the texture is not free-ed **/
 void freeBall(Ball * ball);
 
+/** Build a circle for the given ball**/
+Circle getBallCircle(Ball * ball);
+
 /** Free the ball, the texture is not free-ed **/
-void unglueBall(Ball * ball, int playerID);
+void unglueBall(Ball * ball);
 
 /** Move the ball along its direction. Bounce on screen sides*/
 void moveBall(Ball * ball);
+
+/** Update the ball BBox to it's new one **/
+void updateBallBBox(Ball * ball);
 
 /** Check if the ball is lost, return playerID who lost it*/
 bool ballLost(Ball * ball, int * player);
@@ -84,15 +93,22 @@ void ballCollisions(Ball * ball);
 /**Handle ball collision with plateforme **/
 void ballPlateformeCollision(Ball * ball, Plateforme * plat, Collision col);
 
+/**Handle collision between a ball and a brick**/
+void ballBrickCollision(Ball * ball, Brick * brick, Polygon brickPoly, Collision col, int brickID);
+
 /** Set ball direction from a given angle **/
 void setBallDirection(Ball * ball, float angle);
 
+/** Update bonus for the given ball **/
+void updateBallBonus(Ball * ball);
 
 
 
-/**********/
-/** BRICK**/
-/**********/
+
+
+/***********/
+/** BRICK **/
+/***********/
 
 /** Create a new brick element **/
 Brick * createBrick(float Xpos, float level, int type, int BBox);
@@ -104,4 +120,35 @@ void printBrick(Brick * brick);
 void freeBrick(Brick * brick);
 
 /** Generate a baseRect for the given brick **/
-BaseRect getBrickBaseRect(Brick * brick);
+Polygon getBrickPolygon(Brick * brick);
+
+/** Handle a hit made to a brick*/
+void brickHit(Brick * brick, int brickID);
+
+
+
+
+/***********/
+/** BONUS **/
+/***********/
+
+/** Create a new bonus element width the defaultplateforme texture**/
+Bonus * createBonus(float posX, float posY, int BBox, enum bonusType type);
+
+/** Print the bonus on the screen**/
+void printBonus(Bonus * bonus);
+
+/** Free the bonus, the texture is not free-ed **/
+void freeBonus(Bonus * bonus);
+
+/** Build a circle for the given bonus**/
+Circle getBonusCircle(Bonus * bonus);
+
+/** Generate a bonus at the given brick's position **/
+void generateBonus(Brick * brick);
+
+/** Check for ball collisions **/
+bool bonusCollisions(Bonus * bonus);
+
+/** Apply the effect of the given bonus **/
+void applyBonus(Bonus * bonus);
