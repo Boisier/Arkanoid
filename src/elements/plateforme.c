@@ -116,3 +116,40 @@ void updatePlateformeBonus(Plateforme * plate)
 		plate->size = gameObj.defVal.plateforme.size;
 	}
 }
+
+/** Return the closest ball circle to the plateforme**/
+Circle closestBall(Plateforme * plate)
+{
+	Circle ballCircle, closestCircle;
+	Vector2D plateCenter;
+	float closestDistanceSquared = FLT_MAX, distanceSquared;
+	int i;
+
+	plateCenter.x = plate->x + plate->size / 2;
+	plateCenter.y = plate->y;
+
+	closestCircle.position = plateCenter;
+
+	for(i = 0; i < gameObj.nbrToPrint; ++i)
+	{
+		if(gameObj.toPrint[i].type != BALL || gameObj.toPrint[i].display == false)
+			continue; /*Only care about balls*/
+
+		if(gameObj.toPrint[i].element.ball->glued)
+			continue; /*Ignore glued balls*/
+
+		ballCircle = getBallCircle(gameObj.toPrint[i].element.ball);
+		
+		changeCircleBBox(&ballCircle, plate->BBox);
+
+		distanceSquared = normSquared(subVector(ballCircle.position, plateCenter));
+
+		if(distanceSquared < closestDistanceSquared)
+		{
+			closestDistanceSquared = distanceSquared;
+			closestCircle = ballCircle;
+		}
+	}
+
+	return closestCircle;
+}

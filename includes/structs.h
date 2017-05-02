@@ -131,6 +131,10 @@ struct _button {
 	enum elState state;
 	char callback;
 
+	bool functionBtn;
+	void (*functionCallback)(void *);
+	void * callbackArgument;
+
 	Button * leftBtn;
 	Button * topBtn;
 	Button * rightBtn;
@@ -146,6 +150,18 @@ typedef struct _picture
 
 	GLuint texture;
 } Picture;
+
+typedef struct _numberBox
+{
+	int x;
+	int y;
+	int width;
+	int height;
+
+	int value;
+	int min;
+	int max;
+} NumberBox;
 
 typedef struct _printElement
 {

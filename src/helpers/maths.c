@@ -94,6 +94,7 @@ float bbAngle(int BBox)
 	return gameObj.game.bb.startAngle + gameObj.game.bb.angle * BBox;
 }
 
+/** Tell if the given Ball is inside it's BBox **/
 bool inBBox(Ball * ball)
 {
     float u, v, denom, dotAA, dotAC, dotAB, dotCC, dotCB;
@@ -129,6 +130,7 @@ bool inBBox(Ball * ball)
     return u >= 0 && v >= 0 && u + v < 1;
 }
 
+/** Rotate the given polygon to the new BBox*/
 void changePolyBBox(Polygon * poly, int BBox)
 {
     float angle;
@@ -143,4 +145,19 @@ void changePolyBBox(Polygon * poly, int BBox)
 	    poly->points[i] = rotateVector(poly->points[i], angle);
 
     poly->BBox = BBox;
+}
+
+/** Rotate the given circle to the new BBox*/
+void changeCircleBBox(Circle * circle, int BBox)
+{
+    float angle;
+
+    if(circle->BBox == BBox)
+        return;
+
+    angle = (circle->BBox - BBox) * -gameObj.game.bb.angle;
+			
+    circle->position = rotateVector(circle->position, angle);
+
+    circle->BBox = BBox;
 }

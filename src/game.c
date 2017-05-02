@@ -11,6 +11,7 @@ void initGame()
     gameObj.defVal.plateforme.size = 100;
     gameObj.defVal.plateforme.height = 15;
     gameObj.defVal.plateforme.maxSpeed = 25;
+    gameObj.defVal.plateforme.AIMaxSpeed = 15;
     gameObj.defVal.plateforme.acceleration = .5;
     gameObj.defVal.plateforme.level = 35;
     gameObj.defVal.plateforme.narrowSize = 50;
@@ -204,7 +205,7 @@ void playerSelection()
 void startGame()
 {
     int i;
-    bool addAI = false;
+    /*bool addAI = false;*/
 
     if(gameObj.game.players != NULL)
     {
@@ -215,7 +216,7 @@ void startGame()
     if(gameObj.game.nbrPlayers == 1)
     {
         gameObj.game.nbrPlayers = 2;
-        addAI = true;
+        /*addAI = true;*/
     }
 
     
@@ -233,11 +234,12 @@ void startGame()
 
     for(i = 0; i < gameObj.game.nbrPlayers; ++i)
     {
-        if(addAI == true && i+1 == gameObj.game.nbrPlayers)
+        /*if(addAI == true && i+1 == gameObj.game.nbrPlayers)*/
+        if(i > 0)
         {
             /*If it's the last insert and we need an AI -> add an AI*/
             createPlayer(AI, i);
-            break;
+            continue;
         }
 
         createPlayer(HUMAN, i);
@@ -249,7 +251,7 @@ void startGame()
 /** Create a new player **/
 void createPlayer(enum PlayerType type, int playerNbr)
 {   
-    /**Define plateforme position **/
+    /*Define plateforme position*/
     int platX = 0 - gameObj.defVal.plateforme.size / 2;
     int platY = gameObj.game.bb.height - gameObj.defVal.plateforme.level;
 
@@ -260,6 +262,8 @@ void createPlayer(enum PlayerType type, int playerNbr)
 
     player->plateforme = createPlateforme(platX, platY);
     player->plateforme->BBox = playerNbr;
+
+    printf("> %d <\n", playerNbr);
 
     gameObj.game.players[playerNbr] = player;
 }

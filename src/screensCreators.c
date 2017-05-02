@@ -179,6 +179,7 @@ void createGameBoard()
     /*For each player*/
     for(i = 0; i < gameObj.game.nbrPlayers; ++i)
     {
+        printf("> %d %d <\n", i, gameObj.game.nbrPlayers);
         /*Print it's plateforme*/
         addToPrint(gameObj.game.players[i]->plateforme, PLATEFORME);
 

@@ -139,7 +139,8 @@ void defineBoundingBox()
     /**Store more data that will be used frequently**/
     gameObj.game.bb.platMinPos = - bbWidthAt(gameObj.defVal.plateforme.level) / 2;
     gameObj.game.bb.platMaxPos = bbWidthAt(gameObj.defVal.plateforme.level) / 2;
-    printf(">> %f <> %f \n", bbWidthAt(gameObj.defVal.plateforme.level), gameObj.game.bb.width);
+    
+    /*printf(">> %f <> %f \n", bbWidthAt(gameObj.defVal.plateforme.level), gameObj.game.bb.width);*/
 }
 
 
@@ -152,36 +153,61 @@ void defineBoundingBox()
 void playerMovements()
 {
     int i;
-    float speedFactor, speedBonus;
+    float speedFactor, speedBonus, plateCenterX;
     Player * player;
     Plateforme * plateforme;
+    Circle closest;
     bool leftKey, rightKey;
+
 
     for(i = 0; i < gameObj.game.nbrPlayers; ++i)
     {
         player = gameObj.game.players[i];
+
+        if(player->plateforme == NULL)
+            continue; /*This player is out*/
 
         /*Check and update bonus on this player's plateforme*/
         updatePlateformeBonus(player->plateforme);
 
         if(player->type == AI)
         {
-            /*Handle AI*/
-            continue;
-        }
+            /*AI*/
+            closest = closestBall(player->plateforme);
 
-        /*Human Player*/
-        if(i == 0)
-        {
-            /**Keys are inversed beacause the BBoxs are roated 180 degrees*/
-            leftKey = gameObj.keys.right;
-            rightKey = gameObj.keys.left;
+            plateCenterX = player->plateforme->x + player->plateforme->size / 2;
+
+            if(closest.position.x > plateCenterX + 25)
+            {
+                leftKey = false;
+                rightKey = true;
+            }
+            else if(closest.position.x < plateCenterX - 25)
+            {
+                leftKey = true;
+                rightKey = false;
+            }
+            else
+            {
+                leftKey = false;
+                rightKey = false;
+            }
         }
-        else if(i == 1)
+        else
         {
-            /**Keys are inversed beacause the BBoxs are roated 180 degrees*/
-            rightKey = gameObj.keys.z;
-            leftKey = gameObj.keys.a;
+            /*Human Player*/
+            if(i == 0)
+            {
+                /**Keys are inversed beacause the BBoxs are roated 180 degrees*/
+                leftKey = gameObj.keys.right;
+                rightKey = gameObj.keys.left;
+            }
+            else if(i == 1)
+            {
+                /**Keys are inversed beacause the BBoxs are roated 180 degrees*/
+                rightKey = gameObj.keys.z;
+                leftKey = gameObj.keys.a;
+            }
         }
 
         plateforme = player->plateforme;
@@ -201,7 +227,7 @@ void playerMovements()
 
         plateforme->speed += gameObj.defVal.plateforme.acceleration + speedBonus;
 
-        if(plateforme->speed > gameObj.defVal.plateforme.maxSpeed)
+        if(plateforme->speed > gameObj.defVal.plateforme.maxSpeed && player->type == HUMAN)
             plateforme->speed = gameObj.defVal.plateforme.maxSpeed;
         
         if(leftKey)

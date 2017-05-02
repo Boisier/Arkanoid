@@ -109,8 +109,13 @@ float bbWidthAt(float dist);
 
 float bbAngle(int BBox);
 
-bool inBBox(Ball * ball);	
+/** Tell if the given Ball is inside it's BBox **/
+bool inBBox(Ball * ball);
 
+/** Rotate the given polygon to the new BBox*/
 void changePolyBBox(Polygon * poly, int BBox);
+
+/** Rotate the given circle to the new BBox*/
+void changeCircleBBox(Circle * circle, int BBox);
 
 

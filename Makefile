@@ -1,6 +1,6 @@
 CC = gcc
 LIB     = -lSDL -lSDL_image -lSDL_mixer -lGLU -lGL -lm
-LDFLAGS = -lSDL 
+LDFLAGS = -lSDL
 
 #Do not include ASan
 CFLAGS = -g -O2 -Wall -std=c89 -pedantic -Werror

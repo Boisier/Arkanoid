@@ -22,6 +22,9 @@ float platSpeedFactor(Plateforme * plat);
 /** Update bonus for the given plateforme **/
 void updatePlateformeBonus(Plateforme * plate);
 
+/** Return the closest ball circle to the plateforme**/
+Circle closestBall(Plateforme * plate);
+
 
 
 /*************/

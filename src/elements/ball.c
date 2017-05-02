@@ -111,11 +111,20 @@ void unglueBall(Ball * ball)
 		return;
 
 	/*Select actionKey based on plateforme Position*/
-	if(ball->BBox == 0)
-		actionKey = gameObj.keys.up;
-	else if(ball->BBox == 1)
-		actionKey = gameObj.keys.space;
-	
+	if(gameObj.game.players[ball->BBox]->type == HUMAN)
+	{
+		/*HUMAN*/
+		if(ball->BBox == 0)
+			actionKey = gameObj.keys.up;
+		else if(ball->BBox == 1)
+			actionKey = gameObj.keys.space;
+	}
+	else if(rand() % 100 == 0)
+	{
+		/*AI*/
+		actionKey = true;
+	}
+
 	/*Can we unglue this ball ?*/
 	if(actionKey || ball->gluedAt + gameObj.defVal.ball.gluedMaxDuration < (int)SDL_GetTicks())
 	{
