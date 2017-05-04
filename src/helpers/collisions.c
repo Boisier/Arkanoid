@@ -1,6 +1,6 @@
 #include "../../includes/game.h"
 
-Collision circleRectCollision(Circle circle, Polygon poly)
+Collision circleRectCollision(Circle circle, Polygon * poly)
 {
 	Collision col;
 	Vector2D vertex, nextVertex, edge, axis;
@@ -11,14 +11,14 @@ Collision circleRectCollision(Circle circle, Polygon poly)
 	col.side = NO_COLLISION;
 	col.delta = 0;
 
-	for(i = 0; i < poly.nbrPoints; ++i)
+	for(i = 0; i < poly->nbrPoints; ++i)
 	{	
-		vertex = poly.points[i];
+		vertex = poly->points[i];
 
-		if(i + 1 == poly.nbrPoints)
-			nextVertex = poly.points[poly.nbrPoints - 1];
+		if(i + 1 == poly->nbrPoints)
+			nextVertex = poly->points[poly->nbrPoints - 1];
 		else
-			nextVertex = poly.points[i+1];
+			nextVertex = poly->points[i+1];
 
 		/**Check collision with the angle*/
 		distance = normSquared(subVector(vertex, circle.position));
@@ -73,7 +73,7 @@ Collision circleRectCollision(Circle circle, Polygon poly)
 	}
 
 	/*Non quad polygon*/
-	if(poly.nbrPoints > 4)
+	if(poly->nbrPoints > 4)
 	{
 		if(corner)
 			col.side = CORNER;

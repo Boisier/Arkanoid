@@ -2,15 +2,23 @@
 
 typedef struct _keyPressed
 {
+    /*Nav & player 1*/
     bool up;
     bool down;
     bool left;
     bool right;
-    bool space;
     bool enter;
+    bool esc;
+
+    /*player 2*/
     bool a;
     bool z;
-    bool esc;
+    bool e;
+
+    /*player 3*/
+    bool b;
+    bool n;
+    bool v;
 } KeyPressed;
 
 typedef struct _GameObj
@@ -92,6 +100,9 @@ typedef struct _GameObj
         Player ** players;
         int nbrPlayers;
 
+        int humans;
+        int computers;
+
         struct
         {
             float angle;
@@ -113,6 +124,18 @@ typedef struct _GameObj
         bool guidelines;
 
     } game;
+
+    /* Player selection holder*/
+    struct 
+    {
+        NumberBox * humans;
+        NumberBox * computers;
+    } playerSelection;
+
+    /* Font */
+    Font * defaultFont;
+    Vector3D defautlTextColor;
+    Vector3D selectedTextColor;
 
 } GameObj;
 

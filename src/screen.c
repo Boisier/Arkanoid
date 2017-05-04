@@ -5,6 +5,7 @@ void printScreen()
 {
     int nbrToPrint = gameObj.nbrToPrint;
     int i;
+    bool deletion = false;
     PrintElement el;
 
     /*No need to go further if there's nothing to print*/
@@ -29,8 +30,13 @@ void printScreen()
             case BALL: printBall(el.element.ball); break;
             case BONUS: printBonus(el.element.bonus); break;
             case BUTTON: printButton(el.element.btn); break;
+            case NUMBERBOX: break;
+            case TEXT: printText(el.element.txt); break;
         }
     }
+
+    if(deletion)
+        consolidateToPrint();
 }
 
 /** Add an element to the toPrint array **/
@@ -52,10 +58,15 @@ PrintElement * addToPrint(void * element, enum elType type)
         case BONUS: newEl.element.bonus = element; break;
         case BUTTON: newEl.element.btn = element; break;
         case PICTURE: newEl.element.pict = element; break;
+        case NUMBERBOX: 
+            addToPrint(((NumberBox*)element)->btn, BUTTON);
+            addToPrint(((NumberBox*)element)->display, TEXT);
+            return NULL;
+        break;
+        case TEXT: newEl.element.txt = element; break;
     }
 
     newEl.display = true;
-    newEl.toDelete = false;
     
     /*Add room in the toPrint array to store this new element*/
     newSize = (gameObj.nbrToPrint + 1) * sizeof(PrintElement);
@@ -82,21 +93,29 @@ void cleanToPrint()
     {
         for(i = 0; i < gameObj.nbrToPrint; i++)
         {
-            /*Free the element with the appropriate function*/
-            switch(gameObj.toPrint[i].type)          
-            {
-                case PLATEFORME: freePlateforme(gameObj.toPrint[i].element.plateforme); break;
-                case BRICK: freeBrick(gameObj.toPrint[i].element.brick); break;
-                case BALL: freeBall(gameObj.toPrint[i].element.ball); break;
-                case BONUS: freeBonus(gameObj.toPrint[i].element.bonus); break;
-                case BUTTON: freeButton(gameObj.toPrint[i].element.btn); break;
-                case PICTURE: freePicture(gameObj.toPrint[i].element.pict); break;
-            }
+            deleteElement(gameObj.toPrint[i]);
         }
 
         free(gameObj.toPrint); 
         
         gameObj.toPrint = NULL;
         gameObj.nbrToPrint = 0;                                     
+    }
+}
+
+/** Delete an element **/
+void deleteElement(PrintElement el)
+{
+    /*Free the element with the appropriate function*/
+    switch(el.type)          
+    {
+        case PLATEFORME: freePlateforme(el.element.plateforme); break;
+        case BRICK: freeBrick(el.element.brick); break;
+        case BALL: freeBall(el.element.ball); break;
+        case BONUS: freeBonus(el.element.bonus); break;
+        case BUTTON: freeButton(el.element.btn); break;
+        case PICTURE: freePicture(el.element.pict); break;
+        case NUMBERBOX: freeNumberBox(el.element.nBox); break;
+        case TEXT: freeText(el.element.txt); break;
     }
 }

@@ -12,6 +12,10 @@
 #include <math.h>
 #include <float.h> 
 #include <time.h> 
+#include <pthread.h>
+
+#include <ft2build.h>
+#include FT_FREETYPE_H  
 
 /*Now let's declare some global things... */
 typedef enum { false, true } bool;

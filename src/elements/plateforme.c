@@ -68,28 +68,28 @@ void freePlateforme(Plateforme * plateforme)
 }
 
 /** Generate a polygon for the given plateforme* */
-Polygon getPlateformePolygon(Plateforme * plat)
+Polygon * getPlateformePolygon(Plateforme * plat)
 {
-	Polygon poly;
+	Polygon * poly = allocate(sizeof(Polygon));
 
-	poly.BBox = plat->BBox;
+	poly->BBox = plat->BBox;
 
-	poly.points = allocate(sizeof(Vector2D) * 4);
-	poly.nbrPoints = 4;
+	poly->points = allocate(sizeof(Vector2D) * 4);
+	poly->nbrPoints = 4;
 
 	/* EDGES ORDER : TOP RIGHT BOTTOM LEFT */
 
-	poly.points[0].x = plat->x;
-	poly.points[0].y = plat->y;
+	poly->points[0].x = plat->x;
+	poly->points[0].y = plat->y;
 
-	poly.points[1].x = plat->x + plat->size;
-	poly.points[1].y = plat->y;
+	poly->points[1].x = plat->x + plat->size;
+	poly->points[1].y = plat->y;
 
-	poly.points[2].x = plat->x + plat->size;
-	poly.points[2].y = plat->y + gameObj.defVal.plateforme.height;
+	poly->points[2].x = plat->x + plat->size;
+	poly->points[2].y = plat->y + gameObj.defVal.plateforme.height;
 	
-	poly.points[3].x = plat->x;
-	poly.points[3].y = plat->y + gameObj.defVal.plateforme.height;
+	poly->points[3].x = plat->x;
+	poly->points[3].y = plat->y + gameObj.defVal.plateforme.height;
 	
 	return poly;
 }
@@ -121,14 +121,22 @@ void updatePlateformeBonus(Plateforme * plate)
 Circle closestBall(Plateforme * plate)
 {
 	Circle ballCircle, closestCircle;
-	Vector2D plateCenter;
+	Vector2D refPoint;
 	float closestDistanceSquared = FLT_MAX, distanceSquared;
 	int i;
 
-	plateCenter.x = plate->x + plate->size / 2;
-	plateCenter.y = plate->y;
+	if(gameObj.game.bb.squared)
+	{
+		refPoint.y = gameObj.game.bb.height;
+		refPoint.x = plate->x + plate->size / 2;
+	}
+	else
+	{
+		refPoint.x = plate->x + plate->size / 2;
+		refPoint.y = plate->y;
+	}
 
-	closestCircle.position = plateCenter;
+	closestCircle.position = refPoint;
 
 	for(i = 0; i < gameObj.nbrToPrint; ++i)
 	{
@@ -138,11 +146,21 @@ Circle closestBall(Plateforme * plate)
 		if(gameObj.toPrint[i].element.ball->glued)
 			continue; /*Ignore glued balls*/
 
-		ballCircle = getBallCircle(gameObj.toPrint[i].element.ball);
-		
-		changeCircleBBox(&ballCircle, plate->BBox);
+		if(gameObj.game.bb.squared)
+		{
+			if(gameObj.toPrint[i].element.ball->BBox != plate->BBox)
+				continue;	/*Ignore ball on the other BBox*/
 
-		distanceSquared = normSquared(subVector(ballCircle.position, plateCenter));
+			ballCircle = getBallCircle(gameObj.toPrint[i].element.ball);
+			refPoint.x = gameObj.toPrint[i].element.ball->x;
+		}
+		else
+		{
+			ballCircle = getBallCircle(gameObj.toPrint[i].element.ball);
+			changeCircleBBox(&ballCircle, plate->BBox);
+		}
+
+		distanceSquared = normSquared(subVector(ballCircle.position, refPoint));
 
 		if(distanceSquared < closestDistanceSquared)
 		{

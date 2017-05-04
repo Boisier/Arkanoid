@@ -32,13 +32,16 @@ void watcher()
                 case SDLK_DOWN    : gameObj.keys.down  = newKeyValue; break;
                 case SDLK_LEFT    : gameObj.keys.left  = newKeyValue; break;
                 case SDLK_RIGHT   : gameObj.keys.right = newKeyValue; break;
-                case SDLK_SPACE   : gameObj.keys.space = newKeyValue; break;
                 case SDLK_RETURN  :
                 case SDLK_KP_ENTER:   /*Let's not forget the keypad*/
                                     gameObj.keys.enter = newKeyValue; break;
+                case SDLK_ESCAPE  : gameObj.keys.esc   = newKeyValue; break;
                 case SDLK_a       : gameObj.keys.a     = newKeyValue; break;
                 case SDLK_z       : gameObj.keys.z     = newKeyValue; break;
-                case SDLK_ESCAPE  : gameObj.keys.esc   = newKeyValue; break;
+                case SDLK_e       : gameObj.keys.e     = newKeyValue; break;
+                case SDLK_b       : gameObj.keys.b     = newKeyValue; break;
+                case SDLK_n       : gameObj.keys.n     = newKeyValue; break;
+                case SDLK_v       : gameObj.keys.v     = newKeyValue; break;
                 default: /*Do nothing for other keys*/ break;
             }
         }
@@ -48,7 +51,6 @@ void watcher()
 /** Handle menu interactions **/
 char btnHandler()
 {
-	char callback = 0;
 	Button * btn;
 
 	if(!gameObj.keys.up && !gameObj.keys.down && !gameObj.keys.left && !gameObj.keys.right && !gameObj.keys.enter)
@@ -60,12 +62,18 @@ char btnHandler()
 
     if(gameObj.keys.enter)
     {
-        callback = btn->callback;
-        
         /*Deactivate the key*/
         gameObj.keys.enter = false;
 
-		return callback;
+        /*Handle action*/
+        if(btn->functionBtn)
+        {
+            (*btn->functionCallback)(btn->callbackArgument);
+        }
+        else
+        {
+		    return btn->callback;
+        }
     }
 
     if(gameObj.keys.up && btn->topBtn != NULL)
@@ -73,6 +81,12 @@ char btnHandler()
         btn->state = IDLE;
         btn->topBtn->state = SELECTED;
         gameObj.currentlySelectedBtn = btn->topBtn;
+
+        if(btn->isNumberBox)
+            btn->text->color = gameObj.defautlTextColor;
+
+        if(btn->topBtn->isNumberBox)
+            btn->topBtn->text->color = gameObj.selectedTextColor;
 
         /*Deactivate the key*/
         gameObj.keys.up = false;
@@ -85,6 +99,12 @@ char btnHandler()
         btn->state = IDLE;
         btn->bottomBtn->state = SELECTED;
         gameObj.currentlySelectedBtn = btn->bottomBtn;
+
+        if(btn->isNumberBox)
+            btn->text->color = gameObj.defautlTextColor;
+
+        if(btn->bottomBtn->isNumberBox)
+            btn->bottomBtn->text->color = gameObj.selectedTextColor;
         
         /*Deactivate the key*/
         gameObj.keys.down = false;
@@ -92,7 +112,29 @@ char btnHandler()
 		return 0;
     }
 
-	return callback;
+    if(gameObj.keys.right && btn->isNumberBox)
+    {
+        /*Increment numberBox*/
+        incrementNumberBox(btn->callbackArgument);
+
+        /*Deactivate the key*/
+        gameObj.keys.right = false;
+
+        return 0;
+    }
+
+    if(gameObj.keys.left && btn->isNumberBox)
+    {
+        /*Increment numberBox*/
+        decrementNumberBox(btn->callbackArgument);
+
+        /*Deactivate the key*/
+        gameObj.keys.left = false;
+
+        return 0;
+    }
+
+	return 0;
 }
 
 /**Define the playable area for each player**/
@@ -196,17 +238,46 @@ void playerMovements()
         else
         {
             /*Human Player*/
-            if(i == 0)
+
+            /*Keys are inversed if the player in on the top half on the screen*/
+            if(player->controls == 0)
             {
-                /**Keys are inversed beacause the BBoxs are roated 180 degrees*/
-                leftKey = gameObj.keys.right;
-                rightKey = gameObj.keys.left;
+                if(player->reversed)
+                {
+                    leftKey = gameObj.keys.right;
+                    rightKey = gameObj.keys.left;
+                }
+                else
+                {
+                    leftKey = gameObj.keys.left;
+                    rightKey = gameObj.keys.right;
+                }
             }
-            else if(i == 1)
+            else if(player->controls == 1)
             {
-                /**Keys are inversed beacause the BBoxs are roated 180 degrees*/
-                rightKey = gameObj.keys.z;
-                leftKey = gameObj.keys.a;
+                if(player->reversed)
+                {
+                    leftKey = gameObj.keys.e;
+                    rightKey = gameObj.keys.a;
+                }
+                else
+                {
+                    leftKey = gameObj.keys.a;
+                    rightKey = gameObj.keys.e;
+                }
+            }
+            else /*if(player->controls == 2)*/
+            {
+                if(player->reversed)
+                {
+                    leftKey = gameObj.keys.n;
+                    rightKey = gameObj.keys.v;
+                }
+                else
+                {
+                    leftKey = gameObj.keys.v;
+                    rightKey = gameObj.keys.n;
+                }
             }
         }
 
@@ -294,14 +365,12 @@ void ballMovements()
         /*Lost ball ?*/
         if(ballLost(ball, &player))
         {
-            /*Deactivate the ball*/
-            gameObj.toPrint[i].display = false;
-		    gameObj.toPrint[i].toDelete = true;
+            /*Remove a life to the player who lost it*/
             gameObj.game.players[player]->life--;
-            
-            /*Create a new ball for the ball owner*/
-            ball = createGluedBall(0, 0, ball->playerID);
-            addToPrint(ball, BALL);
+            strcpy(gameObj.game.players[player]->lifeText->text, itoa(gameObj.game.players[player]->life));
+
+            /*Reset the ball to it's starting position*/
+            resetBall(ball);
 
             continue;
         }
@@ -385,7 +454,6 @@ void bonusMovements()
         {
             /*Deactivate the bonus*/
             gameObj.toPrint[i].display = false;
-		    gameObj.toPrint[i].toDelete = true;
 
             continue;
         }
@@ -395,7 +463,6 @@ void bonusMovements()
         {
             /*Deactivate the bonus*/
             gameObj.toPrint[i].display = false;
-		    gameObj.toPrint[i].toDelete = true;
         }
     }
 

@@ -12,6 +12,9 @@ Button * createButton(float posX, float posY, float width, float height, char ca
 
 	btn->state = IDLE;
 	btn->callback = callback;
+	btn->functionBtn = false;
+
+	btn->isNumberBox = false;
 
 	btn->leftBtn = NULL;
 	btn->topBtn = NULL;
@@ -34,12 +37,18 @@ void printButton(Button * btn)
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
+	glPushMatrix();
+
+	glTranslatef(btn->x, btn->y, 0);
+
 	glBegin(GL_QUADS);
-		glTexCoord2f(0, 0); glVertex2f(btn->x             , btn->y);
-		glTexCoord2f(1, 0); glVertex2f(btn->x + btn->width, btn->y);
-		glTexCoord2f(1, 1); glVertex2f(btn->x + btn->width, btn->y - btn->height);
-		glTexCoord2f(0, 1); glVertex2f(btn->x             , btn->y - btn->height);
+		glTexCoord2f(0, 0); glVertex2f(btn->width * -0.5, btn->height * 0.5);
+		glTexCoord2f(1, 0); glVertex2f(btn->width * 0.5 , btn->height * 0.5);
+		glTexCoord2f(1, 1); glVertex2f(btn->width * 0.5 , btn->height * -0.5);
+		glTexCoord2f(0, 1); glVertex2f(btn->width * -0.5, btn->height * -0.5);
 	glEnd();
+
+	glPopMatrix();
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_TEXTURE_2D);

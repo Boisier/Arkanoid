@@ -23,7 +23,7 @@ Bonus * createBonus(float posX, float posY, int BBox, enum bonusType type)
 		case NARROW_PLATEFORME:
 		case SMALL_BALL:
 		case REMOVE_LIFE:
-			bonus->texture = getTexture("bonus.png");
+			bonus->texture = getTexture("malus.png");
 		break;
 		default: bonus->texture = 0; break;
 	}
@@ -122,7 +122,7 @@ bool bonusCollisions(Bonus * bonus)
 {
 	Circle bonusCirc;
 	Collision col;
-	Polygon poly;
+	Polygon * poly;
 
 	bonusCirc = getBonusCircle(bonus);
 
@@ -136,10 +136,15 @@ bool bonusCollisions(Bonus * bonus)
 	col = circleRectCollision(bonusCirc, poly);
 			
 	if(col.side == NO_COLLISION)
+	{
+		freePolygon(poly);
 		return false; /*No collision, let's move on*/
-	
+	}
+
 	/*There is a collision, apply bonus or malus in consequence*/
 	applyBonus(bonus);
+
+	freePolygon(poly);
 
 	return true;
 }

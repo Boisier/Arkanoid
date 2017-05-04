@@ -42,6 +42,27 @@ Ball * createGluedBall(float posX, float posY, int playerID)
 	return ball;
 }
 
+/** Reset the bll position and state **/
+void resetBall(Ball * ball)
+{
+	ball->x = 0;
+	ball->y = 0;
+	ball->size = gameObj.defVal.ball.size;
+	ball->BBox = gameObj.game.players[ball->playerID]->plateforme->BBox;
+
+	ball->glued = true;
+	ball->gluedPlat = gameObj.game.players[ball->playerID]->plateforme;
+	ball->glueOffsetX = ball->gluedPlat->size / 2;
+	ball->gluedAt = (int)SDL_GetTicks();
+
+	ball->direction.x = 0;
+	ball->direction.y = 0;
+	ball->speed = 0;
+
+	ball->bonus = NONE;
+	ball->bonusEnd = 0;
+}
+
 /** Print the ball on the screen**/
 void printBall(Ball * ball)
 {	
@@ -114,10 +135,12 @@ void unglueBall(Ball * ball)
 	if(gameObj.game.players[ball->BBox]->type == HUMAN)
 	{
 		/*HUMAN*/
-		if(ball->BBox == 0)
+		if(gameObj.game.players[ball->BBox]->controls == 0)
 			actionKey = gameObj.keys.up;
-		else if(ball->BBox == 1)
-			actionKey = gameObj.keys.space;
+		else if(gameObj.game.players[ball->BBox]->controls == 1)
+			actionKey = gameObj.keys.z;
+		else /*if(gameObj.game.players[ball->BBox]->controls == 2)*/
+			actionKey = gameObj.keys.b;
 	}
 	else if(rand() % 100 == 0)
 	{
@@ -211,7 +234,7 @@ void ballCollisions(Ball * ball)
 {
 	Circle ballCirc, rotatedCirc;
 	Collision col;
-	Polygon poly;
+	Polygon * poly;
 	float angle;
 	int i;
 
@@ -227,26 +250,21 @@ void ballCollisions(Ball * ball)
 		/*Ignore elements withour interactions with the balls, and unused elements*/
 		switch(gameObj.toPrint[i].type)
 		{
-			case BALL:
-			case BUTTON:
-			case PICTURE:
-			case BONUS:
-				continue;
-			break;
 			case PLATEFORME:
 				poly = getPlateformePolygon(gameObj.toPrint[i].element.plateforme);
 			break;
 			case BRICK:
 				poly = getBrickPolygon(gameObj.toPrint[i].element.brick);
 			break;
+			default: continue; break;
 		}	
 
 		rotatedCirc = ballCirc;
 
 		/*Adjust ballCirc angle if different BBox*/ 
-		if(poly.BBox != ballCirc.BBox)
+		if(poly->BBox != ballCirc.BBox)
 		{
-			angle = (poly.BBox - ballCirc.BBox) * -gameObj.game.bb.angle;
+			angle = (poly->BBox - ballCirc.BBox) * -gameObj.game.bb.angle;
 			
 			rotatedCirc.position = rotateVector(rotatedCirc.position, angle);
 		}
@@ -255,8 +273,10 @@ void ballCollisions(Ball * ball)
 		col = circleRectCollision(rotatedCirc, poly);
 			
 		if(col.side == NO_COLLISION)
+		{
+		freePolygon(poly);
 			continue; /*No collision, let's move on*/
-
+		}
 		/*If it's a plateforme*/
 		if(gameObj.toPrint[i].type == PLATEFORME)
 		{
@@ -266,6 +286,8 @@ void ballCollisions(Ball * ball)
 		{
 			ballBrickCollision(ball, gameObj.toPrint[i].element.brick, poly, col, i);
 		}
+
+		freePolygon(poly);
 
 		return;
 		/*Let's check again in case we are hitting something else*/
@@ -346,13 +368,13 @@ void ballPlateformeCollision(Ball * ball, Plateforme * plat, Collision col)
 
 
 /**Handle collision between a ball and a brick**/
-void ballBrickCollision(Ball * ball, Brick * brick, Polygon brickPoly, Collision col, int brickID)
+void ballBrickCollision(Ball * ball, Brick * brick, Polygon * brickPoly, Collision col, int brickID)
 {
 	Vector2D edge, normal, u, v;
 	float mag;
 
 	/*Make sure we are in the same BBox*/
-	changePolyBBox(&brickPoly, ball->BBox);
+	changePolyBBox(brickPoly, ball->BBox);
 
 	/*Get the reflection vector (called normal here)*/
 	/*CORNER -> BISECTOR*/
@@ -365,32 +387,32 @@ void ballBrickCollision(Ball * ball, Brick * brick, Polygon brickPoly, Collision
 			return;	
 		break;
 		case TOP_LEFT_CORNER:
-			u = subVector(brickPoly.points[1], brickPoly.points[0]);
-			v = subVector(brickPoly.points[3], brickPoly.points[0]);
+			u = subVector(brickPoly->points[1], brickPoly->points[0]);
+			v = subVector(brickPoly->points[3], brickPoly->points[0]);
 		break;
 		case TOP_SIDE:
-			edge = subVector(brickPoly.points[1], brickPoly.points[0]);
+			edge = subVector(brickPoly->points[1], brickPoly->points[0]);
 		break;
 		case TOP_RIGHT_CORNER:
-			u = subVector(brickPoly.points[0], brickPoly.points[1]);
-			v = subVector(brickPoly.points[2], brickPoly.points[1]);
+			u = subVector(brickPoly->points[0], brickPoly->points[1]);
+			v = subVector(brickPoly->points[2], brickPoly->points[1]);
 		break;
 		case RIGHT_SIDE:
-			edge = subVector(brickPoly.points[2], brickPoly.points[1]);
+			edge = subVector(brickPoly->points[2], brickPoly->points[1]);
 		break;
 		case BOTTOM_RIGHT_CORNER:
-			u = subVector(brickPoly.points[1], brickPoly.points[2]);
-			v = subVector(brickPoly.points[3], brickPoly.points[2]);
+			u = subVector(brickPoly->points[1], brickPoly->points[2]);
+			v = subVector(brickPoly->points[3], brickPoly->points[2]);
 		break;
 		case BOTTOM_SIDE: 
-			edge = subVector(brickPoly.points[3], brickPoly.points[2]);
+			edge = subVector(brickPoly->points[3], brickPoly->points[2]);
 		break;
 		case BOTTOM_LEFT_CORNER:
-			u = subVector(brickPoly.points[0], brickPoly.points[3]);
-			v = subVector(brickPoly.points[2], brickPoly.points[3]);
+			u = subVector(brickPoly->points[0], brickPoly->points[3]);
+			v = subVector(brickPoly->points[2], brickPoly->points[3]);
 		break;
 		case LEFT_SIDE: 
-			edge = subVector(brickPoly.points[0], brickPoly.points[3]);
+			edge = subVector(brickPoly->points[0], brickPoly->points[3]);
 		break;
 	}
 

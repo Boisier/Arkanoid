@@ -64,3 +64,19 @@ float clamp(float value, float min, float max)
 {
 	return fmax(min, fmin(value, max));
 }
+
+/** Convert an int to a string **/
+char * itoa(int val)
+{
+	char * caption = allocate(sizeof(char) * 10);
+
+	sprintf(caption, "%d", val);
+    return caption;
+}
+
+void freePolygon(Polygon * poly)
+{
+    free(poly->points);
+    free(poly);
+    poly = NULL;
+}

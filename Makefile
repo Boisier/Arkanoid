@@ -1,12 +1,12 @@
 CC = gcc
-LIB     = -lSDL -lSDL_image -lSDL_mixer -lGLU -lGL -lm
+LIB     = -lSDL -lSDL_image -lSDL_mixer -lGLU -lGL -lm `pkg-config --libs freetype2` -lpthread
 LDFLAGS = -lSDL
 
 #Do not include ASan
-CFLAGS = -g -O2 -Wall -std=c89 -pedantic -Werror
+CFLAGS = -g -O2 -Wall -std=c89 -pedantic -Werror `pkg-config --cflags freetype2`
 
 #Include ASan
-#CFLAGS = -g -O2 -Wall -std=c89 -pedantic -Werror -fsanitize=address -fno-omit-frame-pointer -ggdb
+#CFLAGS = -g -O2 -Wall -std=c89 -pedantic -Werror -fsanitize=address -fno-omit-frame-pointer -ggdb `pkg-config --cflags freetype2`
 
 APP_BIN = arkanopong
 

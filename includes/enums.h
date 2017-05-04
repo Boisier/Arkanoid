@@ -13,6 +13,9 @@ typedef enum _GameState
 
 
 
+
+
+
 enum elType
 {
 	PLATEFORME,
@@ -20,7 +23,9 @@ enum elType
 	BALL,
 	BONUS,
 	BUTTON,
-	PICTURE
+	PICTURE,
+	NUMBERBOX,
+	TEXT
 };
 
 enum elState
@@ -77,4 +82,11 @@ enum gameType
 {
 	LOCALE,
 	ONLINE
+};
+
+enum textAlign
+{
+	ALIGN_CENTER,
+	ALIGN_LEFT,
+	ALIGN_RIGHT
 };

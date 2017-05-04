@@ -101,21 +101,21 @@ void freeBrick(Brick * brick)
 }
 
 /** Generate a polygon for the given brick **/
-Polygon getBrickPolygon(Brick * brick)
+Polygon * getBrickPolygon(Brick * brick)
 {
-	Polygon poly;
+	Polygon * poly = allocate(sizeof(Polygon));
 
-	poly.BBox = brick->BBox;
+	poly->BBox = brick->BBox;
 
-	poly.points = allocate(sizeof(Vector2D) * 4);
-	poly.nbrPoints = 4;
+	poly->points = allocate(sizeof(Vector2D) * 4);
+	poly->nbrPoints = 4;
 
 	/* EDGES ORDER : TOP RIGHT BOTTOM LEFT */
 
-	poly.points[0] = brick->topLeft;
-	poly.points[1] = brick->topRight;
-	poly.points[2] = brick->bottomRight;
-	poly.points[3] = brick->bottomLeft;
+	poly->points[0] = brick->topLeft;
+	poly->points[1] = brick->topRight;
+	poly->points[2] = brick->bottomRight;
+	poly->points[3] = brick->bottomLeft;
 	
 	return poly;
 }
@@ -133,7 +133,6 @@ void brickHit(Brick * brick, int brickID)
 	{
 		/**Remove the brick**/
 		gameObj.toPrint[brickID].display = false;
-		gameObj.toPrint[brickID].toDelete = true;
 	}
 
 	if(rand() % 4 > 0)

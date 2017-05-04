@@ -1,11 +1,18 @@
 #pragma once
 
-/** Holds a vector used for direction **/
+/** Vectors definition **/
 typedef struct _vector2D
 {
 	float x;
 	float y;
 } Vector2D;
+
+typedef struct _vector3D
+{
+	float x;
+	float y;
+	float z;
+} Vector3D;
 
 /** Polygon coordinates for easy manipulation **/
 typedef struct _polygon
@@ -32,6 +39,35 @@ typedef struct _collisionData
 	float delta;
 
 } Collision;
+
+
+
+
+
+/*******************/
+/** TEXT ELEMENTS **/
+/*******************/
+
+typedef struct _character
+{
+	GLuint texture;
+	Vector2D size;
+	Vector2D bearing;
+	GLuint advance;
+} Character;
+
+
+
+typedef struct _font
+{
+	char name[100];	
+	
+	int size;
+
+	Character chars[128];
+} Font;
+
+
 
 
 
@@ -117,6 +153,21 @@ typedef struct _bonus
 
 } Bonus;
 
+typedef struct _text
+{
+	int BBox;
+
+	int x;
+	int y;
+
+	char text[256];
+
+	enum textAlign align;
+	Vector3D color;
+
+	Font * font;
+} Text;
+
 typedef struct _button Button;
 
 struct _button {
@@ -135,6 +186,9 @@ struct _button {
 	void (*functionCallback)(void *);
 	void * callbackArgument;
 
+	bool isNumberBox;
+	Text * text;
+
 	Button * leftBtn;
 	Button * topBtn;
 	Button * rightBtn;
@@ -143,6 +197,8 @@ struct _button {
 
 typedef struct _picture
 {
+	int BBox;
+
 	int x;
 	int y;
 	int width;
@@ -153,14 +209,13 @@ typedef struct _picture
 
 typedef struct _numberBox
 {
-	int x;
-	int y;
-	int width;
-	int height;
-
 	int value;
 	int min;
 	int max;
+
+	Button * btn;
+	Text * display;
+
 } NumberBox;
 
 typedef struct _printElement
@@ -173,10 +228,11 @@ typedef struct _printElement
 		Bonus * bonus;
 		Button * btn;
 		Picture * pict;
+		NumberBox * nBox;
+		Text * txt;
 	} element;
 	enum elType type;
 	bool display;
-	bool toDelete;
 
 } PrintElement;
 
@@ -187,5 +243,9 @@ typedef struct _player
 	int life;
 	int score; /* ~ */
 
+	int controls;
+	bool reversed;
+
 	Plateforme * plateforme;
+	Text * lifeText;
 } Player;

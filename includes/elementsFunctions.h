@@ -14,7 +14,7 @@ void printPlateforme(Plateforme * plateforme);
 void freePlateforme(Plateforme * plateforme);
 
 /** Generate a polygon for the given plateforme **/
-Polygon getPlateformePolygon(Plateforme * plat);
+Polygon * getPlateformePolygon(Plateforme * plat);
 
 /** Return the plateforme speed ratio to the max speed */
 float platSpeedFactor(Plateforme * plat);
@@ -69,6 +69,9 @@ Ball * createBall(float posX, float posY, int playerID, int BBox);
 /** Create a new ball already glued to a plat*/
 Ball * createGluedBall(float posX, float posY, int playerID);
 
+/** Reset the bll position and state **/
+void resetBall(Ball * ball);
+
 /** Print the ball on the screen**/
 void printBall(Ball * ball);
 
@@ -97,7 +100,7 @@ void ballCollisions(Ball * ball);
 void ballPlateformeCollision(Ball * ball, Plateforme * plat, Collision col);
 
 /**Handle collision between a ball and a brick**/
-void ballBrickCollision(Ball * ball, Brick * brick, Polygon brickPoly, Collision col, int brickID);
+void ballBrickCollision(Ball * ball, Brick * brick, Polygon * brickPoly, Collision col, int brickID);
 
 /** Set ball direction from a given angle **/
 void setBallDirection(Ball * ball, float angle);
@@ -123,7 +126,7 @@ void printBrick(Brick * brick);
 void freeBrick(Brick * brick);
 
 /** Generate a baseRect for the given brick **/
-Polygon getBrickPolygon(Brick * brick);
+Polygon * getBrickPolygon(Brick * brick);
 
 /** Handle a hit made to a brick*/
 void brickHit(Brick * brick, int brickID);
@@ -155,3 +158,35 @@ bool bonusCollisions(Bonus * bonus);
 
 /** Apply the effect of the given bonus **/
 void applyBonus(Bonus * bonus);
+
+
+
+
+/****************/
+/** NUMBER BOX **/
+/****************/
+
+NumberBox * createNumberBox(int x, int y, int width, int height, int value, int min, int max);
+
+void printNumberBox(NumberBox * nBox);
+
+void freeNumberBox(NumberBox * nBox);
+
+void incrementNumberBox(NumberBox * nBox);
+
+void decrementNumberBox(NumberBox * nBox);
+
+
+
+/**********/
+/** TEXT **/
+/**********/
+
+/** Create a new Text element **/
+Text * createText(char * caption, float x, float y, Font * font);
+
+/** Print the given Text at proper location **/
+void printText(Text * txt);
+
+/** Free the given Text element. The font is NOT free-ed **/
+void freeText(Text * text);

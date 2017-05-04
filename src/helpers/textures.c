@@ -33,8 +33,9 @@ GLuint getTexture(char * imagePath)
 	/*Increase space in texture holder to store the new one*/
 	texture = addTextureSlot(path); /*And get the newly created space*/
 
+
 	glGenTextures(1, texture);
-	glBindTexture(GL_TEXTURE_2D, *texture);
+	glBindTexture(GL_TEXTURE_2D, * texture);
 
 	/*Set filters*/
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -44,7 +45,17 @@ GLuint getTexture(char * imagePath)
 	format = getImageFormat(image);	/*Get image format*/
 
 	/*Send to OpenGL with this LOVELY function*/
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->w, image->h, 0, format, GL_UNSIGNED_BYTE, image->pixels);
+	glTexImage2D(
+		GL_TEXTURE_2D, 
+		0, 
+		GL_RGBA, 
+		image->w, 
+		image->h, 
+		0, 
+		format, 
+		GL_UNSIGNED_BYTE, 
+		image->pixels
+	);
 
     SDL_FreeSurface(image); /*Free the image*/
 

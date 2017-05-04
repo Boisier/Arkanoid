@@ -50,6 +50,9 @@ void bonusMovements();
 /** GAME FUNCTION **/
 /*******************/
 
+/** Load ressources such as fonts and menu textures **/
+void loadGame();
+
 /** Handle the main menu **/
 void mainMenu();
 
