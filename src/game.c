@@ -32,6 +32,8 @@ void initGame()
     gameObj.defVal.bonus.speed = 2;
     gameObj.defVal.bonus.duration = 10 * 1000; /*ms*/
 
+    gameObj.defVal.wall.height = 35;
+
     gameObj.defVal.lifeNbr = 3;
 
     gameObj.gameState = MAINMENU;
@@ -61,7 +63,7 @@ void initGame()
     gameObj.game.nbrPlayers = 0;
     gameObj.game.players = NULL;
 
-    gameObj.game.guidelines = true;
+    gameObj.game.guidelines = false;
 
     gameObj.defautlTextColor = vec3(1, 1, 1);
     gameObj.selectedTextColor = vec3(0, 61.0/255.0, 81.0/255.0);
@@ -104,23 +106,14 @@ void doThings()
 {
     switch(gameObj.gameState)
     {
-        case MAINMENU:
-            mainMenu();
-        break;
-        case THEMESELECTION:
-            themeSelection();
-        break;
-        case PLAYERSELECTION:
-            playerSelection();
-        break;
-        case STARTGAME:
-            startGame();
-        break;
-        case INGAME:
-            ingame();
-        break;
-        default:
-            return;
+        case MAINMENU:        mainMenu();        break;
+        case THEMESELECTION:  themeSelection();  break;
+        case PLAYERSELECTION: playerSelection(); break;
+        case LEVELSELECTION:  playerSelection(); break;
+        case STARTGAME:       startGame();       break;
+        case INGAME:          ingame();          break;
+        case ENDGAME:         endgame();         break;
+        default: return;
     }
 }
 
@@ -334,4 +327,50 @@ void ingame()
     ballMovements();
 
     bonusMovements();
+}
+
+void endgame()
+{
+    static bool displayed = false;
+    int i;
+    char caption[50];
+
+    if(gameObj.printContent != ENDGAME)
+    {
+        addToPrint(createText("FIN", 0, 0, gameObj.defaultFont), TEXT);
+
+        gameObj.printContent = ENDGAME;
+        return;
+    }
+
+    SDL_Delay(2000);
+
+    if(!displayed)
+    {  
+        displayed = true;
+
+        if(gameObj.game.computers > 0)
+        {
+            strcpy(caption, "L ordinateur remporte la partie");
+            addToPrint(createText(caption, 0, -60, gameObj.defaultFont), TEXT);
+            return;
+        }
+
+        for(i = 0; i < gameObj.game.nbrPlayers; ++i)
+        {
+            if(gameObj.game.players[i]->life != 0)
+            {
+                strcpy(caption, "Joueur ");
+                strcat(caption, itoa(i+1));
+                strcat(caption, " gagne la partie");
+                addToPrint(createText(caption, 0, -60, gameObj.defaultFont), TEXT);
+            }
+        }
+
+        return;
+    }
+
+    SDL_Delay(2000);
+
+    gameObj.gameState = PLAYERSELECTION;
 }

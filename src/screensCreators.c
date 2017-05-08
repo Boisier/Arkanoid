@@ -213,10 +213,13 @@ void createGameBoard()
 
         /*Print it's plateforme*/
         addToPrint(gameObj.game.players[i]->plateforme, PLATEFORME);
+        gameObj.game.players[i]->plateforme->elementID = gameObj.nbrToPrint - 1;
 
         /*Give him a ball*/
         ball = createGluedBall(0, 0, i);
+        ball->elementID = gameObj.nbrToPrint;
         addToPrint(ball, BALL);
+
     }
 
     /**Create the bricks for the level*/

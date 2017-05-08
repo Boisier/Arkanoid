@@ -68,6 +68,7 @@ void printBonus(Bonus * bonus)
 void freeBonus(Bonus * bonus)
 {
 	free(bonus);
+	bonus = NULL;
 }
 
 /** Build a circle for the given bonus**/
@@ -158,10 +159,10 @@ void applyBonus(Bonus * bonus)
 	switch(bonus->type)
 	{
 		case ADD_LIFE:
-			gameObj.game.players[bonus->BBox]->life++;
+			addLifePlayer(gameObj.game.players[bonus->BBox]);
 		break;
 		case REMOVE_LIFE:
-			gameObj.game.players[bonus->BBox]->life--;
+			removeLifePlayer(gameObj.game.players[bonus->BBox]);
 		break;
 		case WIDE_PLATEFORME:
 		case NARROW_PLATEFORME:

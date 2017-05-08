@@ -98,6 +98,7 @@ void printBrick(Brick * brick)
 void freeBrick(Brick * brick)
 {
 	free(brick);
+	brick = NULL;
 }
 
 /** Generate a polygon for the given brick **/

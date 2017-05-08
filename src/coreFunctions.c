@@ -181,9 +181,7 @@ void defineBoundingBox()
     /**Store more data that will be used frequently**/
     gameObj.game.bb.platMinPos = - bbWidthAt(gameObj.defVal.plateforme.level) / 2;
     gameObj.game.bb.platMaxPos = bbWidthAt(gameObj.defVal.plateforme.level) / 2;
-    
-    /*printf(">> %f <> %f \n", bbWidthAt(gameObj.defVal.plateforme.level), gameObj.game.bb.width);*/
-}
+    }
 
 
 
@@ -206,7 +204,7 @@ void playerMovements()
     {
         player = gameObj.game.players[i];
 
-        if(player->plateforme == NULL)
+        if(player->life == 0)
             continue; /*This player is out*/
 
         /*Check and update bonus on this player's plateforme*/
@@ -366,12 +364,17 @@ void ballMovements()
         if(ballLost(ball, &player))
         {
             /*Remove a life to the player who lost it*/
-            gameObj.game.players[player]->life--;
-            strcpy(gameObj.game.players[player]->lifeText->text, itoa(gameObj.game.players[player]->life));
+            removeLifePlayer(gameObj.game.players[player]);
+
+            if(gameObj.game.players[ball->playerID]->life == 0)
+            {
+                /*Player who owns the ball is out, just remove the ball from the game*/
+                gameObj.toPrint[ball->elementID].display = false;
+                continue;
+            }
 
             /*Reset the ball to it's starting position*/
             resetBall(ball);
-
             continue;
         }
 
@@ -467,3 +470,40 @@ void bonusMovements()
     }
 
 }
+
+/** Add a life to the given player and update display **/
+void addLifePlayer(Player * player)
+{
+    if(player->life < 9) /*Cap max life to 9*/
+        player->life++;
+    
+    strcpy(player->lifeText->text, itoa(player->life));
+}
+
+
+/** Remove a life to the given player, update display, and out if it's life counter reach zero **/
+void removeLifePlayer(Player * player)
+{
+    if(player->life == 0)
+        return;
+
+    player->life--;
+    strcpy(player->lifeText->text, itoa(player->life));
+
+    if(player->life == 0)
+    {
+        if(player->type == HUMAN)
+            gameObj.game.humans--;
+        else
+            gameObj.game.computers--;
+
+        if(gameObj.game.humans == 0 || gameObj.game.humans + gameObj.game.computers == 1)
+        {
+            gameObj.gameState = ENDGAME;
+        }
+
+        gameObj.toPrint[player->plateforme->elementID].display = false;
+        addToPrint(createWall(player->plateforme->BBox), WALL);
+    }
+}
+

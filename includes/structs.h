@@ -1,5 +1,10 @@
 #pragma once
 
+
+/**************/
+/** GEOMETRY **/
+/**************/
+
 /** Vectors definition **/
 typedef struct _vector2D
 {
@@ -37,10 +42,33 @@ typedef struct _collisionData
 	Vector2D point;
 
 	float delta;
-
 } Collision;
 
 
+
+
+
+/** The watched keys **/
+typedef struct _keyPressed
+{
+    /*Nav & player 1*/
+    bool up;
+    bool down;
+    bool left;
+    bool right;
+    bool enter;
+    bool esc;
+
+    /*player 2*/
+    bool a;
+    bool z;
+    bool e;
+
+    /*player 3*/
+    bool b;
+    bool n;
+    bool v;
+} KeyPressed;
 
 
 
@@ -48,6 +76,7 @@ typedef struct _collisionData
 /** TEXT ELEMENTS **/
 /*******************/
 
+/*Store a character texture and positioning*/
 typedef struct _character
 {
 	GLuint texture;
@@ -56,8 +85,7 @@ typedef struct _character
 	GLuint advance;
 } Character;
 
-
-
+/*Store a font with all it's characters*/
 typedef struct _font
 {
 	char name[100];	
@@ -77,6 +105,7 @@ typedef struct _font
 /** PRINT ELEMENTS **/
 /********************/
 
+/*A player plateforme*/
 typedef struct _platforme
 {
 	int BBox;
@@ -96,8 +125,10 @@ typedef struct _platforme
 	enum bonusType bonus;
 	int bonusEnd;
 
+	int elementID;
 } Plateforme;
 
+/*A brick*/
 typedef struct _brick
 {
 	int BBox;
@@ -116,6 +147,19 @@ typedef struct _brick
 	GLuint texture2;
 } Brick;
 
+typedef struct _wall
+{
+	int BBox;
+
+	Vector2D topLeft;
+	Vector2D topRight;
+	Vector2D bottomRight;
+	Vector2D bottomLeft;
+
+	GLuint texture;
+} Wall;
+
+/*A ball*/
 typedef struct _ball
 {
 	int BBox;
@@ -138,8 +182,11 @@ typedef struct _ball
 	
 	enum bonusType bonus;
 	int bonusEnd;
+
+	int elementID;
 } Ball;
 
+/*A bonus*/
 typedef struct _bonus
 {
 	int BBox;
@@ -153,6 +200,7 @@ typedef struct _bonus
 
 } Bonus;
 
+/*A text*/
 typedef struct _text
 {
 	int BBox;
@@ -168,6 +216,7 @@ typedef struct _text
 	Font * font;
 } Text;
 
+/*A button*/
 typedef struct _button Button;
 
 struct _button {
@@ -195,6 +244,7 @@ struct _button {
 	Button * bottomBtn;
 };
 
+/*A picture*/
 typedef struct _picture
 {
 	int BBox;
@@ -207,6 +257,7 @@ typedef struct _picture
 	GLuint texture;
 } Picture;
 
+/*A numberbox*/
 typedef struct _numberBox
 {
 	int value;
@@ -218,12 +269,14 @@ typedef struct _numberBox
 
 } NumberBox;
 
+/*Holder for an element in the printArray*/
 typedef struct _printElement
 {
 	union 
 	{
 		Plateforme * plateforme;
 		Brick * brick;
+		Wall * wall;
 		Ball * ball;
 		Bonus * bonus;
 		Button * btn;
@@ -236,6 +289,7 @@ typedef struct _printElement
 
 } PrintElement;
 
+/*A player*/
 typedef struct _player
 {
 	enum PlayerType type;

@@ -62,8 +62,6 @@ void printText(Text * txt)
 	}
 
     glColor3f(txt->color.x, txt->color.y, txt->color.z);
-	
-	/*printf("startX > %d\n", startX);*/
 
 	for(i = 0; i < length; ++i)
 	{
@@ -93,4 +91,5 @@ void printText(Text * txt)
 void freeText(Text * text)
 {
 	free(text);
+	text = NULL;
 }

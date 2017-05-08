@@ -56,4 +56,5 @@ void printPicture(Picture * pict)
 void freePicture(Picture * pict)
 {
 	free(pict);
+	pict = NULL;
 }

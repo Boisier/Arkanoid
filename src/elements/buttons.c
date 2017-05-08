@@ -58,4 +58,5 @@ void printButton(Button * btn)
 void freeButton(Button * btn)
 {
 	free(btn);
+	btn = NULL;
 }

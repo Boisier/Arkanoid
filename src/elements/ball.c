@@ -106,6 +106,7 @@ void printBall(Ball * ball)
 void freeBall(Ball * ball)
 {
 	free(ball);
+	ball = NULL;
 }
 
 /** Build a circle for the given ball**/
@@ -256,6 +257,9 @@ void ballCollisions(Ball * ball)
 			case BRICK:
 				poly = getBrickPolygon(gameObj.toPrint[i].element.brick);
 			break;
+			case WALL:
+				poly = getWallPolygon(gameObj.toPrint[i].element.wall);
+			break;
 			default: continue; break;
 		}	
 
@@ -277,6 +281,7 @@ void ballCollisions(Ball * ball)
 		freePolygon(poly);
 			continue; /*No collision, let's move on*/
 		}
+
 		/*If it's a plateforme*/
 		if(gameObj.toPrint[i].type == PLATEFORME)
 		{
@@ -285,6 +290,10 @@ void ballCollisions(Ball * ball)
 		else if(gameObj.toPrint[i].type == BRICK)
 		{
 			ballBrickCollision(ball, gameObj.toPrint[i].element.brick, poly, col, i);
+		}
+		else if(gameObj.toPrint[i].type == WALL)
+		{
+			ballWallCollision(ball, gameObj.toPrint[i].element.wall, col);
 		}
 
 		freePolygon(poly);
@@ -367,6 +376,46 @@ void ballPlateformeCollision(Ball * ball, Plateforme * plat, Collision col)
 }
 
 
+/** Handle collision between a ball and a wall **/
+void ballWallCollision(Ball * ball, Wall * wall, Collision col)
+{
+	switch(col.side)
+	{
+		case NO_COLLISION:
+		case UNKNOWN:
+		case CORNER:
+			return;
+		break;
+		case TOP_SIDE:
+		case BOTTOM_SIDE:
+		case TOP_LEFT_CORNER:
+		case TOP_RIGHT_CORNER:
+		case BOTTOM_RIGHT_CORNER:
+		case BOTTOM_LEFT_CORNER:
+			
+			/*Just reverse Y direction*/
+			ball->direction.y *= -1;
+
+			if(col.side == TOP_SIDE || col.side == TOP_LEFT_CORNER || col.side == TOP_RIGHT_CORNER)
+				ball->y -= col.delta;
+			else /*if(col.side == BOTTOM_SIDE || col.side == BOTTOM_LEFT_CORNER || col.side == BOTTOM_RIGHT_CORNER)*/
+				ball->y += col.delta;
+			
+		break;
+		case LEFT_SIDE:
+		case RIGHT_SIDE:
+			/*Just reverse X direction*/
+			ball->direction.x *= -1;
+
+			if(col.side == LEFT_SIDE)
+				ball->x -= col.delta;
+			else /*if(col.side == RIGHT_SIDE)*/
+				ball->x += col.delta;
+		break;
+	}
+}
+
+
 /**Handle collision between a ball and a brick**/
 void ballBrickCollision(Ball * ball, Brick * brick, Polygon * brickPoly, Collision col, int brickID)
 {
@@ -435,7 +484,6 @@ void ballBrickCollision(Ball * ball, Brick * brick, Polygon * brickPoly, Collisi
 
 	/*Reflect ball direction with the reflection vector*/
 	ball->direction = subVector(ball->direction, multVector(normal, 2 * dotP(ball->direction, normal)));
-	/*printf("> %.2f %.2f <\n", normal.x, normal.y);*/
 
 	updateBallBBox(ball);
 

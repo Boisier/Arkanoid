@@ -65,6 +65,7 @@ void printPlateforme(Plateforme * plateforme)
 void freePlateforme(Plateforme * plateforme)
 {
 	free(plateforme);
+	plateforme = NULL;
 }
 
 /** Generate a polygon for the given plateforme* */

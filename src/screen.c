@@ -27,6 +27,7 @@ void printScreen()
             case PLATEFORME: printPlateforme(el.element.plateforme); break;
             case PICTURE: printPicture(el.element.pict); break;
             case BRICK: printBrick(el.element.brick); break;
+            case WALL: printWall(el.element.wall); break;
             case BALL: printBall(el.element.ball); break;
             case BONUS: printBonus(el.element.bonus); break;
             case BUTTON: printButton(el.element.btn); break;
@@ -54,6 +55,7 @@ PrintElement * addToPrint(void * element, enum elType type)
     {
         case PLATEFORME: newEl.element.plateforme = element; break;
         case BRICK: newEl.element.brick = element; break;
+        case WALL: newEl.element.wall = element; break;
         case BALL: newEl.element.ball = element; break;
         case BONUS: newEl.element.bonus = element; break;
         case BUTTON: newEl.element.btn = element; break;
@@ -111,6 +113,7 @@ void deleteElement(PrintElement el)
     {
         case PLATEFORME: freePlateforme(el.element.plateforme); break;
         case BRICK: freeBrick(el.element.brick); break;
+        case WALL: freeWall(el.element.wall); break;
         case BALL: freeBall(el.element.ball); break;
         case BONUS: freeBonus(el.element.bonus); break;
         case BUTTON: freeButton(el.element.btn); break;

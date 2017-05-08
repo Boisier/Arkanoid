@@ -42,6 +42,11 @@ void createBricks(char * levelName);
 /** Handle movement of the bonus **/
 void bonusMovements();
 
+/** Add a life to the given player and update display **/
+void addLifePlayer(Player * player);
+
+/** Remove a life to the given player and update display **/
+void removeLifePlayer(Player * player);
 
 
 
@@ -82,3 +87,6 @@ void ingame();
 
 /** create the game board **/
 void createGameBoard();
+
+
+void endgame();

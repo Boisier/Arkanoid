@@ -99,6 +99,9 @@ void ballCollisions(Ball * ball);
 /**Handle ball collision with plateforme **/
 void ballPlateformeCollision(Ball * ball, Plateforme * plat, Collision col);
 
+/** Handle collision between a ball and a wall **/
+void ballWallCollision(Ball * ball, Wall * wall, Collision col);
+
 /**Handle collision between a ball and a brick**/
 void ballBrickCollision(Ball * ball, Brick * brick, Polygon * brickPoly, Collision col, int brickID);
 
@@ -125,11 +128,31 @@ void printBrick(Brick * brick);
 /** Free the brick element, the texture(s) is(are) NOT free-ed **/
 void freeBrick(Brick * brick);
 
-/** Generate a baseRect for the given brick **/
+/** Generate a Polygon for the given brick **/
 Polygon * getBrickPolygon(Brick * brick);
 
 /** Handle a hit made to a brick*/
 void brickHit(Brick * brick, int brickID);
+
+
+
+
+
+/**********/
+/** WALL **/
+/**********/
+
+/** Create a new wall element **/
+Wall * createWall(int BBox);
+
+/** Print the wall on the screen on the correct BBox*/
+void printWall(Wall * wall);
+
+/** Free the wall element, the texture is NOT free-ed **/
+void freeWall(Wall * wall);
+
+/** Generate a polygon for the given wall **/
+Polygon * getWallPolygon(Wall * wall);
 
 
 
@@ -166,14 +189,19 @@ void applyBonus(Bonus * bonus);
 /** NUMBER BOX **/
 /****************/
 
+/*Create one button with the numberbox texture, add a text element on top, and link interactions between the two*/
 NumberBox * createNumberBox(int x, int y, int width, int height, int value, int min, int max);
 
+/*Print the numberBox*/
 void printNumberBox(NumberBox * nBox);
 
+/*Free the number box, the button and the text are not free-ed*/
 void freeNumberBox(NumberBox * nBox);
 
+/*Increment by one the number box, and update it's text*/
 void incrementNumberBox(NumberBox * nBox);
 
+/*Decrement by one the number box, and update it's text*/
 void decrementNumberBox(NumberBox * nBox);
 
 

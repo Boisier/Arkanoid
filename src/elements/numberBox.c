@@ -28,6 +28,7 @@ NumberBox * createNumberBox(int x, int y, int width, int height, int value, int 
 void freeNumberBox(NumberBox * nBox)
 {
 	free(nBox);
+	nBox = NULL;
 }
 
 void incrementNumberBox(NumberBox * nBox)

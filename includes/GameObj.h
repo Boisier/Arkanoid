@@ -1,26 +1,5 @@
 #pragma once
 
-typedef struct _keyPressed
-{
-    /*Nav & player 1*/
-    bool up;
-    bool down;
-    bool left;
-    bool right;
-    bool enter;
-    bool esc;
-
-    /*player 2*/
-    bool a;
-    bool z;
-    bool e;
-
-    /*player 3*/
-    bool b;
-    bool n;
-    bool v;
-} KeyPressed;
-
 typedef struct _GameObj
 {
     /** Window Properties **/
@@ -69,6 +48,11 @@ typedef struct _GameObj
             int duration;
         } bonus;
 
+        struct
+        {
+            int height;
+        } wall;
+
         int lifeNbr;
 
     } defVal;
@@ -103,6 +87,7 @@ typedef struct _GameObj
         int humans;
         int computers;
 
+        /*Bounding box informations*/
         struct
         {
             float angle;
