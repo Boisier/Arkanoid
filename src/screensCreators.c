@@ -6,7 +6,7 @@ void createMainMenu()
     Picture * background;
     Button * playBtn, * rulesBtn, * themeBtn;
 
-    background = createPicture(0, 0, "background.png");
+    background = createPicture(0, 0, "home.jpg");
 
     playBtn = createButton(0, -78, 342, 52, 's');                /*'s' for start*/
     playBtn->idleTexture = getTexture("playBtn_idle.png");
