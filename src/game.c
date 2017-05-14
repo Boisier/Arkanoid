@@ -135,12 +135,18 @@ void mainMenu()
     /*Do something with the callback*/
     if(callback == 's')
     {
+        /*jouer son ici*/
         gameObj.gameState = PLAYERSELECTION;
     }
 
     if(callback == 't')
     {
         gameObj.gameState = THEMESELECTION;
+    }
+
+    if(callback == 'q')
+    {
+        gameObj.gameState = EXITING;
     }
 }
 
