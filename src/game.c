@@ -96,9 +96,10 @@ void theLoop()
         }
     }
     
-    /** TODO : Clean up app **/
     cleanToPrint();
     freeTextures();
+    freePlayers();
+    freeFont(gameObj.defaultFont);
 }
 
 /** Call current game state function **/
@@ -109,7 +110,7 @@ void doThings()
         case MAINMENU:        mainMenu();        break;
         case THEMESELECTION:  themeSelection();  break;
         case PLAYERSELECTION: playerSelection(); break;
-        case LEVELSELECTION:  playerSelection(); break;
+        case LEVELSELECTION:  levelSelection(); break;
         case STARTGAME:       startGame();       break;
         case INGAME:          ingame();          break;
         case ENDGAME:         endgame();         break;
@@ -199,8 +200,35 @@ void playerSelection()
         gameObj.game.humans = gameObj.playerSelection.humans->value;
         gameObj.game.computers = gameObj.playerSelection.computers->value;
 
+        gameObj.gameState = LEVELSELECTION;
+    }
+}
+
+/** Select the bricks layout **/
+void levelSelection()
+{
+    int callback;
+
+    if(gameObj.printContent != LEVELSELECTION)
+    {
+        cleanToPrint();
+        createLevelSelection();
+        return;
+    } 
+
+    callback = btnHandler();
+
+    if(callback == 'b')
+    {
+        gameObj.gameState = PLAYERSELECTION;
+        return;
+    }
+    else if(callback == -1 || callback > 0)
+    {
+        gameObj.game.levelID = callback;
         gameObj.gameState = STARTGAME;
     }
+
 }
 
 /** Start the game **/
@@ -213,6 +241,7 @@ void startGame()
     if(gameObj.game.players != NULL)
     {
         /*Free players*/
+        freePlayers();
     }
     
     /*Make sure there is at least two players*/
@@ -333,7 +362,7 @@ void endgame()
 {
     static bool displayed = false;
     int i;
-    char caption[50];
+    char caption[50], * temp;
 
     if(gameObj.printContent != ENDGAME)
     {
@@ -361,7 +390,9 @@ void endgame()
             if(gameObj.game.players[i]->life != 0)
             {
                 strcpy(caption, "Joueur ");
-                strcat(caption, itoa(i+1));
+                temp = itoa(i+1);
+                strcat(caption, temp);
+                free(temp);
                 strcat(caption, " gagne la partie");
                 addToPrint(createText(caption, 0, -60, gameObj.defaultFont), TEXT);
             }

@@ -388,7 +388,10 @@ void createBricks(char * levelName)
 {
     FILE * level;
     char path[256] = "./levels/", line[256];
-    int i, j, k, type;
+    int i, j, k, type, startLevel = 0;
+
+    if(!gameObj.game.bb.squared)
+        startLevel = gameObj.defVal.brick.startLevel;
 
     strcat(path, levelName);
 
@@ -426,7 +429,7 @@ void createBricks(char * levelName)
             for(k = 0; k < gameObj.game.nbrPlayers; ++k)
             {   
                 /*Add the brick*/
-                addToPrint(createBrick(gameObj.game.bb.gridW - j-1, gameObj.defVal.brick.startLevel + i * gameObj.defVal.brick.height, type, k), BRICK);
+                addToPrint(createBrick(gameObj.game.bb.gridW - j-1, startLevel + i * gameObj.defVal.brick.height, type, k), BRICK);
             }
         }
     }

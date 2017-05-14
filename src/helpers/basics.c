@@ -80,3 +80,21 @@ void freePolygon(Polygon * poly)
     free(poly);
     poly = NULL;
 }
+
+/** Free all players **/
+void freePlayers()
+{
+    int i;
+
+    if(gameObj.game.nbrPlayers == 0)
+        return; /*Nothing to free*/
+
+    for(i = 0; i < gameObj.game.nbrPlayers; ++i)
+        free(gameObj.game.players[i]);
+
+    free(gameObj.game.players);
+    
+    gameObj.game.players = NULL;
+    gameObj.game.nbrPlayers = 0;
+}
+

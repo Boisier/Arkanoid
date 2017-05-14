@@ -41,13 +41,12 @@ void createMainMenu()
 /** Create theme selection screen **/
 void createThemeSelection()
 {
-    Picture * background;
-    Button * tempBtn, * lastBtn = NULL, * backBtn;
+    Picture * background = NULL;
+    Button * tempBtn = NULL, * lastBtn = NULL, * backBtn = NULL;
     char currentTheme[256], themePath[256];
-    int nbrThemes = 0;
+    int i = 0;
 
-    DIR * themesFolder;
-    struct dirent * tFold;
+    FolderContent * folder = NULL;
 
     strcpy(currentTheme, gameObj.theme);
 
@@ -56,69 +55,65 @@ void createThemeSelection()
     addToPrint(background, PICTURE);
 
     /*List available themes*/
-    themesFolder = opendir("./themes");
-    
-    do
+    folder = parseFolder("./themes");
+
+    /*For each folder*/
+    for(i = 0; i < folder->nbrElements && i < 5; ++i)
     {
-        tFold = readdir(themesFolder);
+        /*Build path*/
+        strcpy(themePath, "./themes/");
+        strcat(themePath, folder->elements[i]->d_name);
+        strcat(themePath, "/");
 
-        if(tFold != NULL)
+        /*Set as current theme*/
+        strcpy(gameObj.theme, themePath);
+
+        /*Create the button*/
+        tempBtn = createButton(0, 300 - 111 * i, 342, 52, i + 1);
+        tempBtn->idleTexture = getTexture("themeSelectorBtn_idle.png");
+        tempBtn->selectedTexture = getTexture("themeSelectorBtn_selected.png");
+        
+        if(i == 0)
         {
-            /*Ignore dot folders*/
-            if(tFold->d_name[0] == '.')
-                continue;
-
-            nbrThemes++;
-
-            /*Build path*/
-            strcpy(themePath, "./themes/");
-            strcat(themePath, tFold->d_name);
-            strcat(themePath, "/");
-
-            /*Set as current theme*/
-            strcpy(gameObj.theme, themePath);
-
-            /*Create the button*/
-            tempBtn = createButton(0, 300 - 111*(nbrThemes - 1), 342, 52, nbrThemes);
-            tempBtn->idleTexture = getTexture("themeSelectorBtn_idle.png");
-            tempBtn->selectedTexture = getTexture("themeSelectorBtn_selected.png");
-            
-            if(nbrThemes == 1)
-            {
-                tempBtn->state = SELECTED;
-                gameObj.currentlySelectedBtn = tempBtn;
-            }
-
-            /*Add interactions*/
-            if(lastBtn != NULL)
-            {
-                tempBtn->topBtn = lastBtn;
-                lastBtn->bottomBtn = tempBtn;
-            }
-
-            addToPrint(tempBtn, BUTTON);
-
-            lastBtn = tempBtn;
-            tempBtn = NULL;
-
-            /*Revert to normal*/
-            themePath[0] = '\0';
-            strcpy(gameObj.theme, currentTheme);
-
-            /*Limit to 5 themes*/
-            if(nbrThemes == 5)
-                break;
+            tempBtn->state = SELECTED;
+            gameObj.currentlySelectedBtn = tempBtn;
         }
-    } while(tFold != NULL);
 
-    (void) closedir(themesFolder);
+        /*Add interactions*/
+        if(lastBtn != NULL)
+        {
+            tempBtn->topBtn = lastBtn;
+            lastBtn->bottomBtn = tempBtn;
+        }
 
-    backBtn = createButton(0, 300 - 111*(nbrThemes + 1), 342, 52, 'b');              /*'b' for back*/
+        addToPrint(tempBtn, BUTTON);
+
+        lastBtn = tempBtn;
+        tempBtn = NULL;
+
+        /*Revert to normal*/
+        themePath[0] = '\0';
+        strcpy(gameObj.theme, currentTheme);
+    }
+
+    freeFolder(folder);
+
+    backBtn = createButton(0, -312, 342, 52, 'b');              /*'b' for back*/
     backBtn->idleTexture = getTexture("backBtn_idle.png");
     backBtn->selectedTexture = getTexture("backBtn_selected.png");
 
-    backBtn->topBtn = lastBtn;
-    lastBtn->bottomBtn = backBtn;
+    if(i == 0)
+    {
+        backBtn->state = SELECTED;
+        gameObj.currentlySelectedBtn = backBtn;
+
+        addToPrint(createText("Une erreur est survenue", 0, 100, gameObj.defaultFont), TEXT);
+    }
+    else
+    {
+        backBtn->topBtn = lastBtn;
+        lastBtn->bottomBtn = backBtn;
+    }
 
     addToPrint(backBtn, BUTTON);
 
@@ -184,6 +179,89 @@ void createPlayerSelection()
 }
 
 
+/** Create the brick layout selection **/
+void createLevelSelection()
+{
+    Picture * background;
+    Button * backBtn, * lvlArrow = NULL, * lastArrow = NULL;
+    Text * lvlName;
+    FolderContent * levelsFolder = parseFolder("./levels");
+    int i;
+
+    /*Background*/
+    background = createPicture(0, 0, "background.png");
+    addToPrint(background, PICTURE);
+
+    /*Text Action*/
+    addToPrint(createText("Choix du niveau", 0, 240, gameObj.defaultFont), TEXT);
+
+    /*Parse levels - 8 levels max on screen*/
+    for(i = 0; i < levelsFolder->nbrElements && i < 8; ++i)
+    {
+        /*Arrow*/
+        lvlArrow = createButton(-250, 200 - 50 * i, 52, 52, i + 1);
+        lvlArrow->idleTexture = getTexture("empty.png");
+        lvlArrow->selectedTexture = getTexture("rightArrow.png");
+
+        /*Select if first*/
+        if(i == 0)
+        {
+            lvlArrow->state = SELECTED;
+            gameObj.currentlySelectedBtn = lvlArrow;
+        }
+        
+        /*Level name*/
+        lvlName = createText(levelsFolder->elements[i]->d_name, -190, 180 - 50 * i, gameObj.defaultFont);
+        lvlName->align = ALIGN_LEFT;
+
+        /*Interactions if not the first*/
+        if(lastArrow != NULL)
+        {
+            lastArrow->bottomBtn = lvlArrow;
+            lvlArrow->topBtn = lastArrow;
+        }
+
+        /*Add to print*/
+        addToPrint(lvlArrow, BUTTON);
+        addToPrint(lvlName, TEXT);
+
+        lastArrow = lvlArrow;
+        lvlArrow = NULL;
+    }
+
+    freeFolder(levelsFolder);
+
+    /*empty level button*/
+    lvlArrow = createButton(-250, 200 - 50 * i, 52, 52, -1);            /*-1 implies no level*/
+    lvlArrow->idleTexture = getTexture("empty.png");
+    lvlArrow->selectedTexture = getTexture("rightArrow.png");
+
+    /*Empty level text*/
+    lvlName = createText("Aucun", -190, 180 - 50 * i, gameObj.defaultFont);
+    lvlName->align = ALIGN_LEFT;
+
+    /*Add to print*/
+    addToPrint(lvlArrow, BUTTON);
+    addToPrint(lvlName, TEXT);
+
+    /*Interactions*/
+    lastArrow->bottomBtn = lvlArrow;
+    lvlArrow->topBtn = lastArrow;
+
+    /*Back btn*/
+    backBtn = createButton(0, -312, 342, 52, 'b');           /*'b' for back*/
+    backBtn->idleTexture = getTexture("backBtn_idle.png");
+    backBtn->selectedTexture = getTexture("backBtn_selected.png");
+    addToPrint(backBtn, BUTTON);
+
+    /*Interactions*/
+    lvlArrow->bottomBtn = backBtn;
+    backBtn->topBtn = lvlArrow;
+
+    gameObj.printContent = LEVELSELECTION;
+}
+
+
 /*Create the game board*/
 void createGameBoard()
 {
@@ -191,6 +269,7 @@ void createGameBoard()
     Ball * ball;
     Text * txt;
     int i;
+    FolderContent * levelFolder;
 
     /*Background Image*/
     background = createPicture(0, 0, "background.png");
@@ -204,11 +283,25 @@ void createGameBoard()
         life->height = 40;
         life->width = 40;
         life->BBox = i;
+
+        if(gameObj.game.bb.squared)
+        {
+            life->x = -gameObj.game.bb.width / 2 + 35;
+            life->y = gameObj.game.bb.height - 105;
+        }
+        
         addToPrint(life, PICTURE);
 
         txt = createText(itoa(gameObj.game.players[i]->life), gameObj.game.bb.width / 2 - 75, gameObj.game.bb.height + 10, gameObj.defaultFont);
         txt->BBox = i;
         gameObj.game.players[i]->lifeText = txt;
+
+        if(gameObj.game.bb.squared)
+        {
+            txt->x = -gameObj.game.bb.width / 2 + 35;
+            txt->y = gameObj.game.bb.height - 75;
+        }
+
         addToPrint(txt, TEXT);
 
         /*Print it's plateforme*/
@@ -222,8 +315,21 @@ void createGameBoard()
 
     }
 
-    /**Create the bricks for the level*/
-    createBricks("full.level");
-
     gameObj.printContent = INGAME;
+
+    /*Is this an empty level ?*/
+    if(gameObj.game.levelID == -1)
+        return;
+    
+    /*Get level file path*/
+    levelFolder = parseFolder("./levels");
+
+    if(gameObj.game.levelID > levelFolder->nbrElements)
+        return; /*Bad folder ID*/
+
+    /**Create the bricks for the level*/
+    printf("LEVEL > %s", levelFolder->elements[gameObj.game.levelID - 1]->d_name);
+    createBricks(levelFolder->elements[gameObj.game.levelID - 1]->d_name);
+
+    freeFolder(levelFolder);
 }

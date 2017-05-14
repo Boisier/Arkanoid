@@ -132,12 +132,14 @@ void brickHit(Brick * brick, int brickID)
 
 	if(brick->strength == 0)
 	{
-		/**Remove the brick**/
+		/*Remove the brick*/
 		gameObj.toPrint[brickID].display = false;
+
+
+		if(rand() % 4 > 0)
+			return;		/*No bonus this time*/
+
+		/*Give a bonus*/
+		generateBonus(brick);
 	}
-
-	if(rand() % 4 > 0)
-		return;		/*No bonus this time*/
-
-	generateBonus(brick);
 }

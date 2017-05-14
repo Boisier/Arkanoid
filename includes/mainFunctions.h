@@ -76,6 +76,12 @@ void playerSelection();
 /** Create the nbr of player selector **/
 void createPlayerSelection();
 
+/** Select the bricks layout **/
+void levelSelection();
+
+/** Create the brick layout selection **/
+void createLevelSelection();
+
 /** Start the game **/
 void startGame();
 
@@ -88,5 +94,7 @@ void ingame();
 /** create the game board **/
 void createGameBoard();
 
-
+/** Display endgame messages **/
 void endgame();
+
+

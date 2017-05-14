@@ -23,6 +23,7 @@
 #include <string.h>
 #include <dirent.h>
 #include <sys/types.h>
+#include <errno.h>
 
 /** Now let's declare some global things... **/
 

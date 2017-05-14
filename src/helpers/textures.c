@@ -149,49 +149,34 @@ void freeTextures()
         free(gameObj.texturesPath[i]);
     }
 
+    free(gameObj.textures);
     free(gameObj.texturesPath);
     
+    gameObj.textures = NULL;
     gameObj.texturesPath = NULL;
     gameObj.nbrTextures = 0;
 }
 
 void setTheme(int themeID)
 {
-	DIR * themesFolder;
-    struct dirent * tFold;
+	FolderContent * themesFolder;
 	char themePath[256];
-	int i  = 0;
-
-    themesFolder = opendir("./themes");
 
 	/*Parse folder*/
-	do
-    {
-        tFold = readdir(themesFolder);
+    themesFolder = parseFolder("./themes");
 
-        if(tFold != NULL)
-        {
-            /*Ignore dot and dotdot folders*/
-            if(tFold->d_name[0] == '.')
-                continue;
-			
-			++i;
+	/*Wrong theme ID*/
+	if(themeID - 1 > themesFolder->nbrElements)
+		return;
 
-			/*Is this the theme ?*/
-			if(i != themeID)
-				continue;
-
-			/*This is the theme*/
-			strcpy(themePath, "./themes/");
-            strcat(themePath, tFold->d_name);
-            strcat(themePath, "/");
-			break;
-        }
-    } while(tFold != NULL);
-
-    (void) closedir(themesFolder);
+	/*Set new theme*/
+	strcpy(themePath, "./themes/");
+	strcat(themePath, themesFolder->elements[themeID - 1]->d_name);
+	strcat(themePath, "/");
 
 	strcpy(gameObj.theme, themePath);
+
+    freeFolder(themesFolder);
 
 	/*Clean up textures*/
 	freeTextures();

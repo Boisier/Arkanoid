@@ -34,6 +34,9 @@ char * itoa(int val);
 /** Free the given polygon **/
 void freePolygon(Polygon * poly);
 
+/** Free all players **/
+void freePlayers();
+
 
 
 
@@ -153,6 +156,8 @@ bool bboxIsReversed(int BBox);
 
 
 
+
+
 /**********/
 /** TEXT **/
 /**********/
@@ -162,3 +167,20 @@ Font * loadFont(char * fontName, int size);
 
 /** Generate the asked character for the given face **/
 Character getCharacter(FT_Face face, int charID);
+
+/** Free the given font **/
+void freeFont(Font * font);
+
+
+
+
+
+/************/
+/** PARSER **/
+/************/
+
+/** Parse the given folder and return a FolderContent object with a list of containing files **/
+FolderContent * parseFolder(char * folderPath);
+
+/** Free a FolderContent **/
+void freeFolder(FolderContent * folder);

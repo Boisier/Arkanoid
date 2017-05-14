@@ -87,6 +87,8 @@ typedef struct _GameObj
         int humans;
         int computers;
 
+        int levelID;
+
         /*Bounding box informations*/
         struct
         {

@@ -101,16 +101,14 @@ Character getCharacter(FT_Face face, int charID)
 	return character;
 }
 
+/** Free the given font **/
+void freeFont(Font * font)
+{
+	int i;
 
-	/*while ((err = glGetError()) != GL_NO_ERROR) 
-	{
-        switch(err)
-		{
-			case GL_NO_ERROR: printf("GL_NO_ERROR\n"); break;
-			case GL_INVALID_ENUM: printf("GL_INVALID_ENUM\n"); break;
-			case GL_INVALID_VALUE: printf("GL_INVALID_VALUE\n"); break;
-			case GL_INVALID_OPERATION: printf("GL_INVALID_OPERATION\n"); break;
-			case GL_INVALID_FRAMEBUFFER_OPERATION: printf("GL_INVALID_FRAMEBUFFER_OPERATION\n"); break;
-			case GL_OUT_OF_MEMORY: printf("GL_OUT_OF_MEMORY\n"); break;
-		}
-    }*/
+	for(i = 0; i < font->size; ++i)
+		glDeleteTextures(1, &font->chars[i].texture);
+
+	free(font);
+	font = NULL;
+}
