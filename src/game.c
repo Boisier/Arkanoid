@@ -71,11 +71,64 @@ void initGame()
     srand(time(NULL));   /*Init rand*/
 }
 
+/*Déclaration de l'objet conteneur de propriétés du son*/
+SDL_AudioSpec audioSortie;
+Uint32 audioLen, audioPos;
+
+SDL_AudioSpec audioBufferSpec;
+    Uint8 *audioBuffer;
+    Uint32 startTime, elapsedTime, audioBufferLen;
+
+void audioCallback(void *udata, Uint8 *stream, int len)
+{
+    /* On ne lit que s'il reste des données à jouer */
+    if ( audioLen == 0 )
+        return;
+
+    /* Remise à zéro du tampon de sortie */
+    memset(stream, 0, len);
+
+    /* Lecture du buffer audio */
+    if (audioPos < audioBufferSpec.size) {
+        if (audioPos+len > audioBufferSpec.size)
+            len = audioBufferSpec.size = audioPos;
+        SDL_MixAudio(stream, audioBuffer + audioPos,
+            len, SDL_MIX_MAXVOLUME);
+        audioPos += len;
+    }
+
+    /* Décrémentation de ce qu'il reste à lire */
+    audioLen -= len;
+}
+
+/*Définition des propriétés du son*/
+void audio_init()
+{
+    audioSortie.freq = 48000;
+    audioSortie.format = AUDIO_S16;
+    audioSortie.channels = 1;
+    audioSortie.samples = 1024;
+    audioSortie.callback = audioCallback;
+    audioSortie.userdata = NULL;
+
+    /*Initialisation de la couche audio*/
+    if (SDL_OpenAudio(&audioSortie, NULL) < 0)
+    {
+        fprintf(stderr, "Erreur d'ouverture audio: %s\n", SDL_GetError());
+    }
+}
+
 /** Main loop of the app**/
 void theLoop()
 {
-    Uint32 startTime, elapsedTime;
     
+    /*Loading of the sound in the buffer*/
+    if(!SDL_LoadWAV("./themes/default/sounds/ok.wav", &audioBufferSpec,
+    &audioBuffer, &audioBufferLen))
+    {
+        printf("Erreur lors du chargement du fichier WAV.\n");
+    }
+
     while(gameObj.gameState != EXITING) 
     {
         startTime = SDL_GetTicks();
@@ -99,6 +152,7 @@ void theLoop()
     /** TODO : Clean up app **/
     cleanToPrint();
     freeTextures();
+    SDL_FreeWAV(audioBuffer);
 }
 
 /** Call current game state function **/
@@ -136,6 +190,13 @@ void mainMenu()
     if(callback == 's')
     {
         /*jouer son ici*/
+        SDL_PauseAudio(0);
+
+        while ( audioLen > 0 )
+            SDL_Delay(100);
+
+        SDL_CloseAudio();
+
         gameObj.gameState = PLAYERSELECTION;
     }
 
