@@ -26,7 +26,8 @@ enum elType
 	BUTTON,
 	PICTURE,
 	NUMBERBOX,
-	TEXT
+	TEXT,
+	ANIMATION
 };
 
 

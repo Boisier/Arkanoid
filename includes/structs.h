@@ -1,5 +1,6 @@
 #pragma once
 
+typedef struct _printElement PrintElement;
 
 /**************/
 /** GEOMETRY **/
@@ -43,6 +44,26 @@ typedef struct _collisionData
 
 	float delta;
 } Collision;
+
+
+
+
+/** Animations **/
+typedef struct _animation
+{
+	union
+	{
+		int * i;
+		float * f;
+	} target;
+	bool isInt;
+	float startVal;
+	float endVal;
+	float duration;
+	float startTime;
+
+	PrintElement * holder;
+} Animation;
 
 
 
@@ -280,7 +301,7 @@ typedef struct _numberBox
 } NumberBox;
 
 /*Holder for an element in the printArray*/
-typedef struct _printElement
+struct _printElement
 {
 	union 
 	{
@@ -293,11 +314,12 @@ typedef struct _printElement
 		Picture * pict;
 		NumberBox * nBox;
 		Text * txt;
+		Animation * animation;
 	} element;
 	enum elType type;
 	bool display;
 
-} PrintElement;
+};
 
 /*A player*/
 typedef struct _player

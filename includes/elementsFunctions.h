@@ -218,3 +218,19 @@ void printText(Text * txt);
 
 /** Free the given Text element. The font is NOT free-ed **/
 void freeText(Text * text);
+
+
+
+/**********/
+/** TEXT **/
+/**********/
+
+/** Create an animation for the specified target value **/
+Animation * createIntAnimation(int * target, float startVal, float endVal, float duration, float delay);
+Animation * createFloatAnimation(float * target, float startVal, float endVal, float duration, float delay);
+
+/** Execute the animation **/
+void animate(Animation * anim);
+
+/** Free the given animation **/
+void freeAnimation(Animation * anim);

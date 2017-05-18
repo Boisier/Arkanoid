@@ -181,7 +181,7 @@ void defineBoundingBox()
     /**Store more data that will be used frequently**/
     gameObj.game.bb.platMinPos = - bbWidthAt(gameObj.defVal.plateforme.level) / 2;
     gameObj.game.bb.platMaxPos = bbWidthAt(gameObj.defVal.plateforme.level) / 2;
-    }
+}
 
 
 

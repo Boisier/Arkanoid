@@ -33,6 +33,7 @@ void printScreen()
             case BUTTON: printButton(el.element.btn); break;
             case NUMBERBOX: break;
             case TEXT: printText(el.element.txt); break;
+            case ANIMATION: animate(el.element.animation); break;
         }
     }
 
@@ -66,6 +67,7 @@ PrintElement * addToPrint(void * element, enum elType type)
             return NULL;
         break;
         case TEXT: newEl.element.txt = element; break;
+        case ANIMATION: newEl.element.animation = element; break;
     }
 
     newEl.display = true;
@@ -120,5 +122,6 @@ void deleteElement(PrintElement el)
         case PICTURE: freePicture(el.element.pict); break;
         case NUMBERBOX: freeNumberBox(el.element.nBox); break;
         case TEXT: freeText(el.element.txt); break;
+        case ANIMATION: freeAnimation(el.element.animation); break;
     }
 }
