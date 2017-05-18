@@ -21,7 +21,7 @@ void setVideoMode(unsigned int width, unsigned int height)
 
 bool createWindow()
 {
-    if(-1 == SDL_Init(SDL_INIT_VIDEO)) 
+    if(-1 == SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)) 
     {
         fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");
         return false;
@@ -30,6 +30,9 @@ bool createWindow()
     setVideoMode(gameObj.wWidth, gameObj.wHeight);
 
     SDL_WM_SetCaption("Arkanopong", NULL);
+
+    /**Init AUdio**/
+    audio_init();
 
 	return true;
 }
