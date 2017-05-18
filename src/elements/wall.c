@@ -4,10 +4,9 @@
 Wall * createWall(int BBox)
 {
 	Wall * wall = allocate(sizeof(Wall));
-	float topWidth, bottomWidth, level;
+	float topWidth, bottomWidth;
 
-	level = gameObj.game.bb.height - gameObj.defVal.wall.height;
-	topWidth = bbWidthAt(gameObj.defVal.wall.height);
+	topWidth = gameObj.game.bb.width;
 	bottomWidth = gameObj.game.bb.width;
 
 	topWidth *= .5;
@@ -17,10 +16,10 @@ Wall * createWall(int BBox)
 
 	/*Define wall position*/
 	wall->topLeft.x = -topWidth;
-	wall->topLeft.y = level;
+	wall->topLeft.y = gameObj.game.bb.height;
 
 	wall->topRight.x = topWidth;
-	wall->topRight.y = level;
+	wall->topRight.y = gameObj.game.bb.height;
 
 	wall->bottomRight.x = bottomWidth;
 	wall->bottomRight.y = gameObj.game.bb.height;
@@ -38,6 +37,17 @@ Wall * createWall(int BBox)
 void printWall(Wall * wall)
 {
 	float angle = bbAngle(wall->BBox);
+	float topWidth;
+	
+	if(gameObj.game.bb.height - wall->topLeft.y < gameObj.defVal.wall.height)
+	{
+		wall->topLeft.y--;
+		wall->topRight.y--;
+
+		topWidth = bbWidthAt(gameObj.game.bb.height - wall->topLeft.y);
+		wall->topLeft.x = -topWidth/2;
+		wall->topRight.x = topWidth/2;
+	}
 
 	glEnable(GL_TEXTURE_2D);
 

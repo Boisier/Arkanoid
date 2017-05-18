@@ -176,7 +176,7 @@ void setTheme(int themeID)
 
 	strcpy(gameObj.theme, themePath);
 
-    freeFolder(themesFolder);
+    closeFolder(themesFolder);
 
 	/*Clean up textures*/
 	freeTextures();

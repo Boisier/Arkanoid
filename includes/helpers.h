@@ -183,4 +183,4 @@ void freeFont(Font * font);
 FolderContent * parseFolder(char * folderPath);
 
 /** Free a FolderContent **/
-void freeFolder(FolderContent * folder);
+void closeFolder(FolderContent * folder);

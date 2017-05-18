@@ -96,7 +96,7 @@ void createThemeSelection()
         strcpy(gameObj.theme, currentTheme);
     }
 
-    freeFolder(folder);
+    closeFolder(folder);
 
     backBtn = createButton(0, -312, 342, 52, 'b');              /*'b' for back*/
     backBtn->idleTexture = getTexture("backBtn_idle.png");
@@ -229,7 +229,7 @@ void createLevelSelection()
         lvlArrow = NULL;
     }
 
-    freeFolder(levelsFolder);
+    closeFolder(levelsFolder);
 
     /*empty level button*/
     lvlArrow = createButton(-250, 200 - 50 * i, 52, 52, -1);            /*-1 implies no level*/
@@ -331,5 +331,5 @@ void createGameBoard()
     printf("LEVEL > %s", levelFolder->elements[gameObj.game.levelID - 1]->d_name);
     createBricks(levelFolder->elements[gameObj.game.levelID - 1]->d_name);
 
-    freeFolder(levelFolder);
+    closeFolder(levelFolder);
 }

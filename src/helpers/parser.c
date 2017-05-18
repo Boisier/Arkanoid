@@ -3,7 +3,6 @@
 /** Parse the given folder and return a FolderContent object with a list of containing files **/
 FolderContent * parseFolder(char * folderPath)
 {
-	DIR * folder = NULL;
     struct dirent * element = NULL;
 	FolderContent * content = allocate(sizeof(FolderContent));
 
@@ -12,10 +11,10 @@ FolderContent * parseFolder(char * folderPath)
 	content->elements = NULL;
 
 	/*Open directory*/
-	folder = opendir(folderPath);
+	content->dir = opendir(folderPath);
 
 	/*Stop here if directory not found*/
-	if(folder == NULL)
+	if(content->dir == NULL)
 	{
 		switch(errno)
 		{
@@ -35,7 +34,7 @@ FolderContent * parseFolder(char * folderPath)
 	}
 
 	/*Loop on each element*/
-	while((element = readdir(folder)) != NULL)
+	while((element = readdir(content->dir)) != NULL)
 	{
 		/*If dot folder, go to the next loop*/
 		if(element->d_name[0] == '.')
@@ -50,15 +49,15 @@ FolderContent * parseFolder(char * folderPath)
 		content->elements[content->nbrElements - 1] = element;
 	}
 
-    (void)closedir(folder);
-
 	/*return FolderContent*/
 	return content;
 }
 
-/** Free a FolderContent **/
-void freeFolder(FolderContent * folder)
+/** Close and free a FolderContent **/
+void closeFolder(FolderContent * folder)
 {
+	(void)closedir(folder->dir);
+
 	free(folder->elements);
 	free(folder);
 	folder = NULL;

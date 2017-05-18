@@ -505,6 +505,8 @@ void removeLifePlayer(Player * player)
             gameObj.gameState = ENDGAME;
         }
 
+        strcpy(player->lifeText->text, "X");
+
         gameObj.toPrint[player->plateforme->elementID].display = false;
         addToPrint(createWall(player->plateforme->BBox), WALL);
     }
