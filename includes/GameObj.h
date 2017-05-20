@@ -81,6 +81,9 @@ typedef struct _GameObj
     {
         enum gameType type;
 
+        bool play;
+        bool starting;
+
         Player ** players;
         int nbrPlayers;
 
@@ -109,6 +112,21 @@ typedef struct _GameObj
         } bb; /* bb : short for Bounding Box*/
 
         bool guidelines;
+
+        bool pause;
+
+        struct
+        {
+            PrintElement * background;
+            PrintElement * playBtn;
+            PrintElement * quitBtn;
+        } pauseMenu;
+
+        struct
+        {
+            PrintElement ** playersCtrl;
+            PrintElement * countDown;
+        } startAnimation;
 
     } game;
 

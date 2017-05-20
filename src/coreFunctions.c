@@ -500,15 +500,21 @@ void removeLifePlayer(Player * player)
         else
             gameObj.game.computers--;
 
-        if(gameObj.game.humans == 0 || gameObj.game.humans + gameObj.game.computers == 1)
-        {
-            gameObj.gameState = ENDGAME;
-        }
-
         strcpy(player->lifeText->text, "X");
 
+        if(gameObj.game.humans == 0 || gameObj.game.humans + gameObj.game.computers == 1)
+        {
+            /*ENd of the game*/
+            gameObj.gameState = ENDGAME;
+            return;
+        }
+
+        /*Game's not over, add a wall, hide life counter, and keep playing*/
         gameObj.toPrint[player->plateforme->elementID].display = false;
         addToPrint(createWall(player->plateforme->BBox), WALL);
+
+        createFloatAnimation(&player->lifePicture->opacity, 1.0, 0.0, 1000, 0, QUAD, NULL);
+        createFloatAnimation(&player->lifeText->opacity, 1.0, 0.0, 1000, 0, QUAD, NULL);
     }
 }
 

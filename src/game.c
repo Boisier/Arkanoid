@@ -2,12 +2,15 @@
 
 /** Init gameObj with default values **/
 void initGame()
-{
+{   
+    /*Window dimensions*/
     gameObj.wWidth = 1200;
     gameObj.wHeight = 800;
 
+    /*Default theme*/
     strcpy(gameObj.theme, "themes/default/");
 
+    /*Default values for game elements*/
     gameObj.defVal.plateforme.size = 100;
     gameObj.defVal.plateforme.height = 15;
     gameObj.defVal.plateforme.maxSpeed = 25;
@@ -45,6 +48,7 @@ void initGame()
     gameObj.nbrToPrint = 0;
     gameObj.printContent = EMPTY;
 
+    /*Set state of keys*/
     gameObj.keys.up = false;
     gameObj.keys.down = false;
     gameObj.keys.left = false;
@@ -60,13 +64,25 @@ void initGame()
 
     gameObj.currentlySelectedBtn = NULL;
 
+    gameObj.game.play = false;
+    gameObj.game.starting = false;
+
     gameObj.game.nbrPlayers = 0;
     gameObj.game.players = NULL;
 
-    gameObj.game.guidelines = false;
+    gameObj.game.guidelines = true;
 
     gameObj.defautlTextColor = vec3(1, 1, 1);
     gameObj.selectedTextColor = vec3(0, 61.0/255.0, 81.0/255.0);
+
+    gameObj.game.play = false;
+    gameObj.game.pause = false;
+    gameObj.game.pauseMenu.background = NULL;
+    gameObj.game.pauseMenu.playBtn = NULL;
+    gameObj.game.pauseMenu.quitBtn = NULL;
+
+    gameObj.game.startAnimation.playersCtrl = NULL;
+    gameObj.game.startAnimation.countDown = NULL;
 
     srand(time(NULL));   /*Init rand*/
 }
@@ -236,14 +252,10 @@ void startGame()
 {
     int i, p;
     char pos[11][7];
-    /*bool addAI = false;*/
 
     if(gameObj.game.players != NULL)
-    {
-        /*Free players*/
-        freePlayers();
-    }
-    
+        freePlayers(); /*Free previous players*/
+        
     /*Make sure there is at least two players*/
     if(gameObj.game.humans == 1 && gameObj.game.computers == 0)
     {
@@ -254,16 +266,16 @@ void startGame()
 
     /*Board layout for all the different configurations*/
 
-    /*  HA     -     HA  */ pos[0][0] = 'H'; pos[0][1] = 'A';
-    /*  HAA    -    HAA  */ pos[1][0] = 'H'; pos[1][1] = 'A'; pos[1][2] = 'A'; 
-    /*  HAAA   -   HAAA  */ pos[2][0] = 'H'; pos[2][1] = 'A'; pos[2][2] = 'A'; pos[2][3] = 'A'; 
-    /*  HH     -     HH  */ pos[3][0] = 'H'; pos[3][1] = 'H'; 
-    /*  HHA    -    AHH  */ pos[4][0] = 'A'; pos[4][1] = 'H'; pos[4][2] = 'H'; 
-    /*  HHAA   -   HAHA  */ pos[5][0] = 'H'; pos[5][1] = 'A'; pos[5][2] = 'H'; pos[5][3] = 'A'; 
-    /*  HHAAA  -  AHAAH  */ pos[6][0] = 'A'; pos[6][1] = 'H'; pos[6][2] = 'A'; pos[6][3] = 'A'; pos[6][4] = 'H'; 
-    /*  HHH    -    HHH  */ pos[7][0] = 'H'; pos[7][1] = 'H'; pos[7][2] = 'H'; 
-    /*  HHHA   -   HHAH  */ pos[8][0] = 'H'; pos[8][1] = 'H'; pos[8][2] = 'A'; pos[8][3] = 'H'; 
-    /*  HHHAA  -  HAHHA  */ pos[9][0] = 'H'; pos[9][1] = 'A'; pos[9][2] = 'H'; pos[9][3] = 'H'; pos[9][4] = 'A'; 
+    /*  HA     -     HA  */  pos[0][0] = 'H';  pos[0][1] = 'A';
+    /*  HAA    -    HAA  */  pos[1][0] = 'H';  pos[1][1] = 'A';  pos[1][2] = 'A'; 
+    /*  HAAA   -   HAAA  */  pos[2][0] = 'H';  pos[2][1] = 'A';  pos[2][2] = 'A';  pos[2][3] = 'A'; 
+    /*  HH     -     HH  */  pos[3][0] = 'H';  pos[3][1] = 'H';   
+    /*  HHA    -    AHH  */  pos[4][0] = 'A';  pos[4][1] = 'H';  pos[4][2] = 'H';  
+    /*  HHAA   -   HAHA  */  pos[5][0] = 'H';  pos[5][1] = 'A';  pos[5][2] = 'H';  pos[5][3] = 'A'; 
+    /*  HHAAA  -  AHAAH  */  pos[6][0] = 'A';  pos[6][1] = 'H';  pos[6][2] = 'A';  pos[6][3] = 'A';  pos[6][4] = 'H'; 
+    /*  HHH    -    HHH  */  pos[7][0] = 'H';  pos[7][1] = 'H';  pos[7][2] = 'H';  
+    /*  HHHA   -   HHAH  */  pos[8][0] = 'H';  pos[8][1] = 'H';  pos[8][2] = 'A';  pos[8][3] = 'H'; 
+    /*  HHHAA  -  HAHHA  */  pos[9][0] = 'H';  pos[9][1] = 'A';  pos[9][2] = 'H';  pos[9][3] = 'H';  pos[9][4] = 'A'; 
     /*  HHHAAA - HAHAHA  */ pos[10][0] = 'H'; pos[10][1] = 'A'; pos[10][2] = 'H'; pos[10][3] = 'A'; pos[10][4] = 'H'; pos[10][5] = 'A'; 
 
     if(gameObj.game.humans == 1 && gameObj.game.computers == 1)
@@ -305,10 +317,9 @@ void startGame()
             gameObj.game.players[i]->controls = gameObj.game.humans;
             gameObj.game.humans++;
 
+            /*Set bbox as reversed to ensure controls direction logic*/
             if(bboxIsReversed(i))
-            {
                 gameObj.game.players[i]->reversed = true;
-            }
         }
         else
         {
@@ -344,18 +355,83 @@ void createPlayer(enum PlayerType type, int playerNbr)
 /** Handle ingame events **/
 void ingame()
 {
+    int callback = 0;
+
     if(gameObj.printContent != INGAME)
     {
         cleanToPrint();
         createGameBoard();
+
+        gameObj.game.pause = false;
         return;
     }
 
-    playerMovements();
+    /*Can we execute the game ?*/
+    if(!gameObj.game.play)
+    {
+        if(!gameObj.game.starting)
+        {
+            createStartGameAnimation();
+        }
 
-    ballMovements();
+        return;
+    }
 
-    bonusMovements();
+    /*Shall we toggle the pauseMenu ?*/
+    if(gameObj.keys.esc)
+    {
+        if(gameObj.game.pause)
+            hidePause(); /*Pause the game*/
+        else
+            enterPause(); /*Unpause the game*/
+
+        gameObj.keys.esc = false;
+    }
+
+    /*Is the game paused*/
+    if(gameObj.game.pause)
+    {   
+        /*Wait for user actions*/
+        callback = btnHandler();
+
+        if(callback == 'p')   
+            hidePause(); /*HideMenu*/
+        else if(callback == 'q')
+            gameObj.gameState = PLAYERSELECTION;
+
+        return;
+    }
+
+    /*Animate the gmae*/
+    playerMovements();  /*Players/Plateformes*/
+
+    ballMovements();    /*Balls*/
+
+    bonusMovements();   /*Bonus*/
+}
+ /*pause the game*/
+void enterPause()
+{
+    gameObj.game.pause = true; /*pause the game*/
+
+    createPauseMenu();
+}
+
+/*Hide the game*/
+void hidePause()
+{
+    createFloatAnimation(&gameObj.game.pauseMenu.background->element.pict->opacity, .8, .0, 500, 0, QUAD, &quitPause);
+    createFloatAnimation(&gameObj.game.pauseMenu.playBtn->element.btn->opacity, 1.0, .0, 500, 0, QUAD, NULL);
+    createFloatAnimation(&gameObj.game.pauseMenu.quitBtn->element.btn->opacity, 1.0, .0, 500, 0, QUAD, NULL);
+}
+
+/*restarte the game*/
+void quitPause()
+{
+    gameObj.game.pauseMenu.background->display = false;
+    gameObj.game.pauseMenu.playBtn->display = false;
+    gameObj.game.pauseMenu.quitBtn->display = false;
+    gameObj.game.pause = false; /*Unpause the game*/
 }
 
 void endgame()

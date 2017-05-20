@@ -106,3 +106,13 @@ enum textAlign
 	ALIGN_LEFT,
 	ALIGN_RIGHT
 };
+
+/** Supported animations easings **/
+enum animationType
+{
+	LINEAR,
+	QUAD,
+	CUBIC,
+	QUARTIC,
+	QUINTIC
+};

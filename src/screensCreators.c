@@ -13,8 +13,6 @@ void createMainMenu()
     playBtn->selectedTexture = getTexture("playBtn_selected.png");
     playBtn->state = SELECTED;
 
-    createIntAnimation(&playBtn->x, -370, 370, 1500, 0);
-
     rulesBtn = createButton(-370, -165, 342, 52, 'r');              /*'r' for rules*/
     rulesBtn->idleTexture = getTexture("rulesBtn_idle.png");
     rulesBtn->selectedTexture = getTexture("rulesBtn_selected.png");
@@ -285,6 +283,7 @@ void createGameBoard()
         life->height = 40;
         life->width = 40;
         life->BBox = i;
+        gameObj.game.players[i]->lifePicture = life;
 
         if(gameObj.game.bb.squared)
         {
@@ -334,4 +333,68 @@ void createGameBoard()
     createBricks(levelFolder->elements[gameObj.game.levelID - 1]->d_name);
 
     closeFolder(levelFolder);
+}
+
+void createPauseMenu()
+{
+    Picture * pauseBackground;
+    Button * playBtn, * quitBtn;
+
+    pauseBackground = createPicture(0, 0, "background.1.png");
+
+    playBtn = createButton(0, 100, 342, 52, 'p');                /*'p' for play*/
+    playBtn->idleTexture = getTexture("playBtn_idle.png");
+    playBtn->selectedTexture = getTexture("playBtn_selected.png");
+    playBtn->state = SELECTED;
+
+    quitBtn = createButton(0, -78, 342, 52, 'q');                /*'q' for quit*/
+    quitBtn->idleTexture = getTexture("quitBtn_idle.png");
+    quitBtn->selectedTexture = getTexture("quitBtn_selected.png");
+
+    playBtn->bottomBtn = quitBtn;
+    quitBtn->topBtn = playBtn;
+
+    gameObj.currentlySelectedBtn = playBtn;
+
+    gameObj.game.pauseMenu.background = addToPrint(pauseBackground, PICTURE);
+    gameObj.game.pauseMenu.playBtn = addToPrint(playBtn, BUTTON);
+    gameObj.game.pauseMenu.quitBtn = addToPrint(quitBtn, BUTTON);
+
+    createFloatAnimation(&pauseBackground->opacity, 0.0, .8, 500, 0, QUAD, NULL);
+    createFloatAnimation(&playBtn->opacity, 0.0, 1.0, 500, 0, QUAD, NULL);
+    createFloatAnimation(&quitBtn->opacity, 0.0, 1.0, 500, 0, QUAD, NULL);
+}
+
+void createStartGameAnimation()
+{
+    Picture * playerCtrl;
+    Text * countDown;
+    char path[256];
+    int i, nbr = 0;
+
+    gameObj.game.startAnimation.playersCtrl = allocate(sizeof(Picture *) * gameObj.game.humans);
+
+    for(i = 0; i < gameObj.game.nbrPlayers; ++i)
+    {
+        if(gameObj.game.players[i]->type == AI)
+            continue; /*Ignore AI*/
+
+        strcpy(path, "playerControls");
+        strcat(path, itoa(nbr+1));
+        strcat(path, ".png");
+
+        playerCtrl = createPicture(0, 250, path);
+        playerCtrl->BBox = i;
+
+        gameObj.game.startAnimation.playersCtrl[nbr] = addToPrint(playerCtrl, PICTURE);
+        
+        ++nbr;
+    }
+
+    countDown = createText("3", 0, 0, gameObj.defaultFont);
+    gameObj.game.startAnimation.countDown = addToPrint(countDown, TEXT);
+
+    createFloatAnimation(&countDown->opacity, 1.0, 0.0, 200, 800, QUAD, &startAnimationTwo);
+    
+    gameObj.game.starting = true;
 }

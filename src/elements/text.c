@@ -14,6 +14,7 @@ Text * createText(char * caption, float x, float y, Font * font)
 
 	txt->align = ALIGN_CENTER;
 	txt->color = vec3(1.0, 1.0, 1.0);
+	txt->opacity = 1.0;
 
 	txt->font = font;
 
@@ -61,7 +62,7 @@ void printText(Text * txt)
 		glRotatef(180, 0, 0, 1);
 	}
 
-    glColor3f(txt->color.x, txt->color.y, txt->color.z);
+    glColor4f(txt->color.x, txt->color.y, txt->color.z, txt->opacity);
 
 	for(i = 0; i < length; ++i)
 	{

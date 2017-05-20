@@ -57,12 +57,19 @@ typedef struct _animation
 		float * f;
 	} target;
 	bool isInt;
+
+	enum animationType easing;
+
 	float startVal;
 	float endVal;
+	float changeValue;
 	float duration;
 	float startTime;
 
 	PrintElement * holder;
+
+	void (*callback)();
+
 } Animation;
 
 
@@ -243,6 +250,7 @@ typedef struct _text
 
 	enum textAlign align;
 	Vector3D color;
+	float opacity;
 
 	Font * font;
 } Text;
@@ -258,6 +266,8 @@ struct _button {
 
 	GLuint idleTexture;
 	GLuint selectedTexture;
+
+	float opacity;
 
 	enum elState state;
 	char callback;
@@ -284,6 +294,8 @@ typedef struct _picture
 	int y;
 	int width;
 	int height;
+
+	float opacity;
 
 	GLuint texture;
 } Picture;
@@ -334,4 +346,6 @@ typedef struct _player
 
 	Plateforme * plateforme;
 	Text * lifeText;
+	Picture * lifePicture;
+
 } Player;

@@ -42,4 +42,5 @@ static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
 #include "helpers.h"			/*All utilisty functions used for various things*/
 #include "elementsFunctions.h"  /*The functions to use game elements (ball, buttons, etc.)*/
 #include "screen.h"				/*Functions to display the elements on the screen*/
+#include "animationsCallbacks.h"	/*All the smalls animations callbacks*/
 #include "mainFunctions.h"		/*All the games main functions (menus, watchers, etc.)*/

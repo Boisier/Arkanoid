@@ -94,6 +94,18 @@ void ingame();
 /** create the game board **/
 void createGameBoard();
 
+void createStartGameAnimation();
+
+void createPauseMenu();
+
+void enterPause();
+
+/*Hide the game*/
+void hidePause();
+
+/*restarte the game*/
+void quitPause();
+
 /** Display endgame messages **/
 void endgame();
 

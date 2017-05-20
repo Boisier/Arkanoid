@@ -226,8 +226,8 @@ void freeText(Text * text);
 /**********/
 
 /** Create an animation for the specified target value **/
-Animation * createIntAnimation(int * target, float startVal, float endVal, float duration, float delay);
-Animation * createFloatAnimation(float * target, float startVal, float endVal, float duration, float delay);
+void createIntAnimation(int * target, float startVal, float endVal, float duration, float delay, enum animationType easing, void (*callback)());
+void createFloatAnimation(float * target, float startVal, float endVal, float duration, float delay, enum animationType easing, void (*callback)());
 
 /** Execute the animation **/
 void animate(Animation * anim);

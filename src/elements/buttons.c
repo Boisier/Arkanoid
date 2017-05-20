@@ -16,6 +16,8 @@ Button * createButton(float posX, float posY, float width, float height, char ca
 
 	btn->isNumberBox = false;
 
+	btn->opacity = 1.0;
+
 	btn->leftBtn = NULL;
 	btn->topBtn = NULL;
 	btn->rightBtn = NULL;
@@ -37,9 +39,12 @@ void printButton(Button * btn)
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
+	glPushAttrib(GL_CURRENT_BIT);
 	glPushMatrix();
 
 	glTranslatef(btn->x, btn->y, 0);
+
+	glColor4f(1.0, 1.0, 1.0, btn->opacity);
 
 	glBegin(GL_QUADS);
 		glTexCoord2f(0, 0); glVertex2f(btn->width * -0.5, btn->height * 0.5);
@@ -49,6 +54,7 @@ void printButton(Button * btn)
 	glEnd();
 
 	glPopMatrix();
+	glPopAttrib();
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_TEXTURE_2D);

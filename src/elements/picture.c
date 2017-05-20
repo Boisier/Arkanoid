@@ -12,6 +12,7 @@ Picture * createPicture(float posX, float posY, char * picturePath)
 	picture->y = posY;
 
 	picture->texture = getTexture(picturePath);
+	picture->opacity = 1.0;
 
 	getTextureDimensions(picture->texture, &width, &height);
 
@@ -31,10 +32,13 @@ void printPicture(Picture * pict)
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, pict->texture);
 
+	glPushAttrib(GL_CURRENT_BIT);
 	glPushMatrix();
 	
 	glRotatef(angle, 0, 0, 1);
 	glTranslatef(pict->x, pict->y, 0);
+
+	glColor4f(1.0, 1.0, 1.0, pict->opacity);
 
 	if(pict->BBox != -1 && bboxIsReversed(pict->BBox))
 		glRotatef(180, 0, 0, 1);
@@ -47,6 +51,7 @@ void printPicture(Picture * pict)
 	glEnd();
 
 	glPopMatrix();
+	glPopAttrib();
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_TEXTURE_2D);
