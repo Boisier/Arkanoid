@@ -13,13 +13,9 @@ void createMainMenu()
     playBtn->selectedTexture = getTexture("playBtn_selected.png");
     playBtn->state = SELECTED;
 
-<<<<<<< Updated upstream
-    rulesBtn = createButton(0, -195, 342, 52, 'r');              /*'r' for rules*/
-=======
     createIntAnimation(&playBtn->x, -370, 370, 1500, 0);
 
     rulesBtn = createButton(-370, -165, 342, 52, 'r');              /*'r' for rules*/
->>>>>>> Stashed changes
     rulesBtn->idleTexture = getTexture("rulesBtn_idle.png");
     rulesBtn->selectedTexture = getTexture("rulesBtn_selected.png");
     rulesBtn->state = IDLE;
