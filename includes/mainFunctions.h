@@ -4,12 +4,6 @@
 /** ROOT FUNCTIONS **/
 /********************/
 
-/** Init gameObj with default values **/
-void initGame();
-
-/** Init audio **/
-void audio_init();
-
 /** Main loop of the app**/
 void theLoop();
 
@@ -17,6 +11,28 @@ void theLoop();
 void doThings();
 
 
+
+
+
+
+/************************/
+/** IGNITING FUNCTIONS **/
+/************************/
+
+/** Init gameObj with default values **/
+void initGame();
+
+/** Inite the game obj with default values*/
+bool initGameObj();
+
+/** Init the SDL **/
+bool initSDL();
+
+/** Load elements depending on the SDL library **/
+void loadSDLDependants();
+
+/** Init audio **/
+void audio_init(); /*TODO*/
 
 
 

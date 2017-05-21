@@ -1,97 +1,10 @@
 #include "../includes/game.h"
 
-/** Init gameObj with default values **/
-void initGame()
-{   
-    /*Window dimensions*/
-    gameObj.wWidth = 1200;
-    gameObj.wHeight = 800;
-
-    /*Default theme*/
-    strcpy(gameObj.theme, "themes/default/");
-
-    /*Default values for game elements*/
-    gameObj.defVal.plateforme.size = 100;
-    gameObj.defVal.plateforme.height = 15;
-    gameObj.defVal.plateforme.maxSpeed = 25;
-    gameObj.defVal.plateforme.AIMaxSpeed = 15;
-    gameObj.defVal.plateforme.acceleration = .5;
-    gameObj.defVal.plateforme.level = 35;
-    gameObj.defVal.plateforme.narrowSize = 50;
-    gameObj.defVal.plateforme.wideSize = 150;
-
-    gameObj.defVal.brick.startLevel = 40;
-    gameObj.defVal.brick.height = 20;
-    
-    gameObj.defVal.ball.size = 15;
-    gameObj.defVal.ball.bigSize = 25;
-    gameObj.defVal.ball.smallSize = 5;
-    gameObj.defVal.ball.minSpeed = 5; 
-    gameObj.defVal.ball.maxSpeed = 20;
-    gameObj.defVal.ball.maxAngle = 90;
-    gameObj.defVal.ball.gluedMaxDuration = 10 * 1000; /*ms*/
-
-    gameObj.defVal.bonus.size = 15;
-    gameObj.defVal.bonus.speed = 2;
-    gameObj.defVal.bonus.duration = 10 * 1000; /*ms*/
-
-    gameObj.defVal.wall.height = 35;
-
-    gameObj.defVal.lifeNbr = 3;
-
-    gameObj.gameState = MAINMENU;
-
-    gameObj.textures = NULL;
-    gameObj.nbrTextures = 0;
-
-    gameObj.toPrint = NULL;
-    gameObj.nbrToPrint = 0;
-    gameObj.printContent = EMPTY;
-
-    /*Set state of keys*/
-    gameObj.keys.up = false;
-    gameObj.keys.down = false;
-    gameObj.keys.left = false;
-    gameObj.keys.right = false;
-    gameObj.keys.enter = false;
-    gameObj.keys.esc = false;
-    gameObj.keys.a = false;
-    gameObj.keys.z = false;
-    gameObj.keys.e = false;
-    gameObj.keys.b = false;
-    gameObj.keys.n = false;
-    gameObj.keys.v = false;
-
-    gameObj.currentlySelectedBtn = NULL;
-
-    gameObj.game.play = false;
-    gameObj.game.starting = false;
-
-    gameObj.game.nbrPlayers = 0;
-    gameObj.game.players = NULL;
-
-    gameObj.game.guidelines = true;
-
-    gameObj.defautlTextColor = vec3(1, 1, 1);
-    gameObj.selectedTextColor = vec3(0, 61.0/255.0, 81.0/255.0);
-
-    gameObj.game.play = false;
-    gameObj.game.pause = false;
-    gameObj.game.pauseMenu.background = NULL;
-    gameObj.game.pauseMenu.playBtn = NULL;
-    gameObj.game.pauseMenu.quitBtn = NULL;
-
-    gameObj.game.startAnimation.playersCtrl = NULL;
-    gameObj.game.startAnimation.countDown = NULL;
-
-    srand(time(NULL));   /*Init rand*/
-}
-
-    Uint32 startTime, elapsedTime;
-
 /** Main loop of the app**/
 void theLoop()
 {
+    Uint32 startTime, elapsedTime;
+    
     while(gameObj.gameState != EXITING) 
     {
         startTime = SDL_GetTicks();
@@ -141,7 +54,6 @@ void mainMenu()
 
     if(gameObj.printContent != MAINMENU)
     {
-        gameObj.defaultFont = loadFont("BebasNeue.otf", 40);
         cleanToPrint();
         createMainMenu();
         return;

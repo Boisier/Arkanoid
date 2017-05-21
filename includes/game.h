@@ -25,6 +25,9 @@
 #include <sys/types.h>
 #include <errno.h>
 
+/*Third party libraries*/
+#include "lib/jsmn.h"
+
 /** Now let's declare some global things... **/
 
 /*Boolean type*/

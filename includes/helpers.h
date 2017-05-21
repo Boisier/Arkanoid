@@ -49,8 +49,6 @@ void reshape(unsigned int width, unsigned int height);
 
 void setVideoMode(unsigned int width, unsigned int height); 
 
-bool createWindow();
-
 
 
 

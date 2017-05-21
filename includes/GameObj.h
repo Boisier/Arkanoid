@@ -17,7 +17,6 @@ typedef struct _GameObj
             float size;
             float height;
             float maxSpeed;
-            float AIMaxSpeed;
             float acceleration;
             float level;
             float narrowSize;
