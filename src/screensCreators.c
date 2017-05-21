@@ -277,6 +277,7 @@ void createGameBoard()
     Ball * ball;
     Text * txt;
     int i;
+    char * caption;
     FolderContent * levelFolder;
 
     /*Background Image*/
@@ -301,9 +302,12 @@ void createGameBoard()
         
         addToPrint(life, PICTURE);
 
-        txt = createText(itoa(gameObj.game.players[i]->life), gameObj.game.bb.width / 2 - 75, gameObj.game.bb.height + 10, gameObj.defaultFont);
+        caption = itoa(gameObj.game.players[i]->life);
+        txt = createText(caption, gameObj.game.bb.width / 2 - 75, gameObj.game.bb.height + 10, gameObj.defaultFont);
         txt->BBox = i;
         gameObj.game.players[i]->lifeText = txt;
+
+        free(caption);
 
         if(gameObj.game.bb.squared)
         {
@@ -377,7 +381,7 @@ void createStartGameAnimation()
 {
     Picture * playerCtrl;
     Text * countDown;
-    char path[256];
+    char path[256], * caption;
     int i, nbr = 0;
 
     gameObj.game.startAnimation.playersCtrl = allocate(sizeof(Picture *) * gameObj.game.humans);
@@ -387,9 +391,13 @@ void createStartGameAnimation()
         if(gameObj.game.players[i]->type == AI)
             continue; /*Ignore AI*/
 
+        caption = itoa(nbr+1);
+
         strcpy(path, "playerControls");
-        strcat(path, itoa(nbr+1));
+        strcat(path, caption);
         strcat(path, ".png");
+
+        free(caption);
 
         playerCtrl = createPicture(0, 250, path);
         playerCtrl->BBox = i;

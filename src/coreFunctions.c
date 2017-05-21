@@ -477,21 +477,29 @@ void bonusMovements()
 /** Add a life to the given player and update display **/
 void addLifePlayer(Player * player)
 {
+    char * caption;
+
     if(player->life < 9) /*Cap max life to 9*/
         player->life++;
     
-    strcpy(player->lifeText->text, itoa(player->life));
+    caption = itoa(player->life);
+    strcpy(player->lifeText->text, caption);
+    free(caption);
 }
 
 
 /** Remove a life to the given player, update display, and out if it's life counter reach zero **/
 void removeLifePlayer(Player * player)
 {
+    char * caption;
     if(player->life == 0)
         return;
 
     player->life--;
-    strcpy(player->lifeText->text, itoa(player->life));
+
+    caption = itoa(player->life);
+    strcpy(player->lifeText->text, caption);
+    free(caption);
 
     if(player->life == 0)
     {

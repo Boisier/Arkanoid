@@ -33,18 +33,28 @@ void freeNumberBox(NumberBox * nBox)
 
 void incrementNumberBox(NumberBox * nBox)
 {
+	char * caption;
+
     if(nBox->value >= nBox->max)
 		return;
 
     nBox->value++;
-	strcpy(nBox->display->text, itoa(nBox->value));
+
+	caption = itoa(((NumberBox*)nBox)->value);
+	strcpy(nBox->display->text, caption);
+	free(caption);
 }
 
 void decrementNumberBox(NumberBox * nBox)
 {
+	char * caption;
+
     if(((NumberBox*)nBox)->value <= ((NumberBox*)nBox)->min)
 		return;
 
     ((NumberBox*)nBox)->value--;
-	strcpy(((NumberBox*)nBox)->display->text, itoa(((NumberBox*)nBox)->value));
+
+	caption = itoa(((NumberBox*)nBox)->value);
+	strcpy(((NumberBox*)nBox)->display->text, caption);
+	free(caption);
 }
