@@ -87,11 +87,11 @@ void initGame()
     srand(time(NULL));   /*Init rand*/
 }
 
+    Uint32 startTime, elapsedTime;
+
 /** Main loop of the app**/
 void theLoop()
 {
-    Uint32 startTime, elapsedTime;
-    
     while(gameObj.gameState != EXITING) 
     {
         startTime = SDL_GetTicks();
@@ -141,7 +141,7 @@ void mainMenu()
 
     if(gameObj.printContent != MAINMENU)
     {
-        gameObj.defaultFont = loadFont("8BIT.ttf", 40);
+        gameObj.defaultFont = loadFont("BebasNeue.otf", 40);
         cleanToPrint();
         createMainMenu();
         return;
@@ -152,12 +152,18 @@ void mainMenu()
     /*Do something with the callback*/
     if(callback == 's')
     {
+        /*jouer son ici*/
         gameObj.gameState = PLAYERSELECTION;
     }
 
     if(callback == 't')
     {
         gameObj.gameState = THEMESELECTION;
+    }
+
+    if(callback == 'q')
+    {
+        gameObj.gameState = EXITING;
     }
 }
 

@@ -7,6 +7,9 @@
 /** Init gameObj with default values **/
 void initGame();
 
+/** Init audio **/
+void audio_init();
+
 /** Main loop of the app**/
 void theLoop();
 

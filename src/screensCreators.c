@@ -4,11 +4,11 @@
 void createMainMenu()
 {
     Picture * background;
-    Button * playBtn, * rulesBtn, * themeBtn;
+    Button * playBtn, * rulesBtn, * themeBtn, * quitBtn;
 
-    background = createPicture(0, 0, "background.png");
+    background = createPicture(0, 0, "home.jpg");
 
-    playBtn = createButton(0, -78, 342, 52, 's');                /*'s' for start*/
+    playBtn = createButton(-370, -90, 342, 52, 's');                /*'s' for start*/
     playBtn->idleTexture = getTexture("playBtn_idle.png");
     playBtn->selectedTexture = getTexture("playBtn_selected.png");
     playBtn->state = SELECTED;
@@ -18,20 +18,28 @@ void createMainMenu()
     rulesBtn->selectedTexture = getTexture("rulesBtn_selected.png");
     rulesBtn->state = IDLE;
 
-    themeBtn = createButton(0, -311, 342, 52, 't');              /*'t' for themes*/
+    themeBtn = createButton(-370, -240, 342, 52, 't');              /*'t' for themes*/
     themeBtn->idleTexture = getTexture("themeBtn_idle.png");
     themeBtn->selectedTexture = getTexture("themeBtn_selected.png");
     themeBtn->state = IDLE;
+
+    quitBtn = createButton(-370, -315, 342, 52, 'q');              /*'q' for quit*/
+    quitBtn->idleTexture = getTexture("quitBtn_idle.png");
+    quitBtn->selectedTexture = getTexture("quitBtn_selected.png");
+    quitBtn->state = IDLE;
 
     playBtn->bottomBtn = rulesBtn;
     rulesBtn->topBtn = playBtn;
     rulesBtn->bottomBtn = themeBtn;
     themeBtn->topBtn = rulesBtn;
+    themeBtn->bottomBtn = quitBtn;
+    quitBtn->topBtn = themeBtn;
 
     addToPrint(background, PICTURE);
     addToPrint(playBtn, BUTTON);
     addToPrint(rulesBtn, BUTTON);
     addToPrint(themeBtn, BUTTON);
+    addToPrint(quitBtn, BUTTON);
 
     gameObj.printContent = MAINMENU;
     gameObj.currentlySelectedBtn = playBtn;
