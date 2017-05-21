@@ -4,9 +4,6 @@ int main(int argc, char** argv)
 {
     /*Init the GameObj*/
     initGame();
-
-    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
-    audio_init();
     
     /*Open the window*/
     if(!createWindow())
