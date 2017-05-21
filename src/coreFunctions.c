@@ -506,6 +506,7 @@ void removeLifePlayer(Player * player)
         {
             /*ENd of the game*/
             gameObj.gameState = ENDGAME;
+            gameObj.game.play = false;
             return;
         }
 

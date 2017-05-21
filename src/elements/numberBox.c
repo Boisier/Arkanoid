@@ -11,7 +11,7 @@ NumberBox * createNumberBox(int x, int y, int width, int height, int value, int 
 
 	/*Create text*/
 	caption = itoa(value);
-	nBox->display = createText(caption, x, y - 17, gameObj.defaultFont);
+	nBox->display = createText(caption, x, y - 14, gameObj.defaultFont);
 	free(caption);
 
 	/*Create the button*/

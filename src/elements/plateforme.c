@@ -48,7 +48,7 @@ void printPlateforme(Plateforme * plateforme)
 	{
 		glBegin(GL_LINE_LOOP);
 
-			/*glVertex2f(0                , 0);*/
+			glVertex2f(0                , 0);
 			glVertex2f(gameObj.game.bb.width / 2, gameObj.game.bb.height);
 			glVertex2f(-gameObj.game.bb.width / 2, gameObj.game.bb.height);
 

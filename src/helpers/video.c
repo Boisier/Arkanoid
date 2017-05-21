@@ -32,7 +32,7 @@ bool createWindow()
     SDL_WM_SetCaption("Arkanopong", NULL);
 
     /**Init AUdio**/
-    audio_init();
+    /*audio_init();*/
 
 	return true;
 }
