@@ -41,6 +41,7 @@ void printScreen()
         consolidateToPrint();
 }
 
+
 /** Add an element to the toPrint array **/
 PrintElement * addToPrint(void * element, enum elType type)
 {
@@ -88,6 +89,7 @@ PrintElement * addToPrint(void * element, enum elType type)
     return &gameObj.toPrint[gameObj.nbrToPrint-1];       
 }
 
+
 /** Empty the toPrint array **/
 void cleanToPrint()
 {
@@ -106,6 +108,7 @@ void cleanToPrint()
         gameObj.nbrToPrint = 0;                                     
     }
 }
+
 
 /** Delete an element **/
 void deleteElement(PrintElement el)

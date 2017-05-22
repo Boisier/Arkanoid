@@ -1,5 +1,6 @@
 #include "../../includes/game.h"
 
+/** Detect a collision between a sphere and a polygon **/
 Collision circleRectCollision(Circle circle, Polygon * poly)
 {
 	Collision col;
@@ -11,6 +12,7 @@ Collision circleRectCollision(Circle circle, Polygon * poly)
 	col.side = NO_COLLISION;
 	col.delta = 0;
 
+	/*For each point of the polygon*/
 	for(i = 0; i < poly->nbrPoints; ++i)
 	{	
 		vertex = poly->points[i];

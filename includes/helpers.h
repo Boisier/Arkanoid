@@ -84,7 +84,7 @@ void setTheme(int themeID);
 /** COLLISIONS **/
 /****************/
 
-/** Detect a collision between a sphere and a rect **/
+/** Detect a collision between a sphere and a polygon **/
 Collision circleRectCollision(Circle circle, Polygon * poly);
 
 

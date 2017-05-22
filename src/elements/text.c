@@ -21,6 +21,7 @@ Text * createText(char * caption, float x, float y, Font * font)
 	return txt;
 }
 
+
 /** Print the given Text at proper location **/
 void printText(Text * txt)
 {
@@ -39,7 +40,7 @@ void printText(Text * txt)
 		}
 
 		if(txt->align == ALIGN_CENTER)
-			startX = - width / 2;
+			startX = - width * .5;
 		else
 			startX = - width;
 	}
@@ -87,6 +88,7 @@ void printText(Text * txt)
 
 	glDisable(GL_TEXTURE_2D);
 }
+
 
 /** Free the given Text element. The font is NOT free-ed **/
 void freeText(Text * text)

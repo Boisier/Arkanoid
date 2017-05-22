@@ -64,6 +64,7 @@ GLuint getTexture(char * imagePath)
 	return * texture; /*Return the texture ID*/
 }
 
+
 /** Return the image format to use with openGL **/
 GLenum getImageFormat(SDL_Surface * image)
 {
@@ -83,6 +84,7 @@ GLenum getImageFormat(SDL_Surface * image)
 			return 0;
 	}
 }
+
 
 /** Add one more texture slot to store **/
 GLuint * addTextureSlot(char * path)
@@ -136,6 +138,7 @@ void getTextureDimensions(GLuint texture, int * width, int * height)
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+
 /** Free all textures **/
 void freeTextures()
 {
@@ -157,6 +160,8 @@ void freeTextures()
     gameObj.nbrTextures = 0;
 }
 
+
+/** Set the given themeID as current thelme **/
 void setTheme(int themeID)
 {
 	FolderContent * themesFolder;

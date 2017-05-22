@@ -56,6 +56,7 @@ static enum Properties propKey(char * prop);
 
 
 
+
 /** Init game properties and dependancies with default values **/
 void initGame()
 {   
@@ -69,6 +70,7 @@ void initGame()
 
     loadSDLDependants();
 }
+
 
 
 
@@ -170,7 +172,7 @@ bool loadDynProps()
 	/*Parse JSON*/
 	nbrProps = jsmn_parse(&p, props, strlen(props), t, sizeof(t)/sizeof(t[0]));
 	
-	/*printf("> parsing %d properties\n", (nbrProps - 1) / 2);*/
+	/*printf("> parsing %d properties\n", (nbrProps - 1) * .5);*/
 
 	if(nbrProps < 0)
 		return false; /*Error in json*/
@@ -273,7 +275,7 @@ void loadStaticProps()
     gameObj.game.nbrPlayers = 0;
     gameObj.game.players = NULL;
 
-    gameObj.defautlTextColor = vec3(1, 1, 1);
+    gameObj.defaultTextColor = vec3(1, 1, 1);
     gameObj.selectedTextColor = vec3(0, 61.0/255.0, 81.0/255.0);
 
     gameObj.game.play = false;
@@ -298,7 +300,7 @@ bool initSDL()
         fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");
         return false;
     }
-
+	
     setVideoMode(gameObj.wWidth, gameObj.wHeight);
 
     SDL_WM_SetCaption("Arkanopong", NULL);

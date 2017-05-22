@@ -39,8 +39,8 @@ void printBonus(Bonus * bonus)
 
 	size = gameObj.defVal.bonus.size;
 
-	x = bonus->x - size / 2;
-	y = bonus->y - size / 2;
+	x = bonus->x - size * .5;
+	y = bonus->y - size * .5;
 
 	angle = bbAngle(bonus->BBox);
 
@@ -71,6 +71,7 @@ void freeBonus(Bonus * bonus)
 	bonus = NULL;
 }
 
+
 /** Build a circle for the given bonus**/
 Circle getBonusCircle(Bonus * bonus)
 {
@@ -79,7 +80,7 @@ Circle getBonusCircle(Bonus * bonus)
 	circ.BBox = bonus->BBox;
 	circ.position.x = bonus->x;
 	circ.position.y = bonus->y;
-	circ.radius = gameObj.defVal.bonus.size / 2;
+	circ.radius = gameObj.defVal.bonus.size * .5;
 
 	return circ;
 }
@@ -150,6 +151,7 @@ bool bonusCollisions(Bonus * bonus)
 	return true;
 }
 
+
 /** Apply the effect of the given bonus **/
 void applyBonus(Bonus * bonus)
 {
@@ -172,12 +174,12 @@ void applyBonus(Bonus * bonus)
 			
 			if(bonus->type == WIDE_PLATEFORME)
 			{
-				offset = (gameObj.defVal.plateforme.wideSize - gameObj.game.players[bonus->BBox]->plateforme->size) / 2;
+				offset = (gameObj.defVal.plateforme.wideSize - gameObj.game.players[bonus->BBox]->plateforme->size) * .5;
 				gameObj.game.players[bonus->BBox]->plateforme->size = gameObj.defVal.plateforme.wideSize;
 			}
 			else
 			{
-				offset = (gameObj.defVal.plateforme.narrowSize - gameObj.game.players[bonus->BBox]->plateforme->size) / 2;
+				offset = (gameObj.defVal.plateforme.narrowSize - gameObj.game.players[bonus->BBox]->plateforme->size) * .5;
 				gameObj.game.players[bonus->BBox]->plateforme->size = gameObj.defVal.plateforme.narrowSize;
 			}
 
@@ -213,4 +215,3 @@ void applyBonus(Bonus * bonus)
 		default: break;
 	}
 }
-

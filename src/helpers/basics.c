@@ -47,11 +47,13 @@ float percent(float percent, char direction)
         return 0;
 }
 
+
 /** Return the higher value between a and b **/
 float fmax(float a, float b)
 {
 	return a > b ? a : b;
 }
+
 
 /** Return the lower value between a and b **/
 float fmin(float a, float b)
@@ -59,11 +61,13 @@ float fmin(float a, float b)
 	return a < b ? a : b;
 }
 
+
 /** Clamp value between min and max **/
 float clamp(float value, float min, float max)
 {
 	return fmax(min, fmin(value, max));
 }
+
 
 /** Convert an int to a string **/
 char * itoa(int val)
@@ -74,6 +78,7 @@ char * itoa(int val)
     return caption;
 }
 
+/** Free a polygon **/
 void freePolygon(Polygon * poly)
 {
     free(poly->points);
@@ -97,4 +102,3 @@ void freePlayers()
     gameObj.game.players = NULL;
     gameObj.game.nbrPlayers = 0;
 }
-

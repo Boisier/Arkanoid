@@ -29,20 +29,22 @@ Ball * createBall(float posX, float posY, int playerID, int BBox)
 	return ball;
 }
 
-/** Create a new ball already glued to a plat*/
+
+/** Create a new ball already glued to a plateforme **/
 Ball * createGluedBall(float posX, float posY, int playerID)
 {
 	Ball * ball = createBall(0, 0, playerID, playerID);
 
 	ball->glued = true;
 	ball->gluedPlat = gameObj.game.players[playerID]->plateforme;
-	ball->glueOffsetX = ball->gluedPlat->size / 2;
+	ball->glueOffsetX = ball->gluedPlat->size * .5;
 	ball->gluedAt = (int)SDL_GetTicks();
 
 	return ball;
 }
 
-/** Reset the bll position and state **/
+
+/** Reset the ball position and state **/
 void resetBall(Ball * ball)
 {
 	ball->x = 0;
@@ -52,7 +54,7 @@ void resetBall(Ball * ball)
 
 	ball->glued = true;
 	ball->gluedPlat = gameObj.game.players[ball->playerID]->plateforme;
-	ball->glueOffsetX = ball->gluedPlat->size / 2;
+	ball->glueOffsetX = ball->gluedPlat->size * .5;
 	ball->gluedAt = (int)SDL_GetTicks();
 
 	ball->direction.x = 0;
@@ -62,6 +64,7 @@ void resetBall(Ball * ball)
 	ball->bonus = NONE;
 	ball->bonusEnd = 0;
 }
+
 
 /** Print the ball on the screen**/
 void printBall(Ball * ball)
@@ -74,12 +77,12 @@ void printBall(Ball * ball)
 	if(ball->glued)
 	{
 		/*Get ball position based on the plateforme position*/
-		ball->y = ball->gluedPlat->y - ball->size / 2;
+		ball->y = ball->gluedPlat->y - ball->size * .5;
 		ball->x = ball->gluedPlat->x + ball->glueOffsetX;
 	}
 
-	x = ball->x - ball->size / 2;
-	y = ball->y + ball->size / 2;
+	x = ball->x - ball->size * .5;
+	y = ball->y + ball->size * .5;
 
 	angle = bbAngle(ball->BBox);
 
@@ -102,12 +105,14 @@ void printBall(Ball * ball)
 	glDisable(GL_TEXTURE_2D);
 }
 
+
 /** Free the ball, the texture is not free-ed **/
 void freeBall(Ball * ball)
 {
 	free(ball);
 	ball = NULL;
 }
+
 
 /** Build a circle for the given ball**/
 Circle getBallCircle(Ball * ball)
@@ -117,11 +122,13 @@ Circle getBallCircle(Ball * ball)
 	circ.BBox = ball->BBox;
 	circ.position.x = ball->x;
 	circ.position.y = ball->y;
-	circ.radius = ball->size / 2;
+	circ.radius = ball->size * .5;
 
 	return circ;
 }
 
+
+/** Try to unglue the ball from it's plateforme **/
 void unglueBall(Ball * ball)
 {
 	bool actionKey = false;
@@ -143,7 +150,7 @@ void unglueBall(Ball * ball)
 		else /*if(gameObj.game.players[ball->BBox]->controls == 2)*/
 			actionKey = gameObj.keys.b;
 	}
-	else if(rand() % 100 == 0)
+	else if(rand() % 50 == 0)
 	{
 		/*AI*/
 		actionKey = true;
@@ -157,7 +164,7 @@ void unglueBall(Ball * ball)
 		
 		/*Let's calculate ball start angle and velocity*/
 		speedFactor = platSpeedFactor(plat);
-		relAngle = gameObj.defVal.ball.maxAngle / 2 * speedFactor;
+		relAngle = gameObj.defVal.ball.maxAngle * .5 * speedFactor;
 		startAngle = relAngle * plat->dirFactor;
 
 		setBallDirection(ball, startAngle);
@@ -172,6 +179,7 @@ void unglueBall(Ball * ball)
 		ball->glued = false;
 	}
 }
+
 
 /** Move the ball along its direction. Bounce on screen sides*/
 void moveBall(Ball * ball)
@@ -194,6 +202,8 @@ void moveBall(Ball * ball)
 		ball->direction.x *= -1;
 }
 
+
+/** Update the ball BBox to it's new one **/
 void updateBallBBox(Ball * ball)
 {
 	Vector2D ballPos;
@@ -217,7 +227,8 @@ void updateBallBBox(Ball * ball)
 	}
 }
 
-/** Check if the ball is lost, return playerID who lost it*/
+
+/** Check if the ball is lost, return the playerID who lost it*/
 bool ballLost(Ball * ball, int * player)
 {
 	if(ball->y > gameObj.game.bb.height)
@@ -229,6 +240,7 @@ bool ballLost(Ball * ball, int * player)
 
 	return false;
 }
+
 
 /** Check for ball collisions **/
 void ballCollisions(Ball * ball)
@@ -304,6 +316,7 @@ void ballCollisions(Ball * ball)
 	}
 }
 
+
 /**Handle ball collision with plateforme **/
 void ballPlateformeCollision(Ball * ball, Plateforme * plat, Collision col)
 {
@@ -348,7 +361,7 @@ void ballPlateformeCollision(Ball * ball, Plateforme * plat, Collision col)
 
 			/*Update ball direction based on collision point*/
 			colPosPerc = (col.point.x - plat->x) / plat->size;
-			angle = (gameObj.defVal.ball.maxAngle * colPosPerc) - (gameObj.defVal.ball.maxAngle / 2);
+			angle = (gameObj.defVal.ball.maxAngle * colPosPerc) - (gameObj.defVal.ball.maxAngle * .5);
 
 			setBallDirection(ball, angle);
 			
@@ -490,12 +503,14 @@ void ballBrickCollision(Ball * ball, Brick * brick, Polygon * brickPoly, Collisi
 	brickHit(brick, brickID);
 }
 
+
 /** Set ball direction from a given angle **/
 void setBallDirection(Ball * ball, float angle)
 {
 	ball->direction.x = sin(angle / DEGTORAD);
 	ball->direction.y = cos(angle / DEGTORAD);
 }
+
 
 /** Update bonus for the given ball **/
 void updateBallBonus(Ball * ball)
@@ -507,7 +522,7 @@ void updateBallBonus(Ball * ball)
 		ball->bonus = NONE;
 		ball->bonusEnd = 0;
 
-		offset = (ball->size - gameObj.defVal.ball.size) / 2;
+		offset = (ball->size - gameObj.defVal.ball.size) * .5;
 
 		ball->size = gameObj.defVal.ball.size;
 		ball->x += offset;

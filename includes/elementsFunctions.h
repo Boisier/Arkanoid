@@ -192,9 +192,6 @@ void applyBonus(Bonus * bonus);
 /*Create one button with the numberbox texture, add a text element on top, and link interactions between the two*/
 NumberBox * createNumberBox(int x, int y, int width, int height, int value, int min, int max);
 
-/*Print the numberBox*/
-void printNumberBox(NumberBox * nBox);
-
 /*Free the number box, the button and the text are not free-ed*/
 void freeNumberBox(NumberBox * nBox);
 
@@ -225,7 +222,7 @@ void freeText(Text * text);
 /** TEXT **/
 /**********/
 
-/** Create an animation for the specified target value **/
+/** Create an animation for the specified target **/
 void createIntAnimation(int * target, float startVal, float endVal, float duration, float delay, enum animationType easing, void (*callback)());
 void createFloatAnimation(float * target, float startVal, float endVal, float duration, float delay, enum animationType easing, void (*callback)());
 

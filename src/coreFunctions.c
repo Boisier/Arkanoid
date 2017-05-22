@@ -48,6 +48,7 @@ void watcher()
     }
 }
 
+
 /** Handle menu interactions **/
 char btnHandler()
 {
@@ -83,7 +84,7 @@ char btnHandler()
         gameObj.currentlySelectedBtn = btn->topBtn;
 
         if(btn->isNumberBox)
-            btn->text->color = gameObj.defautlTextColor;
+            btn->text->color = gameObj.defaultTextColor;
 
         if(btn->topBtn->isNumberBox)
             btn->topBtn->text->color = gameObj.selectedTextColor;
@@ -101,7 +102,7 @@ char btnHandler()
         gameObj.currentlySelectedBtn = btn->bottomBtn;
 
         if(btn->isNumberBox)
-            btn->text->color = gameObj.defautlTextColor;
+            btn->text->color = gameObj.defaultTextColor;
 
         if(btn->bottomBtn->isNumberBox)
             btn->bottomBtn->text->color = gameObj.selectedTextColor;
@@ -137,13 +138,14 @@ char btnHandler()
 	return 0;
 }
 
+
 /**Define the playable area for each player**/
 void defineBoundingBox()
 {
     Vector2D A, B, middle;
 
     /*Size of a bounding box*/
-    gameObj.game.bb.radius = gameObj.wHeight / 2;
+    gameObj.game.bb.radius = gameObj.wHeight * .5;
 
     /*The display style is different if there is only 2 players*/
     if(gameObj.game.nbrPlayers == 2)
@@ -154,8 +156,8 @@ void defineBoundingBox()
         gameObj.game.bb.startAngle = 180;
         gameObj.game.bb.width = gameObj.wWidth;
         gameObj.game.bb.height = gameObj.game.bb.radius;
-        gameObj.game.bb.platMinPos = - gameObj.wWidth / 2;
-        gameObj.game.bb.platMaxPos = gameObj.wWidth / 2;
+        gameObj.game.bb.platMinPos = - gameObj.wWidth * .5;
+        gameObj.game.bb.platMaxPos = gameObj.wWidth * .5;
         return;
     }
 
@@ -173,20 +175,15 @@ void defineBoundingBox()
     gameObj.game.bb.width = norm(subVector(B, A));
 
     /*Get the height of the bounding box*/
-    middle.x = (A.x + B.x) / 2;
-    middle.y = (A.y + B.y) / 2;
+    middle.x = (A.x + B.x) * .5;
+    middle.y = (A.y + B.y) * .5;
 
     gameObj.game.bb.height = sqrt((middle.x * middle.x) + (middle.y * middle.y));
 
     /**Store more data that will be used frequently**/
-    gameObj.game.bb.platMinPos = - bbWidthAt(gameObj.defVal.plateforme.level) / 2;
-    gameObj.game.bb.platMaxPos = bbWidthAt(gameObj.defVal.plateforme.level) / 2;
+    gameObj.game.bb.platMinPos = - bbWidthAt(gameObj.defVal.plateforme.level) * .5;
+    gameObj.game.bb.platMaxPos = bbWidthAt(gameObj.defVal.plateforme.level) * .5;
 }
-
-
-
-
-
 
 
 /** Handle movement of the players **/
@@ -215,7 +212,7 @@ void playerMovements()
             /*AI*/
             closest = closestBall(player->plateforme);
 
-            plateCenterX = player->plateforme->x + player->plateforme->size / 2;
+            plateCenterX = player->plateforme->x + player->plateforme->size * .5;
 
             if(closest.position.x > plateCenterX + 25)
             {
@@ -331,6 +328,7 @@ void playerMovements()
     }
 }
 
+
 /** Handle movement of the balls **/
 void ballMovements()
 {
@@ -382,6 +380,7 @@ void ballMovements()
         ballCollisions(ball);
     }
 }
+
 
 /**Create the bricks for the level*/
 void createBricks(char * levelName)
@@ -474,6 +473,7 @@ void bonusMovements()
 
 }
 
+
 /** Add a life to the given player and update display **/
 void addLifePlayer(Player * player)
 {
@@ -526,4 +526,3 @@ void removeLifePlayer(Player * player)
         createFloatAnimation(&player->lifeText->opacity, 1.0, 0.0, 1000, 0, QUAD, NULL);
     }
 }
-

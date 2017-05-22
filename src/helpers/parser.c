@@ -53,6 +53,7 @@ FolderContent * parseFolder(char * folderPath)
 	return content;
 }
 
+
 /** Close and free a FolderContent **/
 void closeFolder(FolderContent * folder)
 {

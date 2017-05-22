@@ -2,18 +2,6 @@
 
 /** First things first, let's get the libraries **/
 
-/*SDL*/
-#include <SDL/SDL.h>
-#include <SDL/SDL_image.h>
-
-/*OpenGL*/
-#include <GL/gl.h>
-#include <GL/glu.h>
-
-/*FreeType Lybrary*/
-#include <ft2build.h>
-#include FT_FREETYPE_H  
-
 /*Standard libraries*/
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,6 +12,18 @@
 #include <dirent.h>
 #include <sys/types.h>
 #include <errno.h>
+
+/*SDL*/
+#include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
+
+/*OpenGL*/
+#include <GL/gl.h>
+#include <GL/glu.h>
+
+/*FreeType Library*/
+#include <ft2build.h>
+#include FT_FREETYPE_H  
 
 /*Third party libraries*/
 #include "lib/jsmn.h"

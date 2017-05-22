@@ -1,5 +1,6 @@
 #include "../../includes/game.h"
 
+/*Create one button with the numberbox texture, add a text element on top, and link interactions between the two*/
 NumberBox * createNumberBox(int x, int y, int width, int height, int value, int min, int max)
 {
 	NumberBox * nBox = allocate(sizeof(NumberBox));
@@ -25,12 +26,16 @@ NumberBox * createNumberBox(int x, int y, int width, int height, int value, int 
 	return nBox;
 }
 
+
+/*Free the number box, the button and the text are not free-ed*/
 void freeNumberBox(NumberBox * nBox)
 {
 	free(nBox);
 	nBox = NULL;
 }
 
+
+/*Increment by one the number box, and update it's text*/
 void incrementNumberBox(NumberBox * nBox)
 {
 	char * caption;
@@ -45,6 +50,8 @@ void incrementNumberBox(NumberBox * nBox)
 	free(caption);
 }
 
+
+/*Decrement by one the number box, and update it's text*/
 void decrementNumberBox(NumberBox * nBox)
 {
 	char * caption;

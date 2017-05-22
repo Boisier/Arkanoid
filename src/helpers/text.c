@@ -55,6 +55,7 @@ Font * loadFont(char * fontName, int size)
 	return font;
 }
 
+
 /** Generate the asked character for the given face **/
 Character getCharacter(FT_Face face, int charID)
 {
@@ -100,6 +101,7 @@ Character getCharacter(FT_Face face, int charID)
 
 	return character;
 }
+
 
 /** Free the given font **/
 void freeFont(Font * font)

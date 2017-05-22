@@ -64,6 +64,7 @@ Brick * createBrick(float Xpos, float level, int type, int BBox)
 	return brick;
 }
 
+
 /** Print the brick on the screen on the correct BBox*/
 void printBrick(Brick * brick)
 {
@@ -94,12 +95,14 @@ void printBrick(Brick * brick)
 	glDisable(GL_TEXTURE_2D);
 }
 
+
 /** Free the brick element, the texture is NOT free-ed **/
 void freeBrick(Brick * brick)
 {
 	free(brick);
 	brick = NULL;
 }
+
 
 /** Generate a polygon for the given brick **/
 Polygon * getBrickPolygon(Brick * brick)
@@ -120,6 +123,7 @@ Polygon * getBrickPolygon(Brick * brick)
 	
 	return poly;
 }
+
 
 /** Handle a hit made to a brick*/
 void brickHit(Brick * brick, int brickID)

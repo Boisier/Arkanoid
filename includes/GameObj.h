@@ -1,5 +1,8 @@
 #pragma once
 
+/** The game object (GameObj) is a global structure holding informations.
+    These are informations used by multiple functions throughout the application.
+    Using one big global structure prevent having to pass it to each function, lightening up the code **/
 typedef struct _GameObj
 {
     /** Window Properties **/
@@ -56,7 +59,7 @@ typedef struct _GameObj
 
     } defVal;
 
-    /** Loop storage **/
+    /** Current state of the application **/
     GameState gameState;
 
 	/** Textures **/
@@ -72,23 +75,27 @@ typedef struct _GameObj
     /** key watched **/
     KeyPressed keys;
 
-    /** Interactions holders **/
+    /** Menu interactions holder **/
     Button * currentlySelectedBtn;
 
     /** The Game **/
     struct
     {
+        /** ONLINE or LOCAL game ? *TODO* */
         enum gameType type;
 
         bool play;
         bool starting;
+        bool pause;
 
+        /*Players*/
         Player ** players;
         int nbrPlayers;
 
         int humans;
         int computers;
 
+        /*The level*/
         int levelID;
 
         /*Bounding box informations*/
@@ -111,8 +118,6 @@ typedef struct _GameObj
         } bb; /* bb : short for Bounding Box*/
 
         bool guidelines;
-
-        bool pause;
 
         struct
         {
@@ -138,7 +143,7 @@ typedef struct _GameObj
 
     /* Font */
     Font * defaultFont;
-    Vector3D defautlTextColor;
+    Vector3D defaultTextColor;
     Vector3D selectedTextColor;
 
 } GameObj;

@@ -33,6 +33,7 @@ Wall * createWall(int BBox)
 	return wall;
 }
 
+
 /** Print the wall on the screen on the correct BBox*/
 void printWall(Wall * wall)
 {
@@ -45,8 +46,8 @@ void printWall(Wall * wall)
 		wall->topRight.y--;
 
 		topWidth = bbWidthAt(gameObj.game.bb.height - wall->topLeft.y);
-		wall->topLeft.x = -topWidth/2;
-		wall->topRight.x = topWidth/2;
+		wall->topLeft.x = -topWidth* .5;
+		wall->topRight.x = topWidth* .5;
 	}
 
 	glEnable(GL_TEXTURE_2D);
@@ -69,12 +70,14 @@ void printWall(Wall * wall)
 	glDisable(GL_TEXTURE_2D);
 }
 
+
 /** Free the wall element, the texture is NOT free-ed **/
 void freeWall(Wall * wall)
 {
 	free(wall);
 	wall = NULL;
 }
+
 
 /** Generate a polygon for the given wall **/
 Polygon * getWallPolygon(Wall * wall)

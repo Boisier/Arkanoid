@@ -129,7 +129,6 @@ void createThemeSelection()
 }
 
 
-
 /*Create Mainmenu elements*/
 void createPlayerSelection()
 {
@@ -288,7 +287,7 @@ void createGameBoard()
     for(i = 0; i < gameObj.game.nbrPlayers; ++i)
     {
         /*Add a life counter*/
-        life = createPicture(gameObj.game.bb.width / 2 - 25, gameObj.game.bb.height + 25, "life.png");
+        life = createPicture(gameObj.game.bb.width * .5 - 25, gameObj.game.bb.height + 25, "life.png");
         life->height = 40;
         life->width = 40;
         life->BBox = i;
@@ -296,14 +295,14 @@ void createGameBoard()
 
         if(gameObj.game.bb.squared)
         {
-            life->x = -gameObj.game.bb.width / 2 + 35;
+            life->x = -gameObj.game.bb.width * .5 + 35;
             life->y = gameObj.game.bb.height - 105;
         }
         
         addToPrint(life, PICTURE);
 
         caption = itoa(gameObj.game.players[i]->life);
-        txt = createText(caption, gameObj.game.bb.width / 2 - 75, gameObj.game.bb.height + 10, gameObj.defaultFont);
+        txt = createText(caption, gameObj.game.bb.width * .5 - 75, gameObj.game.bb.height + 10, gameObj.defaultFont);
         txt->BBox = i;
         gameObj.game.players[i]->lifeText = txt;
 
@@ -311,7 +310,7 @@ void createGameBoard()
 
         if(gameObj.game.bb.squared)
         {
-            txt->x = -gameObj.game.bb.width / 2 + 35;
+            txt->x = -gameObj.game.bb.width * .5 + 35;
             txt->y = gameObj.game.bb.height - 75;
         }
 
@@ -347,6 +346,8 @@ void createGameBoard()
     closeFolder(levelFolder);
 }
 
+
+/** Create the pause menu*/
 void createPauseMenu()
 {
     Picture * pauseBackground;
@@ -377,6 +378,8 @@ void createPauseMenu()
     createFloatAnimation(&quitBtn->opacity, 0.0, 1.0, 500, 0, QUAD, NULL);
 }
 
+
+/** Create the start game countdown animation **/
 void createStartGameAnimation()
 {
     Picture * playerCtrl;

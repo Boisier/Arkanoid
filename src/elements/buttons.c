@@ -26,6 +26,7 @@ Button * createButton(float posX, float posY, float width, float height, char ca
 	return btn;
 }
 
+
 /** Print the given button to the screen **/
 void printButton(Button * btn)
 {
@@ -59,6 +60,7 @@ void printButton(Button * btn)
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_TEXTURE_2D);
 }
+
 
 /** Free the button element, the textures are NOT free-ed **/
 void freeButton(Button * btn)

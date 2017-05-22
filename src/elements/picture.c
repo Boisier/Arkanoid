@@ -22,10 +22,13 @@ Picture * createPicture(float posX, float posY, char * picturePath)
 	return picture;
 }
 
+
+/** Create a new picture element with the given texture **/
 void printPicture(Picture * pict)
 {
 	float angle = 0;
 
+	/*Rotate picture if needed*/
 	if(pict->BBox != -1)
 		angle = bbAngle(pict->BBox);
 
@@ -56,6 +59,7 @@ void printPicture(Picture * pict)
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_TEXTURE_2D);
 }
+
 
 /** Free the picture element, the texture is NOT free-ed **/
 void freePicture(Picture * pict)

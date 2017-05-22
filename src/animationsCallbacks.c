@@ -1,5 +1,9 @@
 #include "../includes/game.h"
 
+/***************************/
+/** Start game animations **/
+/***************************/
+
 void startAnimationTwo()
 {
 	strcpy(gameObj.game.startAnimation.countDown->element.txt->text, "2");

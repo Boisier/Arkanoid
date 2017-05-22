@@ -13,6 +13,7 @@ void createIntAnimation(int * target, float startVal, float endVal, float durati
 	fillAnimation(anim, startVal, endVal, duration, delay, easing, callback);	
 }
 
+
 /** Create an animation for the specified target value **/
 void createFloatAnimation(float * target, float startVal, float endVal, float duration, float delay, enum animationType easing, void (*callback)())
 {
@@ -24,7 +25,8 @@ void createFloatAnimation(float * target, float startVal, float endVal, float du
 	fillAnimation(anim, startVal, endVal, duration, delay, easing, callback);
 }
 
-/** Create an animation for the specified target value **/
+
+/** Fill informations in an animation for the specified target value **/
 void fillAnimation(Animation * anim, float startVal, float endVal, float duration, float delay, enum animationType easing, void (*callback)())
 {
 	anim->easing = easing;
@@ -39,6 +41,7 @@ void fillAnimation(Animation * anim, float startVal, float endVal, float duratio
 
 	anim->holder = addToPrint(anim, ANIMATION);	
 }
+
 
 /** Execute the animation **/
 void animate(Animation * anim)
@@ -73,60 +76,61 @@ void animate(Animation * anim)
 			newVal = c * t / d + b;
 		break;
 		case QUAD:
-			t /= d / 2;
+			t /= d * .5;
 			if(t < 1)
 			{
-				newVal = c / 2 * t * t + b;
+				newVal = c * .5 * t * t + b;
 				break;
 			}
 
 			t--;
-			newVal = -c / 2 * (t * (t - 2) - 1) + b;
+			newVal = -c * .5 * (t * (t - 2) - 1) + b;
 		break;
 		case CUBIC:
-			t /= d / 2;
+			t /= d * .5;
 
 			if (t < 1) 
 			{
-				newVal = c / 2 * t * t * t + b;
+				newVal = c * .5 * t * t * t + b;
 				break;
 			}
 
 			t -= 2;
-			newVal = c / 2 * (t * t * t + 2) + b;
+			newVal = c * .5 * (t * t * t + 2) + b;
 		break;
 		case QUARTIC:
-			t /= d / 2;
+			t /= d * .5;
 
 			if (t < 1) 
 			{
-				newVal = c / 2 * t * t * t * t + b;
+				newVal = c * .5 * t * t * t * t + b;
 				break;
 			}
 
 			t -= 2;
-			newVal = -c / 2 * (t * t * t * t - 2) + b;
+			newVal = -c * .5 * (t * t * t * t - 2) + b;
 		break;
 		case QUINTIC:
-			t /= d / 2;
+			t /= d * .5;
 
 			if (t < 1) 
 			{
-				newVal = c / 2 * t * t * t * t * t + b;
+				newVal = c * .5 * t * t * t * t * t + b;
 				break;
 			}
 
 			t -= 2;
-			newVal = c / 2 * ( t * t * t * t * t + 2) + b;
+			newVal = c * .5 * ( t * t * t * t * t + 2) + b;
 		break;
 	}
 	
-
+	/*Update the value**/
 	if(anim->isInt)
 		* anim->target.i = newVal;
 	else
 		* anim->target.f = newVal;
 }
+
 
 /** Free the given animation **/
 void freeAnimation(Animation * anim)

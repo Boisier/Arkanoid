@@ -11,6 +11,7 @@ Vector2D vec2(float x, float y)
     return vec;
 }
 
+
 /** Create a 3D vector **/
 Vector3D vec3(float x, float y, float z)
 {
@@ -23,6 +24,7 @@ Vector3D vec3(float x, float y, float z)
     return vec;
 }
 
+
 /** Add two vectors **/
 Vector2D addVector(Vector2D A, Vector2D B)
 {
@@ -31,6 +33,7 @@ Vector2D addVector(Vector2D A, Vector2D B)
 
     return A;
 }
+
 
 /** Substract two vectors **/
 Vector2D subVector(Vector2D A, Vector2D B)
@@ -51,11 +54,13 @@ Vector2D multVector(Vector2D A, float factor)
     return A;
 }
 
+
 /** Vector Norm **/
 float norm(Vector2D A)
 {
     return sqrt(normSquared(A));
 }
+
 
 /** Vector Norm squared**/
 float normSquared(Vector2D A)
@@ -63,17 +68,20 @@ float normSquared(Vector2D A)
     return A.x * A.x + A.y * A.y;
 }
 
+
 /** Dot Product **/
 float dotP(Vector2D A, Vector2D B)
 {
     return A.x * B.x + A.y * B.y;
 }
 
+
 /** Angle of the vector*/
 float vectorAngleOrigin(Vector2D vec)
 {
     return atan2(vec.y, vec.x) * DEGTORAD;
 }
+
 
 /** Rotate vector **/
 Vector2D rotateVector(Vector2D vec, float angle)
@@ -84,6 +92,7 @@ Vector2D rotateVector(Vector2D vec, float angle)
 
     return rotated;
 }
+
 
 /** Get point coordinate at the given angle and distance from the origin **/
 void getCoordinatesAngle(float angle, float distance, Vector2D * vec)
@@ -100,6 +109,7 @@ void getCoordinatesAngle(float angle, float distance, Vector2D * vec)
 /** BBOX RELATED FUNCTIONS **/
 /****************************/
 
+/** Return the width of the BB at the given level **/
 float bbWidthAt(float dist)
 {
     if(gameObj.game.bb.squared)
@@ -108,10 +118,13 @@ float bbWidthAt(float dist)
     return ((gameObj.game.bb.height - dist) / gameObj.game.bb.height) * gameObj.game.bb.width;
 }
 
+
+/** Return the angle of the given BBox **/
 float bbAngle(int BBox)
 {
 	return gameObj.game.bb.angle * BBox - gameObj.game.bb.startAngle;
 }
+
 
 /** Tell if the given Ball is inside it's BBox **/
 bool inBBox(Ball * ball)
@@ -126,10 +139,10 @@ bool inBBox(Ball * ball)
     }
 
     /*Barycentric Technique*/
-    A.x = gameObj.game.bb.width / 2;
+    A.x = gameObj.game.bb.width * .5;
     A.y = gameObj.game.bb.height;
 
-    C.x = - gameObj.game.bb.width/2;
+    C.x = - gameObj.game.bb.width* .5;
     C.y = gameObj.game.bb.height;
 
     B.x = ball->x;
@@ -149,6 +162,7 @@ bool inBBox(Ball * ball)
     return u >= 0 && v >= 0 && u + v < 1;
 }
 
+
 /** Rotate the given polygon to the new BBox*/
 void changePolyBBox(Polygon * poly, int BBox)
 {
@@ -166,6 +180,7 @@ void changePolyBBox(Polygon * poly, int BBox)
     poly->BBox = BBox;
 }
 
+
 /** Rotate the given circle to the new BBox*/
 void changeCircleBBox(Circle * circle, int BBox)
 {
@@ -181,6 +196,7 @@ void changeCircleBBox(Circle * circle, int BBox)
     circle->BBox = BBox;
 }
 
+/** Tell if the given BBox is reversed **/
 bool bboxIsReversed(int BBox)
 {
     float angle = bbAngle(BBox);

@@ -20,6 +20,7 @@ Plateforme * createPlateforme(float posX, float posY)
 	return plateforme;
 }
 
+
 /** Print the plateforme on the screen**/
 void printPlateforme(Plateforme * plateforme)
 {	
@@ -49,8 +50,8 @@ void printPlateforme(Plateforme * plateforme)
 		glBegin(GL_LINE_LOOP);
 
 			glVertex2f(0                , 0);
-			glVertex2f(gameObj.game.bb.width / 2, gameObj.game.bb.height);
-			glVertex2f(-gameObj.game.bb.width / 2, gameObj.game.bb.height);
+			glVertex2f(gameObj.game.bb.width * .5, gameObj.game.bb.height);
+			glVertex2f(-gameObj.game.bb.width * .5, gameObj.game.bb.height);
 
 		glEnd();
 	}
@@ -61,12 +62,14 @@ void printPlateforme(Plateforme * plateforme)
 	glDisable(GL_TEXTURE_2D);
 }
 
+
 /** Free the plateforme, the texture is not free-ed **/
 void freePlateforme(Plateforme * plateforme)
 {
 	free(plateforme);
 	plateforme = NULL;
 }
+
 
 /** Generate a polygon for the given plateforme* */
 Polygon * getPlateformePolygon(Plateforme * plat)
@@ -95,11 +98,13 @@ Polygon * getPlateformePolygon(Plateforme * plat)
 	return poly;
 }
 
+
 /** Return the plateforme speed ratio to the max speed */
 float platSpeedFactor(Plateforme * plat)
 {
 	return plat->speed / gameObj.defVal.plateforme.maxSpeed;
 }
+
 
 /** Update bonus for the given plateforme **/
 void updatePlateformeBonus(Plateforme * plate)
@@ -118,6 +123,7 @@ void updatePlateformeBonus(Plateforme * plate)
 	}
 }
 
+
 /** Return the closest ball circle to the plateforme**/
 Circle closestBall(Plateforme * plate)
 {
@@ -129,16 +135,17 @@ Circle closestBall(Plateforme * plate)
 	if(gameObj.game.bb.squared)
 	{
 		refPoint.y = gameObj.game.bb.height;
-		refPoint.x = plate->x + plate->size / 2;
+		refPoint.x = plate->x + plate->size * .5;
 	}
 	else
 	{
-		refPoint.x = plate->x + plate->size / 2;
+		refPoint.x = plate->x + plate->size * .5;
 		refPoint.y = plate->y;
 	}
 
 	closestCircle.position = refPoint;
 
+	/*For each active ball*/
 	for(i = 0; i < gameObj.nbrToPrint; ++i)
 	{
 		if(gameObj.toPrint[i].type != BALL || gameObj.toPrint[i].display == false)

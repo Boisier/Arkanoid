@@ -8,16 +8,21 @@ void theLoop()
     while(gameObj.gameState != EXITING) 
     {
         startTime = SDL_GetTicks();
+
+        /*Clear the screen*/
         glClear(GL_COLOR_BUFFER_BIT);
 
+        /*Execute game actions*/
         doThings();
 
+        /*Print everything on the screen*/
         printScreen();
-
         SDL_GL_SwapBuffers();
 
+        /*Handle SDL events*/
         watcher();
         
+        /*In case we're too fast ;)*/
         elapsedTime = SDL_GetTicks() - startTime;
         if(elapsedTime < FRAMERATE_MILLISECONDS) 
         {
@@ -25,11 +30,13 @@ void theLoop()
         }
     }
     
+    /** Free all used memory **/
     cleanToPrint();
     freeTextures();
     freePlayers();
     freeFont(gameObj.defaultFont);
 }
+
 
 /** Call current game state function **/
 void doThings()
@@ -46,6 +53,7 @@ void doThings()
         default: return;
     }
 }
+
 
 /** Handle the main menu **/
 void mainMenu()
@@ -78,7 +86,6 @@ void mainMenu()
         gameObj.gameState = EXITING;
     }
 }
-
 
 
 /** Theme switch screen **/
@@ -138,6 +145,7 @@ void playerSelection()
     }
 }
 
+
 /** Select the bricks layout **/
 void levelSelection()
 {
@@ -164,6 +172,7 @@ void levelSelection()
     }
 
 }
+
 
 /** Start the game **/
 void startGame()
@@ -222,6 +231,8 @@ void startGame()
 
     /*Create bounding box*/
     defineBoundingBox();
+
+    /*Create players*/
     gameObj.game.players = allocate(sizeof(Player *) * gameObj.game.nbrPlayers);
 
     gameObj.game.humans = 0;
@@ -249,11 +260,12 @@ void startGame()
     gameObj.gameState = INGAME;
 }
 
+
 /** Create a new player **/
 void createPlayer(enum PlayerType type, int playerNbr)
 {   
     /*Define plateforme position*/
-    int platX = 0 - gameObj.defVal.plateforme.size / 2;
+    int platX = 0 - gameObj.defVal.plateforme.size * .5;
     int platY = gameObj.game.bb.height - gameObj.defVal.plateforme.level;
 
     /*Create the player*/
@@ -269,6 +281,7 @@ void createPlayer(enum PlayerType type, int playerNbr)
 
     player->reversed = false;
 }
+
 
 /** Handle ingame events **/
 void ingame()
@@ -327,13 +340,16 @@ void ingame()
 
     bonusMovements();   /*Bonus*/
 }
- /*pause the game*/
+
+
+/*pause the game*/
 void enterPause()
 {
     gameObj.game.pause = true; /*pause the game*/
 
     createPauseMenu();
 }
+
 
 /*Hide the game*/
 void hidePause()
@@ -342,6 +358,7 @@ void hidePause()
     createFloatAnimation(&gameObj.game.pauseMenu.playBtn->element.btn->opacity, 1.0, .0, 500, 0, QUAD, NULL);
     createFloatAnimation(&gameObj.game.pauseMenu.quitBtn->element.btn->opacity, 1.0, .0, 500, 0, QUAD, NULL);
 }
+
 
 /*restarte the game*/
 void quitPause()
@@ -352,6 +369,7 @@ void quitPause()
     gameObj.game.pause = false; /*Unpause the game*/
 }
 
+/* Displauy end game sequence and free memory*/
 void endgame()
 {
     static bool displayed = false;
