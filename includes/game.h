@@ -16,6 +16,7 @@
 /*SDL*/
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
+#include <SDL/SDL_mixer.h>
 
 /*OpenGL*/
 #include <GL/gl.h>

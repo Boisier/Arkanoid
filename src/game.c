@@ -1,10 +1,21 @@
 #include "../includes/game.h"
 
+/* Music */
+Mix_Music *music = NULL;
+
+/* Sounds */
+Mix_Chunk * okSound = NULL;
+Mix_Chunk * backSound = NULL;
+Mix_Chunk * moveSound = NULL;
+
 /** Main loop of the app**/
 void theLoop()
 {
     Uint32 startTime, elapsedTime;
-    
+
+    okSound = Mix_LoadWAV("./themes/default/sounds/ok.wav");
+    backSound = Mix_LoadWAV("./themes/default/sounds/back.wav");
+
     while(gameObj.gameState != EXITING) 
     {
         startTime = SDL_GetTicks();
@@ -34,7 +45,12 @@ void theLoop()
     cleanToPrint();
     freeTextures();
     freePlayers();
+    Mix_FreeChunk(okSound);
+    Mix_FreeChunk(backSound);
+    Mix_FreeChunk(moveSound);
+    Mix_FreeMusic(music);
     freeFont(gameObj.defaultFont);
+    Mix_CloseAudio();
 }
 
 
@@ -72,17 +88,19 @@ void mainMenu()
     /*Do something with the callback*/
     if(callback == 's')
     {
-        /*jouer son ici*/
+        Mix_PlayChannel( -1, okSound, 0 );
         gameObj.gameState = PLAYERSELECTION;
     }
 
     if(callback == 't')
     {
+        Mix_PlayChannel( -1, okSound, 0 );
         gameObj.gameState = THEMESELECTION;
     }
 
     if(callback == 'q')
     {
+        Mix_PlayChannel( -1, backSound, 0 );
         gameObj.gameState = EXITING;
     }
 }
@@ -103,6 +121,7 @@ void themeSelection()
 
     if(callback == 'b')
     {
+        Mix_PlayChannel( -1, backSound, 0 );
         gameObj.gameState = MAINMENU;
         return;
     }
@@ -111,6 +130,7 @@ void themeSelection()
     {
         /*Apply new theme*/
         setTheme(callback);
+        Mix_PlayChannel( -1, okSound, 0 );
         gameObj.gameState = MAINMENU;
     }
 }
@@ -132,6 +152,7 @@ void playerSelection()
 
     if(callback == 'b')
     {
+        Mix_PlayChannel( -1, backSound, 0 );
         gameObj.gameState = MAINMENU;
         return;
     }
@@ -141,6 +162,7 @@ void playerSelection()
         gameObj.game.humans = gameObj.playerSelection.humans->value;
         gameObj.game.computers = gameObj.playerSelection.computers->value;
 
+        Mix_PlayChannel( -1, okSound, 0 );
         gameObj.gameState = LEVELSELECTION;
     }
 }
@@ -162,12 +184,14 @@ void levelSelection()
 
     if(callback == 'b')
     {
+        Mix_PlayChannel( -1, backSound, 0 );
         gameObj.gameState = PLAYERSELECTION;
         return;
     }
     else if(callback == -1 || callback > 0)
     {
         gameObj.game.levelID = callback;
+        Mix_PlayChannel( -1, okSound, 0 );
         gameObj.gameState = STARTGAME;
     }
 
@@ -328,6 +352,7 @@ void ingame()
         if(callback == 'p')   
             hidePause(); /*HideMenu*/
         else if(callback == 'q')
+            Mix_PlayChannel( -1, backSound, 0 );
             gameObj.gameState = PLAYERSELECTION;
 
         return;
