@@ -50,13 +50,11 @@ void createMainMenu()
 void createThemeSelection()
 {
     Picture * background = NULL;
-    Button * tempBtn = NULL, * lastBtn = NULL, * backBtn = NULL;
-    char currentTheme[256], themePath[256];
+    Button * themeArrow = NULL, * lastArrow = NULL, * backBtn = NULL;
+    Text * themeName = NULL;
     int i = 0;
 
     FolderContent * folder = NULL;
-
-    strcpy(currentTheme, gameObj.theme);
 
     /** First, the background*/
     background = createPicture(0, 0, "background.png");
@@ -68,40 +66,35 @@ void createThemeSelection()
     /*For each folder*/
     for(i = 0; i < folder->nbrElements && i < 5; ++i)
     {
-        /*Build path*/
-        strcpy(themePath, "./themes/");
-        strcat(themePath, folder->elements[i]->d_name);
-        strcat(themePath, "/");
+        /*Arrow*/
+        themeArrow = createButton(-250, 200 - 50 * i, 52, 52, i + 1);
+        themeArrow->idleTexture = getTexture("empty.png");
+        themeArrow->selectedTexture = getTexture("rightArrow.png");
 
-        /*Set as current theme*/
-        strcpy(gameObj.theme, themePath);
-
-        /*Create the button*/
-        tempBtn = createButton(0, 300 - 111 * i, 342, 52, i + 1);
-        tempBtn->idleTexture = getTexture("themeSelectorBtn_idle.png");
-        tempBtn->selectedTexture = getTexture("themeSelectorBtn_selected.png");
-        
+        /*Select if first*/
         if(i == 0)
         {
-            tempBtn->state = SELECTED;
-            gameObj.currentlySelectedBtn = tempBtn;
+            themeArrow->state = SELECTED;
+            gameObj.currentlySelectedBtn = themeArrow;
         }
+        
+        /*theme name*/
+        themeName = createText(folder->elements[i]->d_name, -190, 180 - 50 * i, gameObj.defaultFont);
+        themeName->align = ALIGN_LEFT;
 
-        /*Add interactions*/
-        if(lastBtn != NULL)
+        /*Interactions if not the first*/
+        if(lastArrow != NULL)
         {
-            tempBtn->topBtn = lastBtn;
-            lastBtn->bottomBtn = tempBtn;
+            lastArrow->bottomBtn = themeArrow;
+            themeArrow->topBtn = lastArrow;
         }
 
-        addToPrint(tempBtn, BUTTON);
+        /*Add to print*/
+        addToPrint(themeArrow, BUTTON);
+        addToPrint(themeName, TEXT);
 
-        lastBtn = tempBtn;
-        tempBtn = NULL;
-
-        /*Revert to normal*/
-        themePath[0] = '\0';
-        strcpy(gameObj.theme, currentTheme);
+        lastArrow = themeArrow;
+        themeArrow = NULL;
     }
 
     closeFolder(folder);
@@ -119,8 +112,8 @@ void createThemeSelection()
     }
     else
     {
-        backBtn->topBtn = lastBtn;
-        lastBtn->bottomBtn = backBtn;
+        backBtn->topBtn = lastArrow;
+        lastArrow->bottomBtn = backBtn;
     }
 
     addToPrint(backBtn, BUTTON);
