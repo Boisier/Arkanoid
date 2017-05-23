@@ -15,6 +15,7 @@ void theLoop()
 
     okSound = Mix_LoadWAV("./themes/default/sounds/ok.wav");
     backSound = Mix_LoadWAV("./themes/default/sounds/back.wav");
+    moveSound = Mix_LoadWAV("./themes/default/sounds/move.wav");
 
     while(gameObj.gameState != EXITING) 
     {
@@ -83,7 +84,7 @@ void mainMenu()
         return;
     }
 
-    callback = btnHandler();
+    callback = btnHandler(moveSound);
 
     /*Do something with the callback*/
     if(callback == 's')
@@ -117,7 +118,7 @@ void themeSelection()
         createThemeSelection();
     }
 
-    callback = btnHandler();
+    callback = btnHandler(moveSound);
 
     if(callback == 'b')
     {
@@ -148,7 +149,7 @@ void playerSelection()
         return;
     }
 
-    callback = btnHandler();
+    callback = btnHandler(moveSound);
 
     if(callback == 'b')
     {
@@ -180,7 +181,7 @@ void levelSelection()
         return;
     } 
 
-    callback = btnHandler();
+    callback = btnHandler(moveSound);
 
     if(callback == 'b')
     {
@@ -347,7 +348,7 @@ void ingame()
     if(gameObj.game.pause)
     {   
         /*Wait for user actions*/
-        callback = btnHandler();
+        callback = btnHandler(moveSound);
 
         if(callback == 'p')   
             hidePause(); /*HideMenu*/

@@ -31,9 +31,6 @@ bool initSDL();
 /** Load elements depending on the SDL library **/
 void loadSDLDependants();
 
-/** Init audio **/
-void audio_init(); /*TODO*/
-
 
 
 /********************/
@@ -44,7 +41,7 @@ void audio_init(); /*TODO*/
 void watcher();
 
 /** Handle menu interactions **/
-char btnHandler();
+char btnHandler(Mix_Chunk * sound);
 
 /**Define the playable area for each player**/
 void defineBoundingBox();
