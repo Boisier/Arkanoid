@@ -56,6 +56,12 @@ void animate(Animation * anim)
 	{	/*We are after the animation time frame*/
 		anim->holder->display = false; /*Stop executing the animation every frame*/
 
+		/*Update the value to its dest value**/
+		if(anim->isInt)
+			* anim->target.i = anim->endVal;
+		else
+			* anim->target.f = anim->endVal;
+
 		/*Execute callback if needed*/
 		if(anim->callback != NULL)
 			anim->callback();

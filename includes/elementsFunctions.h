@@ -182,6 +182,8 @@ bool bonusCollisions(Bonus * bonus);
 /** Apply the effect of the given bonus **/
 void applyBonus(Bonus * bonus);
 
+void displayBonusText(Bonus * bonus);
+
 
 
 

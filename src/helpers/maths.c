@@ -79,7 +79,7 @@ float dotP(Vector2D A, Vector2D B)
 /** Angle of the vector*/
 float vectorAngleOrigin(Vector2D vec)
 {
-    return atan2(vec.y, vec.x) * DEGTORAD;
+    return atan2(vec.y, vec.x) / DEGTORAD;
 }
 
 
@@ -87,8 +87,8 @@ float vectorAngleOrigin(Vector2D vec)
 Vector2D rotateVector(Vector2D vec, float angle)
 {
     Vector2D rotated;
-    rotated.x = vec.x * cos(angle / DEGTORAD) - vec.y * sin(angle / DEGTORAD);
-    rotated.y = vec.x * sin(angle / DEGTORAD) + vec.y * cos(angle / DEGTORAD);
+    rotated.x = vec.x * cos(angle * DEGTORAD) - vec.y * sin(angle * DEGTORAD);
+    rotated.y = vec.x * sin(angle * DEGTORAD) + vec.y * cos(angle * DEGTORAD);
 
     return rotated;
 }
@@ -97,8 +97,8 @@ Vector2D rotateVector(Vector2D vec, float angle)
 /** Get point coordinate at the given angle and distance from the origin **/
 void getCoordinatesAngle(float angle, float distance, Vector2D * vec)
 {
-    vec->x = sin(angle / DEGTORAD) * distance;
-    vec->y = cos(angle / DEGTORAD) * distance;
+    vec->x = sin(angle * DEGTORAD) * distance;
+    vec->y = cos(angle * DEGTORAD) * distance;
 }
 
 

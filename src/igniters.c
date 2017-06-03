@@ -143,7 +143,7 @@ bool loadDynProps()
 	jsmn_parser p;
 	jsmntok_t t[128]; /* Suppose no more than 128 properties */
 	int nbrProps, i;
-	float fValue;
+	float fValue = 0;
 	enum Properties pp;
 
 	if(file)
@@ -154,7 +154,7 @@ bool loadDynProps()
 		rewind(file);
 		
 		/*Allocate memory and read file*/
-		props = allocate(sizeof(char) * (length + 1));
+		props = allocate(sizeof(char) * (int)(length + 1));
 		if(fread (props, 1, length, file) == 0)
 			return false;
 

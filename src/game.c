@@ -274,6 +274,8 @@ void createPlayer(enum PlayerType type, int playerNbr)
 
     player->type = type;
     player->life = gameObj.defVal.lifeNbr;
+    player->bonusText = NULL;
+    player->currentBonusAnim = NULL;
 
     /*Create the player's plateforme*/
     player->plateforme = createPlateforme(platX, platY);

@@ -19,11 +19,13 @@ void * reAllocate(void * var, int newSize);
 /** return a percentage based on the window size **/
 float percent(float percent, char direction);
 
+#if __linux__
 /** Return the higher value between a and b **/
 float fmax(float a, float b);
 
 /** Return the lower value between a and b **/
 float fmin(float a, float b);
+#endif
 
 /** Clamp value between min and max **/
 float clamp(float value, float min, float max);

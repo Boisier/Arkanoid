@@ -40,6 +40,7 @@ void startAnimationStart()
 void startAnimationEnd()
 {
     gameObj.game.startAnimation.countDown->display = false;
+    gameObj.game.startAnimation.countDown->element.txt->opacity = 0;
 	gameObj.game.play = true;
 	gameObj.game.starting = false;
 }

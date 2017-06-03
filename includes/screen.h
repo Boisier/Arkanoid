@@ -15,6 +15,3 @@ void deleteElement(PrintElement el);
 
 /** Empty the toPrint array **/
 void cleanToPrint();
-
-/** remove deleted element and close the gaps **/
-void consolidateToPrint();
