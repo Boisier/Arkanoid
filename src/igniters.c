@@ -295,7 +295,7 @@ void loadStaticProps()
 /** Init the SDL **/
 bool initSDL()
 {
-    if(-1 == SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)) 
+    if(-1 == SDL_Init(SDL_INIT_VIDEO )) 
     {
         fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");
         return false;
@@ -303,10 +303,13 @@ bool initSDL()
 	
     setVideoMode(gameObj.wWidth, gameObj.wHeight);
 
-    SDL_WM_SetCaption("Arkanopong", NULL);
+	/* Audio initialization */
+	if( Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1 )
+    {
+        return false;
+    }
 
-    /**Init AUdio**/
-    /*audio_init();*/
+    SDL_WM_SetCaption("Arkanopong", NULL);
 
 	return true;
 }

@@ -50,7 +50,7 @@ void watcher()
 
 
 /** Handle menu interactions **/
-char btnHandler()
+char btnHandler(Mix_Chunk * sound)
 {
 	Button * btn;
 
@@ -79,6 +79,7 @@ char btnHandler()
 
     if(gameObj.keys.up && btn->topBtn != NULL)
     {
+        Mix_PlayChannel( -1, sound, 0 );
         btn->state = IDLE;
         btn->topBtn->state = SELECTED;
         gameObj.currentlySelectedBtn = btn->topBtn;
@@ -97,6 +98,7 @@ char btnHandler()
     
 	if(gameObj.keys.down && btn->bottomBtn != NULL)
     {
+        Mix_PlayChannel( -1, sound, 0 );
         btn->state = IDLE;
         btn->bottomBtn->state = SELECTED;
         gameObj.currentlySelectedBtn = btn->bottomBtn;
@@ -115,6 +117,8 @@ char btnHandler()
 
     if(gameObj.keys.right && btn->isNumberBox)
     {
+        Mix_PlayChannel( -1, sound, 0 );
+
         /*Increment numberBox*/
         incrementNumberBox(btn->callbackArgument);
 
@@ -126,6 +130,8 @@ char btnHandler()
 
     if(gameObj.keys.left && btn->isNumberBox)
     {
+        Mix_PlayChannel( -1, sound, 0 );
+        
         /*Increment numberBox*/
         decrementNumberBox(btn->callbackArgument);
 
