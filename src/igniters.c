@@ -300,7 +300,7 @@ bool initSDL()
     setVideoMode(gameObj.wWidth, gameObj.wHeight);
 
 	/* Audio initialization */
-	if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 64) == -1 )
+	if( Mix_OpenAudio( 48000, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1 )
     {
         return false;
     }
