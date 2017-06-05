@@ -237,7 +237,6 @@ void displayBonusText(Bonus * bonus)
 
 	if(txt == NULL)
 	{
-		printf("here\n");
 		txt = createText(caption, 0, gameObj.game.bb.height + 10, gameObj.defaultFont);
 		txt->BBox = bonus->BBox;
 

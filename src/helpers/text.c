@@ -3,8 +3,9 @@
 /** Generate a font with it's ASCII characters **/
 Font * loadFont(char * fontName, int size)
 {
-	char path[256];
+	char path[256], testPath[256];
 	int c;
+	struct stat buffer;   
 	Font * font = allocate(sizeof(Font));
 	FT_Library ft;
 	FT_Face face;
@@ -28,7 +29,16 @@ Font * loadFont(char * fontName, int size)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  
 
+	strcpy(testPath, path);
+	strcat(testPath, ".otf");
+
+  	if(stat(testPath, &buffer) == 0)
+		strcat(path, ".otf");
+	else
+		strcat(path, ".ttf");
+
 	/*Load Font*/
+	printf("%s\n", path);
 	if(FT_New_Face(ft, path, 0, &face))
 	{
 		printf("Could not load font : \"%s\"\n", path);

@@ -9,9 +9,7 @@ void printScreen()
 
     /*No need to go further if there's nothing to print*/
     if(gameObj.printContent == EMPTY || gameObj.nbrToPrint == 0)
-        return;
-
-    /** Clean screen ?**/                            
+        return;                          
     
     /*Iterate over all the element of the toPrint array*/
     for(i = 0; i < nbrToPrint; i++)             

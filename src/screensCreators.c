@@ -4,19 +4,14 @@
 void createMainMenu()
 {
     Picture * background;
-    Button * playBtn, * rulesBtn, * themeBtn, * quitBtn;
+    Button * playBtn, * themeBtn, * quitBtn;
 
     background = createPicture(0, 0, "home.jpg");
 
-    playBtn = createButton(-370, -90, 342, 52, 's');                /*'s' for start*/
+    playBtn = createButton(-370, -165, 342, 52, 's');                /*'s' for start*/
     playBtn->idleTexture = getTexture("playBtn_idle.png");
     playBtn->selectedTexture = getTexture("playBtn_selected.png");
     playBtn->state = SELECTED;
-
-    rulesBtn = createButton(-370, -165, 342, 52, 'r');              /*'r' for rules*/
-    rulesBtn->idleTexture = getTexture("rulesBtn_idle.png");
-    rulesBtn->selectedTexture = getTexture("rulesBtn_selected.png");
-    rulesBtn->state = IDLE;
 
     themeBtn = createButton(-370, -240, 342, 52, 't');              /*'t' for themes*/
     themeBtn->idleTexture = getTexture("themeBtn_idle.png");
@@ -28,16 +23,13 @@ void createMainMenu()
     quitBtn->selectedTexture = getTexture("quitBtn_selected.png");
     quitBtn->state = IDLE;
 
-    playBtn->bottomBtn = rulesBtn;
-    rulesBtn->topBtn = playBtn;
-    rulesBtn->bottomBtn = themeBtn;
-    themeBtn->topBtn = rulesBtn;
+    playBtn->bottomBtn = themeBtn;
+    themeBtn->topBtn = playBtn;
     themeBtn->bottomBtn = quitBtn;
     quitBtn->topBtn = themeBtn;
 
     addToPrint(background, PICTURE);
     addToPrint(playBtn, BUTTON);
-    addToPrint(rulesBtn, BUTTON);
     addToPrint(themeBtn, BUTTON);
     addToPrint(quitBtn, BUTTON);
 
@@ -333,7 +325,6 @@ void createGameBoard()
         return; /*Bad folder ID*/
 
     /**Create the bricks for the level*/
-    printf("LEVEL > %s", levelFolder->elements[gameObj.game.levelID - 1]->d_name);
     createBricks(levelFolder->elements[gameObj.game.levelID - 1]->d_name);
 
     closeFolder(levelFolder);
@@ -366,9 +357,9 @@ void createPauseMenu()
     gameObj.game.pauseMenu.playBtn = addToPrint(playBtn, BUTTON);
     gameObj.game.pauseMenu.quitBtn = addToPrint(quitBtn, BUTTON);
 
-    createFloatAnimation(&pauseBackground->opacity, 0.0, .8, 500, 0, QUAD, NULL);
-    createFloatAnimation(&playBtn->opacity, 0.0, 1.0, 500, 0, QUAD, NULL);
-    createFloatAnimation(&quitBtn->opacity, 0.0, 1.0, 500, 0, QUAD, NULL);
+    createFloatAnimation(&pauseBackground->opacity, 0.0, .8, 200, 0, QUAD, NULL);
+    createFloatAnimation(&playBtn->opacity, 0.0, 1.0, 200, 0, QUAD, NULL);
+    createFloatAnimation(&quitBtn->opacity, 0.0, 1.0, 200, 0, QUAD, NULL);
 }
 
 
@@ -406,7 +397,7 @@ void createStartGameAnimation()
     countDown = createText("3", 0, 0, gameObj.defaultFont);
     gameObj.game.startAnimation.countDown = addToPrint(countDown, TEXT);
 
-    createFloatAnimation(&countDown->opacity, 1.0, 0.0, 200, 800, QUAD, &startAnimationTwo);
+    createFloatAnimation(&countDown->opacity, 1.0, 0.0, 200, 800, QUAD, &startAnimationA);
     
     gameObj.game.starting = true;
 }

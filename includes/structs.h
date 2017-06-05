@@ -70,6 +70,8 @@ typedef struct _animation
 
 	PrintElement * holder;
 
+	char ID;
+
 	void (*callback)();
 
 } Animation;

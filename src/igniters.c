@@ -171,8 +171,6 @@ bool loadDynProps()
 
 	/*Parse JSON*/
 	nbrProps = jsmn_parse(&p, props, strlen(props), t, sizeof(t)/sizeof(t[0]));
-	
-	/*printf("> parsing %d properties\n", (nbrProps - 1) * .5);*/
 
 	if(nbrProps < 0)
 		return false; /*Error in json*/
@@ -185,8 +183,6 @@ bool loadDynProps()
 
 		strncpy(value, props + t[i+1].start, t[i+1].end - t[i+1].start);
 		value[t[i+1].end - t[i+1].start] = '\0';
-
-		/*printf("> %s %s <\n", key, value);*/
 		
 		pp = propKey(key);
 
@@ -304,7 +300,7 @@ bool initSDL()
     setVideoMode(gameObj.wWidth, gameObj.wHeight);
 
 	/* Audio initialization */
-	if( Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1 )
+	if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 64) == -1 )
     {
         return false;
     }
@@ -319,5 +315,5 @@ bool initSDL()
 /** Load elements depending on the SDL library **/
 void loadSDLDependants()
 {
-    gameObj.defaultFont = loadFont("BebasNeue.otf", 40);
+    gameObj.defaultFont = loadFont("main", 40);
 }

@@ -53,7 +53,8 @@ void animate(Animation * anim)
 		return; /*We are before the animation time frame*/
 		
 	if(SDL_GetTicks() > anim->startTime + anim->duration)
-	{	/*We are after the animation time frame*/
+	{	
+		/*We are after the animation time frame*/
 		anim->holder->display = false; /*Stop executing the animation every frame*/
 
 		/*Update the value to its dest value**/

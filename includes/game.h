@@ -12,6 +12,9 @@
 #include <dirent.h>
 #include <sys/types.h>
 #include <errno.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 /*SDL*/
 #include <SDL/SDL.h>
@@ -21,6 +24,8 @@
 #elif __linux__
     #include <SDL/SDL_image.h>
 #endif
+
+#include <SDL/SDL_mixer.h>
 
 /*OpenGL*/
 #if __APPLE__
