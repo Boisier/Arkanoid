@@ -7,15 +7,11 @@
 void startAnimationA()
 {
 	strcpy(gameObj.game.startAnimation.countDown->element.txt->text, "2");
-    createFloatAnimation(&gameObj.game.startAnimation.countDown->element.txt->opacity, 0.0, 1.0, 200, 0, QUAD, &startAnimationB);
+    createFloatAnimation(&gameObj.game.startAnimation.countDown->element.txt->opacity, 0.0, 1.0, 200, 0, QUAD, NULL);
+    createFloatAnimation(&gameObj.game.startAnimation.countDown->element.txt->opacity, 1.0, 0.0, 200, 1000, QUAD, &startAnimationB);
 }
 
 void startAnimationB()
-{
-    createFloatAnimation(&gameObj.game.startAnimation.countDown->element.txt->opacity, 1.0, 0.0, 200, 800, QUAD, &startAnimationC);
-}
-
-void startAnimationC()
 {
 	int i;
 
@@ -25,15 +21,11 @@ void startAnimationC()
 	}
 
 	strcpy(gameObj.game.startAnimation.countDown->element.txt->text, "1");
-    createFloatAnimation(&gameObj.game.startAnimation.countDown->element.txt->opacity, 0.0, 1.0, 200, 0, QUAD, &startAnimationD);
+    createFloatAnimation(&gameObj.game.startAnimation.countDown->element.txt->opacity, 0.0, 1.0, 200, 0, QUAD, NULL);
+    createFloatAnimation(&gameObj.game.startAnimation.countDown->element.txt->opacity, 1.0, 0.0, 200, 1000, QUAD, &startAnimationC);
 }
 
-void startAnimationD()
-{
-    createFloatAnimation(&gameObj.game.startAnimation.countDown->element.txt->opacity, 1.0, 0.0, 200, 800, QUAD, &startAnimationE);
-}
-
-void startAnimationE()
+void startAnimationC()
 {
 	int i;
 
@@ -45,26 +37,23 @@ void startAnimationE()
 	free(gameObj.game.startAnimation.playersCtrl);
 	
 	strcpy(gameObj.game.startAnimation.countDown->element.txt->text, "GO");
-    createFloatAnimation(&gameObj.game.startAnimation.countDown->element.txt->opacity, 0.0, 1.0, 200, 0, QUAD, &startAnimationF);
+    createFloatAnimation(&gameObj.game.startAnimation.countDown->element.txt->opacity, 0.0, 1.0, 200, 0, QUAD, NULL);
+    createFloatAnimation(&gameObj.game.startAnimation.countDown->element.txt->opacity, 1.0, 0.0, 200, 1000, QUAD, &startAnimationD);
 }
 
-void startAnimationF()
-{
-    createFloatAnimation(&gameObj.game.startAnimation.countDown->element.txt->opacity, 1.0, 0.0, 200, 800, QUAD, &startAnimationG);
-}
-
-void startAnimationG()
+void startAnimationD()
 {
     gameObj.game.startAnimation.countDown->display = false;
-    gameObj.game.startAnimation.countDown->element.txt->opacity = 0.0;
 	gameObj.game.play = true;
 	gameObj.game.starting = false;
 }
 
-
-
-
 void endAnimationA()
+{
+	createFloatAnimation(&gameObj.toPrint[gameObj.nbrToPrint-1]->element.txt->opacity, 1.0, 1.0, 1, 1300, QUAD, &endAnimationB);
+}
+
+void endAnimationB()
 {
 	gameObj.gameState = PLAYERSELECTION;
 }

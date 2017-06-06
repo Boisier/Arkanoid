@@ -432,9 +432,11 @@ void endgame()
                 }
             }
         }
+        
         addToPrint(endText, TEXT);
 
-    	createFloatAnimation(&endText->opacity, 1.0, 1.0, 1500, 0, QUAD, &endAnimationA);
+        endText->opacity = 0.0;
+    	createFloatAnimation(&endText->opacity, 0.0, 1.0, 200, 1000, QUAD, &endAnimationA);
 
         return;
     }
