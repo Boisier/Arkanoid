@@ -99,6 +99,7 @@ void printBrick(Brick * brick)
 /** Free the brick element, the texture is NOT free-ed **/
 void freeBrick(Brick * brick)
 {
+
 	free(brick);
 	brick = NULL;
 }

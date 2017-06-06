@@ -4,7 +4,7 @@ CC = gcc
 
 LIB     = -lSDL -lSDL_image -lSDL_mixer -lGLU -lGL -lm `pkg-config --libs freetype2` -lpthread
 LDFLAGS = #-fsanitize=address
-CFLAGS = -g -O2 -Wall -std=c89 -pedantic -Werror `pkg-config --cflags freetype2` #-fno-omit-frame-pointer -ggdb
+CFLAGS = -g -O0 -Wall -std=c89 -pedantic -Werror `pkg-config --cflags freetype2` -g #-fno-omit-frame-pointer -ggdb
 
 APP_BIN = arkanopong
 

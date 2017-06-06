@@ -409,7 +409,10 @@ void createBricks(char * levelName)
     gameObj.game.bb.gridW = atoi(strtok(line, " "));
     gameObj.game.bb.gridH = atoi(strtok(NULL, " "));
 
-    brickHeight = gameObj.defVal.brick.height / gameObj.game.bb.gridH;
+    if(gameObj.game.bb.squared)
+        brickHeight = 20;
+    else
+        brickHeight = gameObj.defVal.brick.height / gameObj.game.bb.gridH;
 
     /*For every line of brick*/
     for(i = 0; i < gameObj.game.bb.gridH; ++i)

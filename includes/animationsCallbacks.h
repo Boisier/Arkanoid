@@ -13,4 +13,3 @@ void startAnimationF();
 void startAnimationG();
 
 void endAnimationA();
-void endAnimationB();
