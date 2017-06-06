@@ -2,6 +2,9 @@
 
 /* Music */
 Mix_Music * menuMusic = NULL;
+char menuMusicPath[256];
+Mix_Music * battleMusic = NULL;
+char battleMusicPath[256];
 
 /* Sounds */
 Mix_Chunk * okSound = NULL;
@@ -15,11 +18,23 @@ void theLoop()
 {
     Uint32 startTime, elapsedTime;
 
+    /*Load musics*/
+    strcpy(menuMusicPath, gameObj.theme);
+    strcat(menuMusicPath, "sounds/menu.mp3");
+    menuMusic = Mix_LoadMUS(menuMusicPath);
+    strcpy(battleMusicPath, gameObj.theme);
+    strcat(battleMusicPath, "sounds/battle.mp3");
+    battleMusic = Mix_LoadMUS(battleMusicPath);
+    Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
+
+    /*Load general sounds*/
     okSound = Mix_LoadWAV("./themes/default/sounds/ok.wav");
     backSound = Mix_LoadWAV("./themes/default/sounds/back.wav");
     moveSound = Mix_LoadWAV("./themes/default/sounds/move.wav");
     pauseSound = Mix_LoadWAV("./themes/default/sounds/pause.wav");
     unpauseSound = Mix_LoadWAV("./themes/default/sounds/unpause.wav");
+
+    Mix_PlayMusic(menuMusic, -1);
 
     while(gameObj.gameState != EXITING) 
     {
@@ -54,6 +69,7 @@ void theLoop()
     Mix_FreeChunk(backSound);
     Mix_FreeChunk(moveSound);
     Mix_FreeMusic(menuMusic);
+    Mix_FreeMusic(battleMusic);
     freeFont(gameObj.defaultFont);
     Mix_CloseAudio();
 }
@@ -135,10 +151,22 @@ void themeSelection()
     {
         /*Apply new theme*/
         setTheme(callback);
+        Mix_FreeMusic(menuMusic);
+        Mix_FreeMusic(battleMusic);
         freeFont(gameObj.defaultFont);
         loadSDLDependants();
+
+        /*Load new musics*/
+        strcpy(menuMusicPath, gameObj.theme);
+        strcat(menuMusicPath, "sounds/menu.mp3");
+        menuMusic = Mix_LoadMUS(menuMusicPath);
+        strcpy(battleMusicPath, gameObj.theme);
+        strcat(battleMusicPath, "sounds/battle.mp3");
+        battleMusic = Mix_LoadMUS(battleMusicPath);
+
         Mix_PlayChannel( -1, okSound, 0 );
         gameObj.gameState = MAINMENU;
+        Mix_PlayMusic(menuMusic, -1);
     }
 }
 
@@ -288,6 +316,10 @@ void startGame()
         }
     }
 
+    /*Switch to battle music*/
+    Mix_HaltMusic();
+    Mix_PlayMusic(battleMusic, -1);
+
     gameObj.gameState = INGAME;
 }
 
@@ -373,6 +405,9 @@ void ingame()
         {
             Mix_PlayChannel( -1, backSound, 0 );
             gameObj.gameState = PLAYERSELECTION;
+            /*Switch to menu music*/
+            Mix_HaltMusic();
+            Mix_PlayMusic(menuMusic, -1);
         }
 
         return;
@@ -391,7 +426,7 @@ void ingame()
 void enterPause()
 {
     gameObj.game.pause = true; /*pause the game*/
-
+    Mix_VolumeMusic(MIX_MAX_VOLUME / 4);
     createPauseMenu();
 }
 
@@ -412,6 +447,7 @@ void quitPause()
     gameObj.game.pauseMenu.playBtn->display = false;
     gameObj.game.pauseMenu.quitBtn->display = false;
     gameObj.game.pause = false; /*Unpause the game*/
+    Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
 }
 
 /* Displauy end game sequence and free memory*/
@@ -453,6 +489,10 @@ void endgame()
 
         return;
     }
+
+    /*Switch to menu music*/
+    Mix_HaltMusic();
+    Mix_PlayMusic(menuMusic, -1);
 
     gameObj.gameState = PLAYERSELECTION;
 }
