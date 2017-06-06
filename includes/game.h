@@ -1,6 +1,7 @@
 #pragma once
 
 /** First things first, let's get the libraries **/
+#define _XOPEN_SOURCE
 
 /*Standard libraries*/
 #include <stdio.h>
@@ -18,6 +19,7 @@
 
 /*SDL*/
 #include <SDL/SDL.h>
+#include <SDL/SDL_getenv.h>
 
 #if __APPLE__
     #include <SDL_image/SDL_image.h>

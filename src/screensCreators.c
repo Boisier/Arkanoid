@@ -394,7 +394,7 @@ void createStartGameAnimation()
         ++nbr;
     }
 
-    countDown = createText("3", 0, 0, gameObj.defaultFont);
+    countDown = createText("3", 0, -13, gameObj.defaultFont);
     gameObj.game.startAnimation.countDown = addToPrint(countDown, TEXT);
 
     createFloatAnimation(&countDown->opacity, 1.0, 0.0, 200, 800, QUAD, &startAnimationA);

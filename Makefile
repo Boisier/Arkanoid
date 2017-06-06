@@ -3,8 +3,8 @@ CC = gcc
 #Remove # in LDFLAGS and CFLAGS to activate ASan
 
 LIB     = -lSDL -lSDL_image -lSDL_mixer -lGLU -lGL -lm `pkg-config --libs freetype2` -lpthread
-LDFLAGS = #-fsanitize=address
-CFLAGS = -g -O0 -Wall -std=c89 -pedantic -Werror `pkg-config --cflags freetype2` -g #-fno-omit-frame-pointer -ggdb
+LDFLAGS = -fsanitize=address
+CFLAGS = -g -O0 -Wall -std=c89 -pedantic -Werror `pkg-config --cflags freetype2` -g -fno-omit-frame-pointer -ggdb
 
 APP_BIN = arkanopong
 

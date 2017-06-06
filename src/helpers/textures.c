@@ -160,7 +160,7 @@ void freeTextures()
 }
 
 
-/** Set the given themeID as current thelme **/
+/** Set the given themeID as current theme **/
 void setTheme(int themeID)
 {
 	FolderContent * themesFolder;
