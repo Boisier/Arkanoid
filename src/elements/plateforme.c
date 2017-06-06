@@ -148,23 +148,23 @@ Circle closestBall(Plateforme * plate)
 	/*For each active ball*/
 	for(i = 0; i < gameObj.nbrToPrint; ++i)
 	{
-		if(gameObj.toPrint[i].type != BALL || gameObj.toPrint[i].display == false)
+		if(gameObj.toPrint[i]->type != BALL || gameObj.toPrint[i]->display == false)
 			continue; /*Only care about balls*/
 
-		if(gameObj.toPrint[i].element.ball->glued)
+		if(gameObj.toPrint[i]->element.ball->glued)
 			continue; /*Ignore glued balls*/
 
 		if(gameObj.game.bb.squared)
 		{
-			if(gameObj.toPrint[i].element.ball->BBox != plate->BBox)
+			if(gameObj.toPrint[i]->element.ball->BBox != plate->BBox)
 				continue;	/*Ignore ball on the other BBox*/
 
-			ballCircle = getBallCircle(gameObj.toPrint[i].element.ball);
-			refPoint.x = gameObj.toPrint[i].element.ball->x;
+			ballCircle = getBallCircle(gameObj.toPrint[i]->element.ball);
+			refPoint.x = gameObj.toPrint[i]->element.ball->x;
 		}
 		else
 		{
-			ballCircle = getBallCircle(gameObj.toPrint[i].element.ball);
+			ballCircle = getBallCircle(gameObj.toPrint[i]->element.ball);
 			changeCircleBBox(&ballCircle, plate->BBox);
 		}
 

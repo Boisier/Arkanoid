@@ -5,7 +5,7 @@ void printScreen()
 {
     int nbrToPrint = gameObj.nbrToPrint;
     int i;
-    PrintElement el;
+    PrintElement * el;
 
     /*No need to go further if there's nothing to print*/
     if(gameObj.printContent == EMPTY || gameObj.nbrToPrint == 0)
@@ -16,21 +16,21 @@ void printScreen()
     {
         el = gameObj.toPrint[i];
 
-        if(!el.display) /*Deactivated element ?*/
+        if(!el->display) /*Deactivated element ?*/
             continue;
 
-        switch(el.type)          
+        switch(el->type)          
         {
-            case PLATEFORME: printPlateforme(el.element.plateforme); break;
-            case PICTURE: printPicture(el.element.pict); break;
-            case BRICK: printBrick(el.element.brick); break;
-            case WALL: printWall(el.element.wall); break;
-            case BALL: printBall(el.element.ball); break;
-            case BONUS: printBonus(el.element.bonus); break;
-            case BUTTON: printButton(el.element.btn); break;
+            case PLATEFORME: printPlateforme(el->element.plateforme); break;
+            case PICTURE: printPicture(el->element.pict); break;
+            case BRICK: printBrick(el->element.brick); break;
+            case WALL: printWall(el->element.wall); break;
+            case BALL: printBall(el->element.ball); break;
+            case BONUS: printBonus(el->element.bonus); break;
+            case BUTTON: printButton(el->element.btn); break;
             case NUMBERBOX: break;
-            case TEXT: printText(el.element.txt); break;
-            case ANIMATION: animate(el.element.animation); break;
+            case TEXT: printText(el->element.txt); break;
+            case ANIMATION: animate(el->element.animation); break;
         }
     }
 }
@@ -40,35 +40,35 @@ void printScreen()
 PrintElement * addToPrint(void * element, enum elType type)
 {
     int newSize;
-    PrintElement newEl;
+    PrintElement * newEl = allocate(sizeof(PrintElement));
     
     /*We make sure no NULL pointer get's in the loop*/
     criticalIfNull(element);                    
     
-    newEl.type = type;                             
+    newEl->type = type;                             
     
     switch(type)          
     {
-        case PLATEFORME: newEl.element.plateforme = element; break;
-        case BRICK: newEl.element.brick = element; break;
-        case WALL: newEl.element.wall = element; break;
-        case BALL: newEl.element.ball = element; break;
-        case BONUS: newEl.element.bonus = element; break;
-        case BUTTON: newEl.element.btn = element; break;
-        case PICTURE: newEl.element.pict = element; break;
+        case PLATEFORME: newEl->element.plateforme = element; break;
+        case BRICK: newEl->element.brick = element; break;
+        case WALL: newEl->element.wall = element; break;
+        case BALL: newEl->element.ball = element; break;
+        case BONUS: newEl->element.bonus = element; break;
+        case BUTTON: newEl->element.btn = element; break;
+        case PICTURE: newEl->element.pict = element; break;
         case NUMBERBOX: 
             addToPrint(((NumberBox*)element)->btn, BUTTON);
             addToPrint(((NumberBox*)element)->display, TEXT);
             return NULL;
         break;
-        case TEXT: newEl.element.txt = element; break;
-        case ANIMATION: newEl.element.animation = element; break;
+        case TEXT: newEl->element.txt = element; break;
+        case ANIMATION: newEl->element.animation = element; break;
     }
 
-    newEl.display = true;
+    newEl->display = true;
     
     /*Add room in the toPrint array to store this new element*/
-    newSize = (gameObj.nbrToPrint + 1) * sizeof(PrintElement);
+    newSize = (gameObj.nbrToPrint + 1) * sizeof(PrintElement *);
 
     if(gameObj.nbrToPrint == 0)
         gameObj.toPrint = allocate(newSize);
@@ -80,7 +80,7 @@ PrintElement * addToPrint(void * element, enum elType type)
     gameObj.nbrToPrint++;
     
     /*Return the newly created element so it can be edited*/
-    return &gameObj.toPrint[gameObj.nbrToPrint-1];       
+    return gameObj.toPrint[gameObj.nbrToPrint-1];       
 }
 
 
@@ -105,20 +105,22 @@ void cleanToPrint()
 
 
 /** Delete an element **/
-void deleteElement(PrintElement el)
+void deleteElement(PrintElement * el)
 {
     /*Free the element with the appropriate function*/
-    switch(el.type)          
+    switch(el->type)          
     {
-        case PLATEFORME: freePlateforme(el.element.plateforme); break;
-        case BRICK: freeBrick(el.element.brick); break;
-        case WALL: freeWall(el.element.wall); break;
-        case BALL: freeBall(el.element.ball); break;
-        case BONUS: freeBonus(el.element.bonus); break;
-        case BUTTON: freeButton(el.element.btn); break;
-        case PICTURE: freePicture(el.element.pict); break;
-        case NUMBERBOX: freeNumberBox(el.element.nBox); break;
-        case TEXT: freeText(el.element.txt); break;
-        case ANIMATION: freeAnimation(el.element.animation); break;
+        case PLATEFORME: freePlateforme(el->element.plateforme); break;
+        case BRICK: freeBrick(el->element.brick); break;
+        case WALL: freeWall(el->element.wall); break;
+        case BALL: freeBall(el->element.ball); break;
+        case BONUS: freeBonus(el->element.bonus); break;
+        case BUTTON: freeButton(el->element.btn); break;
+        case PICTURE: freePicture(el->element.pict); break;
+        case NUMBERBOX: freeNumberBox(el->element.nBox); break;
+        case TEXT: freeText(el->element.txt); break;
+        case ANIMATION: freeAnimation(el->element.animation); break;
     }
+
+    free(el);
 }

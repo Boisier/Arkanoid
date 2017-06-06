@@ -257,23 +257,23 @@ void ballCollisions(Ball * ball)
 	for(i = 0; i < gameObj.nbrToPrint; ++i)
 	{
 		/*Ignore hidden elements*/
-		if(!gameObj.toPrint[i].display)
+		if(!gameObj.toPrint[i]->display)
 			continue;	
 
 		/*Ignore elements withour interactions with the balls, and unused elements*/
-		switch(gameObj.toPrint[i].type)
+		switch(gameObj.toPrint[i]->type)
 		{
 			case PLATEFORME:
-				if(gameObj.game.players[gameObj.toPrint[i].element.plateforme->BBox]->life == 0)
+				if(gameObj.game.players[gameObj.toPrint[i]->element.plateforme->BBox]->life == 0)
 					continue;
 
-				poly = getPlateformePolygon(gameObj.toPrint[i].element.plateforme);
+				poly = getPlateformePolygon(gameObj.toPrint[i]->element.plateforme);
 			break;
 			case BRICK:
-				poly = getBrickPolygon(gameObj.toPrint[i].element.brick);
+				poly = getBrickPolygon(gameObj.toPrint[i]->element.brick);
 			break;
 			case WALL:
-				poly = getWallPolygon(gameObj.toPrint[i].element.wall);
+				poly = getWallPolygon(gameObj.toPrint[i]->element.wall);
 			break;
 			default: continue; break;
 		}	
@@ -298,17 +298,17 @@ void ballCollisions(Ball * ball)
 		}
 
 		/*If it's a plateforme*/
-		if(gameObj.toPrint[i].type == PLATEFORME)
+		if(gameObj.toPrint[i]->type == PLATEFORME)
 		{
-			ballPlateformeCollision(ball, gameObj.toPrint[i].element.plateforme, col);
+			ballPlateformeCollision(ball, gameObj.toPrint[i]->element.plateforme, col);
 		}
-		else if(gameObj.toPrint[i].type == BRICK)
+		else if(gameObj.toPrint[i]->type == BRICK)
 		{
-			ballBrickCollision(ball, gameObj.toPrint[i].element.brick, poly, col, i);
+			ballBrickCollision(ball, gameObj.toPrint[i]->element.brick, poly, col, i);
 		}
-		else if(gameObj.toPrint[i].type == WALL)
+		else if(gameObj.toPrint[i]->type == WALL)
 		{
-			ballWallCollision(ball, gameObj.toPrint[i].element.wall, col);
+			ballWallCollision(ball, gameObj.toPrint[i]->element.wall, col);
 		}
 
 		freePolygon(poly);

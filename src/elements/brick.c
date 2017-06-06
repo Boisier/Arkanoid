@@ -138,7 +138,7 @@ void brickHit(Brick * brick, int brickID)
 	if(brick->strength == 0)
 	{
 		/*Remove the brick*/
-		gameObj.toPrint[brickID].display = false;
+		gameObj.toPrint[brickID]->display = false;
 
 
 		if(rand() % 4 > 0)

@@ -196,19 +196,19 @@ void applyBonus(Bonus * bonus)
 
 			for(i = 0; i < gameObj.nbrToPrint; ++i)
 			{
-				if(!gameObj.toPrint[i].display || gameObj.toPrint[i].type != BALL)
+				if(!gameObj.toPrint[i]->display || gameObj.toPrint[i]->type != BALL)
 					continue;
 				
-				if(gameObj.toPrint[i].element.ball->playerID != bonus->BBox)
+				if(gameObj.toPrint[i]->element.ball->playerID != bonus->BBox)
 					continue;
 
-				gameObj.toPrint[i].element.ball->bonus = bonus->type;
-				gameObj.toPrint[i].element.ball->bonusEnd = (int)SDL_GetTicks() + gameObj.defVal.bonus.duration;
+				gameObj.toPrint[i]->element.ball->bonus = bonus->type;
+				gameObj.toPrint[i]->element.ball->bonusEnd = (int)SDL_GetTicks() + gameObj.defVal.bonus.duration;
 
 				if(bonus->type == BIG_BALL)
-					gameObj.toPrint[i].element.ball->size = gameObj.defVal.ball.bigSize;
+					gameObj.toPrint[i]->element.ball->size = gameObj.defVal.ball.bigSize;
 				else
-					gameObj.toPrint[i].element.ball->size = gameObj.defVal.ball.smallSize;
+					gameObj.toPrint[i]->element.ball->size = gameObj.defVal.ball.smallSize;
 			}
 
 		break;
@@ -249,5 +249,5 @@ void displayBonusText(Bonus * bonus)
 		gameObj.game.players[bonus->BBox]->currentBonusAnim->startVal = -1000; /*Terminate ongoing animation*/
 		
 	createFloatAnimation(&txt->opacity, 1.0, 0.0, 500, 1000, QUAD, NULL);
-	gameObj.game.players[bonus->BBox]->currentBonusAnim = gameObj.toPrint[gameObj.nbrToPrint - 1].element.animation;
+	gameObj.game.players[bonus->BBox]->currentBonusAnim = gameObj.toPrint[gameObj.nbrToPrint - 1]->element.animation;
 }

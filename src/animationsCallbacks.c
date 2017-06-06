@@ -6,7 +6,6 @@
 
 void startAnimationA()
 {
-	free(gameObj.game.startAnimation.countDown->element.txt->text);
 	strcpy(gameObj.game.startAnimation.countDown->element.txt->text, "2");
     createFloatAnimation(&gameObj.game.startAnimation.countDown->element.txt->opacity, 0.0, 1.0, 200, 0, QUAD, &startAnimationB);
 }
