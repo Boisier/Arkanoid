@@ -17,7 +17,7 @@ LIB_PATH = lib
 SRC_FILES = $(shell find $(SRC_PATH) -type f -name '*.c')
 OBJ_FILES = $(patsubst $(SRC_PATH)/%.c,$(OBJ_PATH)/%.o, $(SRC_FILES))
 
-all: $(APP_BIN) clean
+all: $(APP_BIN) clean display
 
 $(APP_BIN): $(OBJ_FILES)
 	@mkdir -p $(BIN_PATH)
@@ -27,7 +27,12 @@ $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c
 	@mkdir -p "$(@D)"
 	$(CC) -c $< -o $@ $(CFLAGS) $(INC_PATH)
 
-.PHONY: clean
-
 clean:
 	rm -f $(OBJ_FILES)
+
+display:
+	clear
+	@echo "--------------------------------------------------------------"
+	@echo "                  Compile succeeded!                          "
+	@echo "            To execute type: ./bin/$(APP_BIN)                 "
+	@echo "--------------------------------------------------------------"
