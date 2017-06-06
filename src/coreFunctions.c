@@ -344,10 +344,10 @@ void ballMovements()
     for(i = 0; i < gameObj.nbrToPrint; ++i)
     {
         /*Only care about active balls here*/
-        if(gameObj.toPrint[i].type != BALL || !gameObj.toPrint[i].display)
+        if(gameObj.toPrint[i]->type != BALL || !gameObj.toPrint[i]->display)
             continue;
 
-        ball = gameObj.toPrint[i].element.ball;
+        ball = gameObj.toPrint[i]->element.ball;
 
         /*Update bonus*/
         updateBallBonus(ball);
@@ -373,7 +373,7 @@ void ballMovements()
             if(gameObj.game.players[ball->playerID]->life == 0)
             {
                 /*Player who owns the ball is out, just remove the ball from the game*/
-                gameObj.toPrint[ball->elementID].display = false;
+                gameObj.toPrint[ball->elementID]->display = false;
                 continue;
             }
 
@@ -409,7 +409,10 @@ void createBricks(char * levelName)
     gameObj.game.bb.gridW = atoi(strtok(line, " "));
     gameObj.game.bb.gridH = atoi(strtok(NULL, " "));
 
-    brickHeight = gameObj.defVal.brick.height / gameObj.game.bb.gridH;
+    if(gameObj.game.bb.squared)
+        brickHeight = 20;
+    else
+        brickHeight = gameObj.defVal.brick.height / gameObj.game.bb.gridH;
 
     /*For every line of brick*/
     for(i = 0; i < gameObj.game.bb.gridH; ++i)
@@ -452,10 +455,10 @@ void bonusMovements()
     for(i = 0; i < gameObj.nbrToPrint; ++i)
     {
         /*Only care about active bonus here*/
-        if(gameObj.toPrint[i].type != BONUS || !gameObj.toPrint[i].display)
+        if(gameObj.toPrint[i]->type != BONUS || !gameObj.toPrint[i]->display)
             continue;
 
-        bonus = gameObj.toPrint[i].element.bonus;
+        bonus = gameObj.toPrint[i]->element.bonus;
 
         /*Move bonus*/
         bonus->y += gameObj.defVal.bonus.speed;
@@ -464,7 +467,7 @@ void bonusMovements()
         if(bonus->y > gameObj.game.bb.height)
         {
             /*Deactivate the bonus*/
-            gameObj.toPrint[i].display = false;
+            gameObj.toPrint[i]->display = false;
 
             continue;
         }
@@ -473,7 +476,7 @@ void bonusMovements()
         if(bonusCollisions(bonus))
         {
             /*Deactivate the bonus*/
-            gameObj.toPrint[i].display = false;
+            gameObj.toPrint[i]->display = false;
         }
     }
 
@@ -525,7 +528,7 @@ void removeLifePlayer(Player * player)
         }
 
         /*Game's not over, add a wall, hide life counter, and keep playing*/
-        gameObj.toPrint[player->plateforme->elementID].display = false;
+        gameObj.toPrint[player->plateforme->elementID]->display = false;
         addToPrint(createWall(player->plateforme->BBox), WALL);
 
         createFloatAnimation(&player->lifePicture->opacity, 1.0, 0.0, 1000, 0, QUAD, NULL);

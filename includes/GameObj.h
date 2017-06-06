@@ -68,7 +68,7 @@ typedef struct _GameObj
 	int nbrTextures;
 
     /** Printing**/
-    PrintElement * toPrint;
+    PrintElement ** toPrint;
     int nbrToPrint;
     GameState printContent;
 

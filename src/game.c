@@ -405,6 +405,7 @@ void ingame()
         {
             Mix_PlayChannel( -1, backSound, 0 );
             gameObj.gameState = PLAYERSELECTION;
+
             /*Switch to menu music*/
             Mix_HaltMusic();
             Mix_PlayMusic(menuMusic, -1);
@@ -450,7 +451,7 @@ void quitPause()
     Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
 }
 
-/* Displauy end game sequence and free memory*/
+/* Display end game sequence and free memory*/
 void endgame()
 {
     int i;
@@ -468,7 +469,7 @@ void endgame()
         }
         else
         {
-            for(i = 0; i < gameObj.game.nbrPlayers; i++)
+            for(i = 0; i < gameObj.game.nbrPlayers; ++i)
             {
                 if(gameObj.game.players[i]->life != 0)
                 {
@@ -481,18 +482,17 @@ void endgame()
                 }
             }
         }
-
-        endText->opacity = 0.0;
+        
         addToPrint(endText, TEXT);
 
-        createFloatAnimation(&endText->opacity, 0.0, 1.0, 200, 1000, QUAD, &endAnimationA);
+        endText->opacity = 0.0;
+    	createFloatAnimation(&endText->opacity, 0.0, 1.0, 200, 1000, QUAD, &endAnimationA);
+
+        /*Switch to menu music*/
+        Mix_HaltMusic();
+        Mix_PlayMusic(menuMusic, -1);
 
         return;
     }
-
-    /*Switch to menu music*/
-    Mix_HaltMusic();
-    Mix_PlayMusic(menuMusic, -1);
-
     gameObj.gameState = PLAYERSELECTION;
 }

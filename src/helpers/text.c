@@ -38,7 +38,6 @@ Font * loadFont(char * fontName, int size)
 		strcat(path, ".ttf");
 
 	/*Load Font*/
-	printf("%s\n", path);
 	if(FT_New_Face(ft, path, 0, &face))
 	{
 		printf("Could not load font : \"%s\"\n", path);

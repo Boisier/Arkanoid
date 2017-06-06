@@ -291,6 +291,8 @@ void loadStaticProps()
 /** Init the SDL **/
 bool initSDL()
 {
+	putenv("SDL_VIDEO_CENTERED=1");
+	
     if(-1 == SDL_Init(SDL_INIT_VIDEO )) 
     {
         fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");

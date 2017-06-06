@@ -11,7 +11,7 @@ void printScreen();
 PrintElement * addToPrint(void * element, enum elType type);
 
 /** Delete an element **/
-void deleteElement(PrintElement el);
+void deleteElement(PrintElement * el);
 
 /** Empty the toPrint array **/
 void cleanToPrint();

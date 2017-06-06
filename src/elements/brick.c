@@ -99,6 +99,7 @@ void printBrick(Brick * brick)
 /** Free the brick element, the texture is NOT free-ed **/
 void freeBrick(Brick * brick)
 {
+
 	free(brick);
 	brick = NULL;
 }
@@ -137,7 +138,7 @@ void brickHit(Brick * brick, int brickID)
 	if(brick->strength == 0)
 	{
 		/*Remove the brick*/
-		gameObj.toPrint[brickID].display = false;
+		gameObj.toPrint[brickID]->display = false;
 
 
 		if(rand() % 4 > 0)

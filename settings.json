@@ -8,7 +8,7 @@
 	"plateforme_height": 15,
 	"plateforme_maxspeed": 25,
 	"plateforme_acceleration": 0.5,
-	"plateforme_level": 15,
+	"plateforme_level": 25,
 	"plateforme_narrowsize": 50,
 	"plateforme_widesize": 150,
 
