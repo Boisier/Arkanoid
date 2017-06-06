@@ -120,7 +120,7 @@ void updateBallBonus(Ball * ball);
 /***********/
 
 /** Create a new brick element **/
-Brick * createBrick(float Xpos, float level, int type, int BBox);
+Brick * createBrick(float Xpos, float level, int height, int type, int BBox);
 
 /** Print the brick on the screen on the correct BBox*/
 void printBrick(Brick * brick);
@@ -181,6 +181,8 @@ bool bonusCollisions(Bonus * bonus);
 
 /** Apply the effect of the given bonus **/
 void applyBonus(Bonus * bonus);
+
+void displayBonusText(Bonus * bonus);
 
 
 

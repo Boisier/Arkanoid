@@ -4,19 +4,14 @@
 void createMainMenu()
 {
     Picture * background;
-    Button * playBtn, * rulesBtn, * themeBtn, * quitBtn;
+    Button * playBtn, * themeBtn, * quitBtn;
 
     background = createPicture(0, 0, "home.jpg");
 
-    playBtn = createButton(-370, -90, 342, 52, 's');                /*'s' for start*/
+    playBtn = createButton(-370, -165, 342, 52, 's');                /*'s' for start*/
     playBtn->idleTexture = getTexture("playBtn_idle.png");
     playBtn->selectedTexture = getTexture("playBtn_selected.png");
     playBtn->state = SELECTED;
-
-    rulesBtn = createButton(-370, -165, 342, 52, 'r');              /*'r' for rules*/
-    rulesBtn->idleTexture = getTexture("rulesBtn_idle.png");
-    rulesBtn->selectedTexture = getTexture("rulesBtn_selected.png");
-    rulesBtn->state = IDLE;
 
     themeBtn = createButton(-370, -240, 342, 52, 't');              /*'t' for themes*/
     themeBtn->idleTexture = getTexture("themeBtn_idle.png");
@@ -28,16 +23,13 @@ void createMainMenu()
     quitBtn->selectedTexture = getTexture("quitBtn_selected.png");
     quitBtn->state = IDLE;
 
-    playBtn->bottomBtn = rulesBtn;
-    rulesBtn->topBtn = playBtn;
-    rulesBtn->bottomBtn = themeBtn;
-    themeBtn->topBtn = rulesBtn;
+    playBtn->bottomBtn = themeBtn;
+    themeBtn->topBtn = playBtn;
     themeBtn->bottomBtn = quitBtn;
     quitBtn->topBtn = themeBtn;
 
     addToPrint(background, PICTURE);
     addToPrint(playBtn, BUTTON);
-    addToPrint(rulesBtn, BUTTON);
     addToPrint(themeBtn, BUTTON);
     addToPrint(quitBtn, BUTTON);
 
@@ -50,13 +42,11 @@ void createMainMenu()
 void createThemeSelection()
 {
     Picture * background = NULL;
-    Button * tempBtn = NULL, * lastBtn = NULL, * backBtn = NULL;
-    char currentTheme[256], themePath[256];
+    Button * themeArrow = NULL, * lastArrow = NULL, * backBtn = NULL;
+    Text * themeName = NULL;
     int i = 0;
 
     FolderContent * folder = NULL;
-
-    strcpy(currentTheme, gameObj.theme);
 
     /** First, the background*/
     background = createPicture(0, 0, "background.png");
@@ -68,40 +58,35 @@ void createThemeSelection()
     /*For each folder*/
     for(i = 0; i < folder->nbrElements && i < 5; ++i)
     {
-        /*Build path*/
-        strcpy(themePath, "./themes/");
-        strcat(themePath, folder->elements[i]->d_name);
-        strcat(themePath, "/");
+        /*Arrow*/
+        themeArrow = createButton(-250, 200 - 50 * i, 52, 52, i + 1);
+        themeArrow->idleTexture = getTexture("empty.png");
+        themeArrow->selectedTexture = getTexture("rightArrow.png");
 
-        /*Set as current theme*/
-        strcpy(gameObj.theme, themePath);
-
-        /*Create the button*/
-        tempBtn = createButton(0, 300 - 111 * i, 342, 52, i + 1);
-        tempBtn->idleTexture = getTexture("themeSelectorBtn_idle.png");
-        tempBtn->selectedTexture = getTexture("themeSelectorBtn_selected.png");
-        
+        /*Select if first*/
         if(i == 0)
         {
-            tempBtn->state = SELECTED;
-            gameObj.currentlySelectedBtn = tempBtn;
+            themeArrow->state = SELECTED;
+            gameObj.currentlySelectedBtn = themeArrow;
         }
+        
+        /*theme name*/
+        themeName = createText(folder->elements[i]->d_name, -190, 180 - 50 * i, gameObj.defaultFont);
+        themeName->align = ALIGN_LEFT;
 
-        /*Add interactions*/
-        if(lastBtn != NULL)
+        /*Interactions if not the first*/
+        if(lastArrow != NULL)
         {
-            tempBtn->topBtn = lastBtn;
-            lastBtn->bottomBtn = tempBtn;
+            lastArrow->bottomBtn = themeArrow;
+            themeArrow->topBtn = lastArrow;
         }
 
-        addToPrint(tempBtn, BUTTON);
+        /*Add to print*/
+        addToPrint(themeArrow, BUTTON);
+        addToPrint(themeName, TEXT);
 
-        lastBtn = tempBtn;
-        tempBtn = NULL;
-
-        /*Revert to normal*/
-        themePath[0] = '\0';
-        strcpy(gameObj.theme, currentTheme);
+        lastArrow = themeArrow;
+        themeArrow = NULL;
     }
 
     closeFolder(folder);
@@ -119,8 +104,8 @@ void createThemeSelection()
     }
     else
     {
-        backBtn->topBtn = lastBtn;
-        lastBtn->bottomBtn = backBtn;
+        backBtn->topBtn = lastArrow;
+        lastArrow->bottomBtn = backBtn;
     }
 
     addToPrint(backBtn, BUTTON);
@@ -340,7 +325,6 @@ void createGameBoard()
         return; /*Bad folder ID*/
 
     /**Create the bricks for the level*/
-    printf("LEVEL > %s", levelFolder->elements[gameObj.game.levelID - 1]->d_name);
     createBricks(levelFolder->elements[gameObj.game.levelID - 1]->d_name);
 
     closeFolder(levelFolder);
@@ -373,9 +357,9 @@ void createPauseMenu()
     gameObj.game.pauseMenu.playBtn = addToPrint(playBtn, BUTTON);
     gameObj.game.pauseMenu.quitBtn = addToPrint(quitBtn, BUTTON);
 
-    createFloatAnimation(&pauseBackground->opacity, 0.0, .8, 500, 0, QUAD, NULL);
-    createFloatAnimation(&playBtn->opacity, 0.0, 1.0, 500, 0, QUAD, NULL);
-    createFloatAnimation(&quitBtn->opacity, 0.0, 1.0, 500, 0, QUAD, NULL);
+    createFloatAnimation(&pauseBackground->opacity, 0.0, .8, 200, 0, QUAD, NULL);
+    createFloatAnimation(&playBtn->opacity, 0.0, 1.0, 200, 0, QUAD, NULL);
+    createFloatAnimation(&quitBtn->opacity, 0.0, 1.0, 200, 0, QUAD, NULL);
 }
 
 
@@ -413,7 +397,7 @@ void createStartGameAnimation()
     countDown = createText("3", 0, 0, gameObj.defaultFont);
     gameObj.game.startAnimation.countDown = addToPrint(countDown, TEXT);
 
-    createFloatAnimation(&countDown->opacity, 1.0, 0.0, 200, 800, QUAD, &startAnimationTwo);
+    createFloatAnimation(&countDown->opacity, 1.0, 0.0, 200, 800, QUAD, &startAnimationA);
     
     gameObj.game.starting = true;
 }

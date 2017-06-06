@@ -47,7 +47,7 @@ float percent(float percent, char direction)
         return 0;
 }
 
-
+#if __linux__
 /** Return the higher value between a and b **/
 float fmax(float a, float b)
 {
@@ -61,6 +61,7 @@ float fmin(float a, float b)
 	return a < b ? a : b;
 }
 
+#endif
 
 /** Clamp value between min and max **/
 float clamp(float value, float min, float max)

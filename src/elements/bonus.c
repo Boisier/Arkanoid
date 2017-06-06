@@ -129,7 +129,7 @@ bool bonusCollisions(Bonus * bonus)
 	bonusCirc = getBonusCircle(bonus);
 
 	/*Select the plateforme on the same BBox*/
-	if(gameObj.game.players[bonus->BBox]->plateforme == NULL) 
+	if(gameObj.game.players[bonus->BBox]->life == 0) 
 		return false; /*This player has lost, not collision here*/
 
 	poly = getPlateformePolygon(gameObj.game.players[bonus->BBox]->plateforme);
@@ -214,4 +214,40 @@ void applyBonus(Bonus * bonus)
 		break;
 		default: break;
 	}
+
+	displayBonusText(bonus);
+}
+
+void displayBonusText(Bonus * bonus)
+{
+	Text * txt = gameObj.game.players[bonus->BBox]->bonusText;
+	char caption[256];
+
+	switch(bonus->type)
+	{
+		case ADD_LIFE:          strcpy(caption, "+1 vie"); 			    break;
+		case REMOVE_LIFE:       strcpy(caption, "-1 vie"); 			    break;
+		case WIDE_PLATEFORME:   strcpy(caption, "Grande plateforme");   break;
+		case NARROW_PLATEFORME: strcpy(caption, "Petite plateforme");   break;
+		case STICKY_PLATEFORME: strcpy(caption, "Plateforme collante"); break;
+		case BIG_BALL: 			strcpy(caption, "Grosse balle");        break;
+		case SMALL_BALL: 		strcpy(caption, "Petite balle");        break;
+		default: break;
+	}
+
+	if(txt == NULL)
+	{
+		txt = createText(caption, 0, gameObj.game.bb.height + 10, gameObj.defaultFont);
+		txt->BBox = bonus->BBox;
+
+		addToPrint(txt, TEXT);
+	}
+	else
+		strcpy(txt->text, caption);
+	
+	if(gameObj.game.players[bonus->BBox]->currentBonusAnim != NULL)
+		gameObj.game.players[bonus->BBox]->currentBonusAnim->startVal = -1000; /*Terminate ongoing animation*/
+		
+	createFloatAnimation(&txt->opacity, 1.0, 0.0, 500, 1000, QUAD, NULL);
+	gameObj.game.players[bonus->BBox]->currentBonusAnim = gameObj.toPrint[gameObj.nbrToPrint - 1].element.animation;
 }

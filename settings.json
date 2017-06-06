@@ -13,7 +13,7 @@
 	"plateforme_widesize": 150,
 
 	"brick_startLevel": 40,
-	"brick_height": 20,
+	"brick_height": 70,
 
 	"ball_size": 15,
 	"ball_bigsize": 25,

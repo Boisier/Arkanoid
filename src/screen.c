@@ -5,14 +5,11 @@ void printScreen()
 {
     int nbrToPrint = gameObj.nbrToPrint;
     int i;
-    bool deletion = false;
     PrintElement el;
 
     /*No need to go further if there's nothing to print*/
     if(gameObj.printContent == EMPTY || gameObj.nbrToPrint == 0)
-        return;
-
-    /** Clean screen ?**/                            
+        return;                          
     
     /*Iterate over all the element of the toPrint array*/
     for(i = 0; i < nbrToPrint; i++)             
@@ -36,9 +33,6 @@ void printScreen()
             case ANIMATION: animate(el.element.animation); break;
         }
     }
-
-    if(deletion)
-        consolidateToPrint();
 }
 
 

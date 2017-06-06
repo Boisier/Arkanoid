@@ -4,7 +4,13 @@
 /** START GAME **/
 /****************/
 
-void startAnimationTwo();
-void startAnimationOne();
-void startAnimationStart();
-void startAnimationEnd();
+void startAnimationA();
+void startAnimationB();
+void startAnimationC();
+void startAnimationD();
+void startAnimationE();
+void startAnimationF();
+void startAnimationG();
+
+void endAnimationA();
+void endAnimationB();

@@ -12,19 +12,33 @@
 #include <dirent.h>
 #include <sys/types.h>
 #include <errno.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 /*SDL*/
 #include <SDL/SDL.h>
-#include <SDL/SDL_image.h>
+
+#if __APPLE__
+    #include <SDL_image/SDL_image.h>
+#elif __linux__
+    #include <SDL/SDL_image.h>
+#endif
+
 #include <SDL/SDL_mixer.h>
 
 /*OpenGL*/
-#include <GL/gl.h>
-#include <GL/glu.h>
+#if __APPLE__
+    #include <OpenGL/gl.h>
+    #include <OpenGL/glu.h>
+#elif __linux__
+    #include <GL/gl.h>
+    #include <GL/glu.h>
+#endif
 
 /*FreeType Library*/
 #include <ft2build.h>
-#include FT_FREETYPE_H  
+#include FT_FREETYPE_H
 
 /*Third party libraries*/
 #include "lib/jsmn.h"
@@ -36,7 +50,7 @@ typedef enum { false, true } bool;
 
 /*some constants**/
 static const unsigned int BIT_PER_PIXEL = 32;
-static const float DEGTORAD = 57.2957795131; /* PI/180*/
+static const float DEGTORAD = 0.01745329252; /* PI/180*/
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
 
 /*Finally, include our own libraries*/

@@ -143,7 +143,7 @@ bool loadDynProps()
 	jsmn_parser p;
 	jsmntok_t t[128]; /* Suppose no more than 128 properties */
 	int nbrProps, i;
-	float fValue;
+	float fValue = 0;
 	enum Properties pp;
 
 	if(file)
@@ -154,7 +154,7 @@ bool loadDynProps()
 		rewind(file);
 		
 		/*Allocate memory and read file*/
-		props = allocate(sizeof(char) * (length + 1));
+		props = allocate(sizeof(char) * (int)(length + 1));
 		if(fread (props, 1, length, file) == 0)
 			return false;
 
@@ -171,8 +171,6 @@ bool loadDynProps()
 
 	/*Parse JSON*/
 	nbrProps = jsmn_parse(&p, props, strlen(props), t, sizeof(t)/sizeof(t[0]));
-	
-	/*printf("> parsing %d properties\n", (nbrProps - 1) * .5);*/
 
 	if(nbrProps < 0)
 		return false; /*Error in json*/
@@ -185,8 +183,6 @@ bool loadDynProps()
 
 		strncpy(value, props + t[i+1].start, t[i+1].end - t[i+1].start);
 		value[t[i+1].end - t[i+1].start] = '\0';
-
-		/*printf("> %s %s <\n", key, value);*/
 		
 		pp = propKey(key);
 
@@ -319,5 +315,5 @@ bool initSDL()
 /** Load elements depending on the SDL library **/
 void loadSDLDependants()
 {
-    gameObj.defaultFont = loadFont("BebasNeue.otf", 40);
+    gameObj.defaultFont = loadFont("main", 40);
 }

@@ -150,7 +150,7 @@ void unglueBall(Ball * ball)
 		else /*if(gameObj.game.players[ball->BBox]->controls == 2)*/
 			actionKey = gameObj.keys.b;
 	}
-	else if(rand() % 50 == 0)
+	else if(rand() % 50 == 0 || gameObj.game.players[ball->BBox]->life == 0)
 	{
 		/*AI*/
 		actionKey = true;
@@ -264,6 +264,9 @@ void ballCollisions(Ball * ball)
 		switch(gameObj.toPrint[i].type)
 		{
 			case PLATEFORME:
+				if(gameObj.game.players[gameObj.toPrint[i].element.plateforme->BBox]->life == 0)
+					continue;
+
 				poly = getPlateformePolygon(gameObj.toPrint[i].element.plateforme);
 			break;
 			case BRICK:
@@ -507,8 +510,8 @@ void ballBrickCollision(Ball * ball, Brick * brick, Polygon * brickPoly, Collisi
 /** Set ball direction from a given angle **/
 void setBallDirection(Ball * ball, float angle)
 {
-	ball->direction.x = sin(angle / DEGTORAD);
-	ball->direction.y = cos(angle / DEGTORAD);
+	ball->direction.x = sin(angle * DEGTORAD);
+	ball->direction.y = cos(angle * DEGTORAD);
 }
 
 

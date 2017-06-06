@@ -70,6 +70,8 @@ typedef struct _animation
 
 	PrintElement * holder;
 
+	char ID;
+
 	void (*callback)();
 
 } Animation;
@@ -317,8 +319,12 @@ typedef struct _player
 	bool reversed;
 
 	Plateforme * plateforme;
+	
 	Text * lifeText;
 	Picture * lifePicture;
+
+	Text * bonusText;
+	Animation * currentBonusAnim;
 
 } Player;
 

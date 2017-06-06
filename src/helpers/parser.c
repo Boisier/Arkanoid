@@ -16,21 +16,9 @@ FolderContent * parseFolder(char * folderPath)
 	/*Stop here if directory not found*/
 	if(content->dir == NULL)
 	{
-		switch(errno)
-		{
-			case EACCES: printf("EACCES\n"); break;
-			case ELOOP:printf("ELOOP\n"); break;
-			case ENAMETOOLONG:printf("ENAMETOOLONG\n"); break;
-			case ENOENT:printf("ENOENT\n"); break;
-			case ENOTDIR:printf("ENOTDIR\n"); break; 
-			case EMFILE:printf("EMFILE\n"); break;
-			case ENFILE:printf("ENFILE\n"); break;
-			default: printf("OTHER\n"); break;
-		}
-
-		/*printf("Error %d oppening %s : %s\n", errno, folderPath, strerror(errno));*/
+		printf("Error %d oppening %s : %s\n", errno, folderPath, strerror(errno));
+		throwCriticalError();
 		return content;
-
 	}
 
 	/*Loop on each element*/

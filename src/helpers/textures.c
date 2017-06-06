@@ -12,7 +12,7 @@ GLuint getTexture(char * imagePath)
 	/* Build path */
 	strcpy(path, gameObj.theme);
     strcat(path, imagePath);
-	
+
 	rslt = textureLoaded(path);				/*Make sure the texture isn't already loaded*/
 
 	if(rslt != -1)							/*Is the texture already loaded ?*/
@@ -26,7 +26,7 @@ GLuint getTexture(char * imagePath)
 
     if(image == NULL)						/*Loading ok ?*/
 	{
-        printf("No image > %s\n", path);
+        printf("%s > Image not found\n", path);
 		return -1;
 	}
 
@@ -80,7 +80,6 @@ GLenum getImageFormat(SDL_Surface * image)
 			return GL_RGBA;
 		break;
 		default:
-			fprintf(stderr, "Format des pixels de l'image non pris en charge\n");
 			return 0;
 	}
 }
@@ -161,7 +160,7 @@ void freeTextures()
 }
 
 
-/** Set the given themeID as current thelme **/
+/** Set the given themeID as current theme **/
 void setTheme(int themeID)
 {
 	FolderContent * themesFolder;

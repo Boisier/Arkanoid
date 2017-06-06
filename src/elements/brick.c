@@ -1,14 +1,14 @@
 #include "../../includes/game.h"
 
 /** Create a new brick element **/
-Brick * createBrick(float Xpos, float level, int type, int BBox)
+Brick * createBrick(float Xpos, float level, int height, int type, int BBox)
 {
 	Brick * brick = allocate(sizeof(Button));
 	float topWidth, bottomWidth, topBrickWidth, bottomBrickWidth;
 
 	topWidth = bbWidthAt(gameObj.game.bb.height - level);
 	topBrickWidth = topWidth / gameObj.game.bb.gridW;
-	bottomWidth = bbWidthAt(gameObj.game.bb.height - level - gameObj.defVal.brick.height);
+	bottomWidth = bbWidthAt(gameObj.game.bb.height - level - height);
 	bottomBrickWidth = bottomWidth / gameObj.game.bb.gridW;
 
 	topWidth *= .5;
@@ -24,10 +24,10 @@ Brick * createBrick(float Xpos, float level, int type, int BBox)
 	brick->topRight.y = level;
 
 	brick->bottomLeft.x = -bottomWidth + bottomBrickWidth * Xpos;
-	brick->bottomLeft.y = level + gameObj.defVal.brick.height;
+	brick->bottomLeft.y = level + height;
 
 	brick->bottomRight.x = -bottomWidth + bottomBrickWidth * (Xpos + 1);
-	brick->bottomRight.y = level + gameObj.defVal.brick.height;
+	brick->bottomRight.y = level + height;
 
 	brick->strength = 1;
 
@@ -53,7 +53,7 @@ Brick * createBrick(float Xpos, float level, int type, int BBox)
 			brick->strength = 3;
 			brick->texture = getTexture("brick/veryStrong_0.png"); 
 			brick->texture1 = getTexture("brick/veryStrong_1.png"); 
-			brick->texture1 = getTexture("brick/veryStrong_2.png"); 
+			brick->texture2 = getTexture("brick/veryStrong_2.png"); 
 		break;
 		case 5: 
 			brick->type = TRANSPARENT;

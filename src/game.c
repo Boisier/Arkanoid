@@ -1,12 +1,14 @@
 #include "../includes/game.h"
 
 /* Music */
-Mix_Music *music = NULL;
+Mix_Music * menuMusic = NULL;
 
 /* Sounds */
 Mix_Chunk * okSound = NULL;
 Mix_Chunk * backSound = NULL;
 Mix_Chunk * moveSound = NULL;
+Mix_Chunk * pauseSound = NULL;
+Mix_Chunk * unpauseSound = NULL;
 
 /** Main loop of the app**/
 void theLoop()
@@ -16,6 +18,8 @@ void theLoop()
     okSound = Mix_LoadWAV("./themes/default/sounds/ok.wav");
     backSound = Mix_LoadWAV("./themes/default/sounds/back.wav");
     moveSound = Mix_LoadWAV("./themes/default/sounds/move.wav");
+    pauseSound = Mix_LoadWAV("./themes/default/sounds/pause.wav");
+    unpauseSound = Mix_LoadWAV("./themes/default/sounds/unpause.wav");
 
     while(gameObj.gameState != EXITING) 
     {
@@ -49,7 +53,7 @@ void theLoop()
     Mix_FreeChunk(okSound);
     Mix_FreeChunk(backSound);
     Mix_FreeChunk(moveSound);
-    Mix_FreeMusic(music);
+    Mix_FreeMusic(menuMusic);
     freeFont(gameObj.defaultFont);
     Mix_CloseAudio();
 }
@@ -131,6 +135,8 @@ void themeSelection()
     {
         /*Apply new theme*/
         setTheme(callback);
+        freeFont(gameObj.defaultFont);
+        loadSDLDependants();
         Mix_PlayChannel( -1, okSound, 0 );
         gameObj.gameState = MAINMENU;
     }
@@ -299,6 +305,8 @@ void createPlayer(enum PlayerType type, int playerNbr)
 
     player->type = type;
     player->life = gameObj.defVal.lifeNbr;
+    player->bonusText = NULL;
+    player->currentBonusAnim = NULL;
 
     /*Create the player's plateforme*/
     player->plateforme = createPlateforme(platX, platY);
@@ -336,12 +344,18 @@ void ingame()
     /*Shall we toggle the pauseMenu ?*/
     if(gameObj.keys.esc)
     {
-        if(gameObj.game.pause)
-            hidePause(); /*Pause the game*/
-        else
-            enterPause(); /*Unpause the game*/
-
         gameObj.keys.esc = false;
+        
+        if(gameObj.game.pause)
+        {
+            Mix_PlayChannel( -1, unpauseSound, 0 );
+            hidePause(); /*Pause the game*/
+        }
+        else
+        {
+            Mix_PlayChannel( -1, pauseSound, 0 );
+            enterPause(); /*Unpause the game*/
+        }
     }
 
     /*Is the game paused*/
@@ -350,11 +364,16 @@ void ingame()
         /*Wait for user actions*/
         callback = btnHandler(moveSound);
 
-        if(callback == 'p')   
+        if(callback == 'p')
+        {
+            Mix_PlayChannel( -1, unpauseSound, 0 );   
             hidePause(); /*HideMenu*/
+        }
         else if(callback == 'q')
+        {
             Mix_PlayChannel( -1, backSound, 0 );
             gameObj.gameState = PLAYERSELECTION;
+        }
 
         return;
     }
@@ -380,9 +399,9 @@ void enterPause()
 /*Hide the game*/
 void hidePause()
 {
-    createFloatAnimation(&gameObj.game.pauseMenu.background->element.pict->opacity, .8, .0, 500, 0, QUAD, &quitPause);
-    createFloatAnimation(&gameObj.game.pauseMenu.playBtn->element.btn->opacity, 1.0, .0, 500, 0, QUAD, NULL);
-    createFloatAnimation(&gameObj.game.pauseMenu.quitBtn->element.btn->opacity, 1.0, .0, 500, 0, QUAD, NULL);
+    createFloatAnimation(&gameObj.game.pauseMenu.background->element.pict->opacity, .8, .0, 200, 0, QUAD, &quitPause);
+    createFloatAnimation(&gameObj.game.pauseMenu.playBtn->element.btn->opacity, 1.0, .0, 200, 0, QUAD, NULL);
+    createFloatAnimation(&gameObj.game.pauseMenu.quitBtn->element.btn->opacity, 1.0, .0, 200, 0, QUAD, NULL);
 }
 
 
@@ -398,48 +417,42 @@ void quitPause()
 /* Displauy end game sequence and free memory*/
 void endgame()
 {
-    static bool displayed = false;
     int i;
     char caption[50], * temp;
+    Text * endText = NULL;
 
     if(gameObj.printContent != ENDGAME)
     {
         addToPrint(createText("FIN", 0, 0, gameObj.defaultFont), TEXT);
 
-        gameObj.printContent = ENDGAME;
-        return;
-    }
-
-    SDL_Delay(2000);
-
-    if(!displayed)
-    {  
-        displayed = true;
-
         if(gameObj.game.computers > 0)
         {
             strcpy(caption, "L ordinateur remporte la partie");
-            addToPrint(createText(caption, 0, -60, gameObj.defaultFont), TEXT);
-            return;
+            endText = createText(caption, 0, -60, gameObj.defaultFont);
         }
-
-        for(i = 0; i < gameObj.game.nbrPlayers; ++i)
+        else
         {
-            if(gameObj.game.players[i]->life != 0)
+            for(i = 0; i < gameObj.game.nbrPlayers; i++)
             {
-                strcpy(caption, "Joueur ");
-                temp = itoa(i+1);
-                strcat(caption, temp);
-                free(temp);
-                strcat(caption, " gagne la partie");
-                addToPrint(createText(caption, 0, -60, gameObj.defaultFont), TEXT);
+                if(gameObj.game.players[i]->life != 0)
+                {
+                    strcpy(caption, "Joueur ");
+                    temp = itoa(i+1);
+                    strcat(caption, temp);
+                    free(temp);
+                    strcat(caption, " gagne la partie");
+                    endText = createText(caption, 0, -60, gameObj.defaultFont);
+                }
             }
         }
 
+        endText->opacity = 0.0;
+        addToPrint(endText, TEXT);
+
+        createFloatAnimation(&endText->opacity, 0.0, 1.0, 200, 1000, QUAD, &endAnimationA);
+
         return;
     }
-
-    SDL_Delay(2000);
 
     gameObj.gameState = PLAYERSELECTION;
 }
